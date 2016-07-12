@@ -8,7 +8,7 @@
 import os, pygame, time, datetime, random, sys, urllib, ConfigParser
 
 config=ConfigParser.ConfigParser()
-config.readfp(open(r'HyperClock.conf'))
+config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
 
 cfg_Topology=config.get('HyperClock','topology')
 cfg_AstralDataFile=config.get('HyperClock','AstralDataFile')
