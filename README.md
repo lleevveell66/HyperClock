@@ -1,3 +1,6 @@
+
+![HyperClock 2.0 Screenshot](HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
+
 HyperClock
 
 Current Version: 2.0<br>
