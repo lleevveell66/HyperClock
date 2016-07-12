@@ -135,4 +135,42 @@ A sample script which retreives the data on my own network is included in the /u
 
 ### Indoor Temperature Retreival:
 
+There are three (3) included settings for HyperClock to retreive an indoor temperature:
+
+#### Honeywell Wifi Thermostat (via My Total Connect):
+
+You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retreive this data from a Honeywell thermostat.  Change the *USERNAME*, *PASSWORD*, and *DEVICEID* lines to match your account on MyTotalConnect, and uncomment these lines and everything should work.
+
+```
+# Use this for a WiFi Honeywell thermostat via My Total Connect
+
+USERNAME=CHANGEME@CHANGEME.CH
+PASSWORD=CHANGEME
+DEVICEID=CHANGME
+extras/therm.py -U $USERNAME -P $PASSWORD -D $DEVICEID -q | grep ^CurrentTemp|cut -d\  -f2|sed 's/\..*//'>/usr/local/HyperClock/CurrentIndoorTemp
+```
+
+This method uses the extras/therm.py script written by Brad Goodman.  I made a few changes to make it work with the newer MyTotalConnect web site.  
+
+#### DS18B20-Based Temperature Probe
+
+You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retreive this data from a DS18B20-based temperature probe, via 1-wire on the GPIO pins.
+
+```
+# Use this for a DS18B20 type of probe
+# (https://www.amazon.com/gp/product/B00Q9YBIJI/ref=oh_aui_detailpage_o06_s01?ie=UTF8&psc=1)
+
+extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+```
+
+This method uses my own extras/IndoorTemp script, based closely on *find this original author's name* script.
+
+#### No Indoor Temperature Data
+
+If the script defined in *IndoorTempCommand* writes a **9999** into the file defined in *IndoorTempFile*, then HyperClock assumes that there is no indoor temperature capability, and omits displaying this data ont he screen.  This is the default for the released code, as many more people will not have a valid method for indoor temperature sensing, right off, than will.
+
+#### BONUS Method:
+
+Build, buy, and/or write your own!  It's fun!   If you do this, I would humbly request that you branch the code and include your magic.  If you are not git-savvy, simply send me an email with a description and include the code you used.
+
 
