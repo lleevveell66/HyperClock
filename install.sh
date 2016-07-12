@@ -12,7 +12,7 @@ echo "Installing HyperClock ..."
 /bin/chmod 755 GetWeather.sh
 /bin/mkdir -p /usr/local/HyperClock/
 
-/bin/cp -av . /usr/local/HyperClock/
+/bin/cp -a . /usr/local/HyperClock/
 
 echo "Done!"
 echo "  Remember to edit /usr/local/HyperClock/HyperClock.conf to customize your HyperClock"
