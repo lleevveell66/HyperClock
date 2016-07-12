@@ -1,11 +1,10 @@
 HyperClock
 
-Current Version: 2.0
-Last Update: 07/12/16
-Author: level6 of LiE (http://www.awja.org:8090/pages/viewpage.action?pageId=950283)
-URL: http://www.awja.org:8090/display/~level6/HyperClock?flashId=-637453519
-
-This is HyperClock, the customizable clock and weather display of the futuuuurreeee... 
+Current Version: 2.0<br>
+Last Update: 07/12/16<br>
+Author: level6 of LiE (http://www.awja.org:8090/pages/viewpage.action?pageId=950283)<br>
+URL: http://www.awja.org:8090/display/~level6/HyperClock?flashId=-637453519<br>
+This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
 
 
 
