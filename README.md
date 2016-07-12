@@ -98,18 +98,18 @@ the color section values. You can use those values in your own HyperClock.conf f
 
 ### Topology and Weather Retreival:
 
-There are two methods of weather data retreival:
+There are two methods of weather data retrieval:
 
 #### Standalone:
 
-This is the default method of weather and astral data retreival.  The *topology* parameter is set to *standalone* in the HyperClock.conf file for this method.  Every 15 minutes (900 seconds), HyperClock will use built-in code to retreive the data 
+This is the default method of weather and astral data retrieval.  The *topology* parameter is set to *standalone* in the HyperClock.conf file for this method.  Every 15 minutes (900 seconds), HyperClock will use built-in code to retrieve the data 
 from the Yahoo! Weather API.  This is fine for a single HyperClock, but when running multiple HyperClocks, please try to use a networked topology, as described below.
 
 #### Networked:
 
-This method is slightly more complicated.  It is important to think about using this method of data retreival when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
+This method is slightly more complicated.  It is important to think about using this method of data retrieval when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
 
-The *topology* parameter is set to *networked* in the HyperClock.conf file for this method.  HyperClock will use the script defined in *AstralDataCommand* to retreive the XML file of data, ideally gathered once every 15 minutes on a central site (a web server on your LAN is easiest.)
+The *topology* parameter is set to *networked* in the HyperClock.conf file for this method.  HyperClock will use the script defined in *AstralDataCommand* to retrieve the XML file of data, ideally gathered once every 15 minutes on a central site (a web server on your LAN is easiest.)
 
 Your script must create the file defined in *AstralDataFile* as an XML file following this format:
 
@@ -135,11 +135,11 @@ A sample script which retreives the data on my own network is included in the /u
 
 ### Indoor Temperature Retreival:
 
-There are three (3) included settings for HyperClock to retreive an indoor temperature:
+There are three (3) included settings for HyperClock to retrieve an indoor temperature:
 
 #### Honeywell Wifi Thermostat (via My Total Connect):
 
-You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retreive this data from a Honeywell thermostat.  Change the *USERNAME*, *PASSWORD*, and *DEVICEID* lines to match your account on MyTotalConnect, and uncomment these lines and everything should work.
+You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retrieve this data from a Honeywell thermostat.  Change the *USERNAME*, *PASSWORD*, and *DEVICEID* lines to match your account on MyTotalConnect, and uncomment these lines and everything should work.
 
 ```
 # Use this for a WiFi Honeywell thermostat via My Total Connect
@@ -154,7 +154,7 @@ This method uses the extras/therm.py script written by Brad Goodman.  I made a f
 
 #### DS18B20-Based Temperature Probe
 
-You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retreive this data from a DS18B20-based temperature probe, via 1-wire on the GPIO pins.
+You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retrieve this data from a DS18B20-based temperature probe, via 1-wire on the GPIO pins.
 
 ```
 # Use this for a DS18B20 type of probe
@@ -167,7 +167,7 @@ This method uses my own extras/IndoorTemp script, based closely on *find this or
 
 #### No Indoor Temperature Data
 
-If the script defined in *IndoorTempCommand* writes a **9999** into the file defined in *IndoorTempFile*, then HyperClock assumes that there is no indoor temperature capability, and omits displaying this data ont he screen.  This is the default for the released code, as many more people will not have a valid method for indoor temperature sensing, right off, than will.
+If the script defined in *IndoorTempCommand* writes a **9999** into the file defined in *IndoorTempFile*, then HyperClock assumes that there is no indoor temperature capability, and omits displaying this data on the screen.  This is the default for the released code, as many more people will not have a valid method for indoor temperature sensing, right off, than will.
 
 #### BONUS Method:
 
