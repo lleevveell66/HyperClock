@@ -1,17 +1,17 @@
 
 ![HyperClock 2.0 Screenshot](HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
 
-HyperClock
+# HyperClock
 
-Current Version: 2.0<br>
-Last Update: 07/12/16<br>
-Author: Raymond Spangle<br>
-URL: http://www.awja.org:8090/display/~level6/HyperClock?flashId=-637453519<br>
+**Current Version:** 2.0<br>
+**Last Update:** 07/12/16<br>
+**Author:** Raymond Spangle<br>
+**URL:** http://www.awja.org:8090/display/~level6/HyperClock?flashId=-637453519<br>
 This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
 
 
 
-Description:
+## Description:
 
 HyperClock is a simple clock with weather and astral information displayed on any HDMI-capable 
 display you want. HyperClock is a Python script running on a Raspberry Pi board. It has been 
@@ -24,10 +24,93 @@ Weather data is retrieved every 15 minutes over the network from the Yahoo Weath
 spoken in a robotic voice, on the hour.  There is support for external temperature sensor probes.
 Colors and fonts are easily configurable.
 
-Documentation is lacking.  Please be patient.  For the impatient:
-- git the code
-- edit the HyperClock.conf file
-- ./install.sh
-- /usr/local/HyperClock/HyperClock
+## Requirements:
+- Raspberry Pi B+, 2B, or 3B
+- Raspbian (Wheezy or Jessie)
+- Python
+- Pygame
+- Graphics capability (I have this running on 19" and 32" HDMI TVs and on a 7" TFT display with an external speaker)
 
-More info to come...
+## Installation:
+
+```
+apt-get install git python python-pygame
+cd /usr/local/src
+git clone https://github.com/lleevveell66/HyperClock
+cd Hyperclock
+./install.sh
+/usr/local/HyperClock/HyperClock
+``` 
+
+## Customization:
+
+There are several customizable pieces of HyperClock:
+
+### Fonts:
+
+To change fonts displayed in HyperClock, edit the /usr/local/HyperClock/HyperClock.conf file and change the font lines to 
+correspond to your font locations.
+
+```
+# Font locations
+timefont = /usr/local/HyperClock/fonts/digital-7-mono.ttf
+datefont = /usr/local/HyperClock/fonts/DroidSans.ttf
+weatherfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+tempfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+itempfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+highfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+lowfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+forecastfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+windfont = /usr/local/HyperClock/fonts/DejaVuSansMono.ttf
+pressurefont = /usr/local/HyperClock/fonts/DroidSans.ttf
+humidityfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+sunrisesetfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+lastfont = /usr/local/HyperClock/fonts/DroidSans.ttf
+```
+
+### Colors:
+
+To change the colors of HyperClock text, edit the /usr/local/HyperClock/HyperClock.conf file and change the color lines with your preferred Red, Green, Blue values.
+
+```
+# Colors in Red, Green, Blue
+timecolor = 64,255,64
+datecolor = 240,240,30
+weathercolor = 255,255,128
+tempcolor = 80,255,0
+itempcolor = 240,170,60
+highcolor = 65,235,180
+lowcolor = 70,130,255
+windcolor = 128,128,255
+pressurecolor = 128,128,255
+humiditycolor = 128,128,255
+day1color = 255,128,255
+day2color = 255,128,255
+day3color = 255,128,255
+day4color = 255,128,255
+sunrisecolor = 128,255,255
+sunsetcolor = 128,255,255
+lastcolor = 50,89,58
+```
+
+Several pre-built "themes" are included in the /usr/local/HyperClock/themes/ directory.  These include only 
+the color section values. You can use those values in your own HyperClock.conf file.
+
+### Topology and Weather Retreival:
+
+There are two methods of weather data retreival:
+
+#### Standalone:
+
+This is the default method of weather and astral data retreival.  The *topology* parameter is set to *standalone* in the HyperClock.conf file for this method.  Every 15 minutes (900 seconds), HyperClock will use built-in code to retreive the data 
+from the Yahoo! Weather API.  This is fine for a single HyperClock, but when running multiple HyperClocks, please try to use a networked topology, as described below.
+
+#### Networked:
+
+This method is aslightly more complicated.  It is important to think about using this method of data retreival when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
+
+The *topology* parameter is set to *networked* in the HyperClock.conf file for this method.  HyperClock will use the script defined in *AstralDataCommand* to retreive the XML file of data, ideally gathered once every 15 minutes on a central site (a web server on your LAN is easiest.)
+
+### Indoor Temperature Retreival:
+
+
