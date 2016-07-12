@@ -37,7 +37,7 @@ Colors and fonts are easily configurable.
 apt-get install git python python-pygame
 cd /usr/local/src
 git clone https://github.com/lleevveell66/HyperClock
-cd Hyperclock
+cd HyperClock
 ./install.sh
 /usr/local/HyperClock/HyperClock
 ``` 
@@ -107,9 +107,31 @@ from the Yahoo! Weather API.  This is fine for a single HyperClock, but when run
 
 #### Networked:
 
-This method is aslightly more complicated.  It is important to think about using this method of data retreival when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
+This method is slightly more complicated.  It is important to think about using this method of data retreival when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
 
 The *topology* parameter is set to *networked* in the HyperClock.conf file for this method.  HyperClock will use the script defined in *AstralDataCommand* to retreive the XML file of data, ideally gathered once every 15 minutes on a central site (a web server on your LAN is easiest.)
+
+Your script must create the file defined in *AstralDataFile* as an XML file following this format:
+
+```
+<?xml version="1.0" ?>
+  <data>
+    <now date="Tuesday 07/12/2016" time="05:30 PM"/>
+    <astral moonphase="First Quarter" moonphasenum="2" sunrise="6:28 am" sunset="8:37 pm"/>
+    <weather>
+      <current code="23" condition="Breezy" humidity="44" indoor="NA" pressure="989.0" rising="0" setting="NA" temp="95" windchill="95" winddirection="180" windspeed="29"/>
+      <forecast>
+        <day0 code="23" condition="Breezy" date="12 Jul 2016" day="Tue" high="91" low="77" precip="100"/>
+        <day1 code="23" condition="Breezy" date="13 Jul 2016" day="Wed" high="94" low="77" precip="100"/>
+        <day2 code="34" condition="Mostly Sunny" date="14 Jul 2016" day="Thu" high="95" low="78" precip="100"/>
+        <day3 code="4" condition="Thunderstorms" date="15 Jul 2016" day="Fri" high="93" low="79" precip="100"/>
+        <day4 code="47" condition="Scattered Thunderstorms" date="16 Jul 2016" day="Sat" high="92" low="78" precip="100"/>
+      </forecast>
+    </weather>
+  </data>
+```
+
+A sample script which retreives the data on my own network is included in the /usr/local/HyperClock/GetWeather.sh file.  You will notice a sanity check in this script.  This is important in case the central script skips a beat and cannot retreive the data.  HyperClock will remain running, but just display older data.  
 
 ### Indoor Temperature Retreival:
 
