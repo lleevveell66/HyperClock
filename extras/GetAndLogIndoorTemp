@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+
+$itemp=`/usr/local/bin/IndoorTemp`;
+chop($itemp);
+$name="Studio";
+
+open(LOCALLOG,">/usr/local/HyperClock/CurrentIndoorTemp") or die("ERROR: $!\n");
+print LOCALLOG "$itemp\n";
+close(LOCALLOG);
+
+$output=`curl -s --url 'http://192.168.44.55/BERTHA/ReceiveIndoorTemperature.cgi?name=$name&itemp=$itemp'`;
+
+
+exit 0
