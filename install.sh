@@ -8,7 +8,7 @@
 
 echo "Installing HyperClock ..."
 /bin/chmod 755 HyperClock
-/bin/chmod 755 GetIndoorTemperature.sh
+/bin/chmod 755 GetIndoorTemp.sh
 /bin/chmod 755 GetWeather.sh
 /bin/mkdir -p /usr/local/HyperClock/
 
