@@ -186,8 +186,17 @@ while True:
 
 	moonphase=currentData['moonphase']
 	moonphasenum=currentData['moonphasenum']
+
 	sunrise=currentData['sunrise']
 	sunset=currentData['sunset']
+
+	# Fix what appears to be a bug in the Yahoo Weather API, whereas sunrise/sunset times do not pad with zeros for single digit times
+	if(re.match(".*\d:\d .*",sunrise)):
+		sunrise=re.sub(':',':0',sunrise);
+
+	if(re.match(".*\d:\d .*",sunset)):
+		sunset=re.sub(':',':0',sunset);
+
 	code=currentData['code']
 	condition=currentData['condition']
 	humidity=currentData['humidity']

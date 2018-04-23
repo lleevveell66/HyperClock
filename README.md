@@ -15,7 +15,7 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
 
 HyperClock is a simple clock with weather and astral information displayed on any HDMI-capable 
 display you want. HyperClock is a Python script running on a Raspberry Pi board. It has been 
-tested to work on RPi B+, 2B, and 3B in Raspbian Wheezy and Jessie.  I am sure it could work on 
+tested to work on RPi Zero, B+, 2B, and 3B in Raspbian Wheezy, Jessie and Stretch.  I am sure it could work on 
 any Linux system with Python, Pygame, and graphic capability, though.  The reason I built it on RPis
 with huge HDMI TV displays is because I am as blind as a bat, these days.  I have one in almost 
 every room of my house, now.
@@ -25,8 +25,8 @@ spoken in a robotic voice, on the hour.  There is support for external temperatu
 Colors and fonts are easily configurable.
 
 ## Requirements:
-- Raspberry Pi B+, 2B, or 3B
-- Raspbian (Wheezy or Jessie)
+- Raspberry Pi Zero/ZeroW/ZeroWH,B+, 2B, or 3B
+- Raspbian (Wheezy, Jessie, or Stretch)
 - Python
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on a 7" TFT display with an external speaker)
@@ -34,12 +34,63 @@ Colors and fonts are easily configurable.
 ## Installation:
 
 ```
-apt-get install git python python-pygame
+# Build a Raspbian Pi mSD card.  DO NOT use any "Lite" versions, as you will be hard-pressed to get the newer pygame to install on those.
+
+# Insert card, boot, and configure for your network, etc.
+
+# Get into a root shell:
+sudo su -
+
+# Boot into normal textual login, no more X:
+systemctl set-default multi-user.target
+
+# Install some required packages and update everything:
+apt-get install ntp ntpdate git python-pip python3-pip
+apt-get -y upgrade
+apt-get update
+
+# Get NTP working:
+service ntp stop
+ntpdate 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
+service ntp start
+update-rc.d ntp enable
+date
+ntpq -p
+
+# Install pygame for python and python3 (you can do this only for python, if you like):
+pip install pygame
+pip3 install pygame
+pip install setuptools
+pip3 install setuptools
+
 cd /usr/local/src
 git clone https://github.com/lleevveell66/HyperClock
 cd HyperClock
 ./install.sh
+
+# Customize (decribed below):
+vi /usr/local/HyperClock/HyperClock.conf
+
+# Test it out:
 /usr/local/HyperClock/HyperClock
+
+# Make it run HyperClock on boot:
+vi /etc/rc.local
+.
+.
+# Uncomment and edit these for your chosen indoor temperature solution (described below): 
+#printf "Getting the initial indoor temp reading ...\n"
+#/usr/local/HyperClock/extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+
+printf "HyperClock: Starting HyperClock ...\n"
+sudo /usr/local/HyperClock/HyperClock &
+.
+.
+exit 0
+EOF
+
+# Reboot to test it out:
+shutdown -r now
 ``` 
 
 ## Customization:
