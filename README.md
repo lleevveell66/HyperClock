@@ -86,8 +86,7 @@ printf "HyperClock: Starting HyperClock ...\n"
 sudo /usr/local/HyperClock/HyperClock &
 .
 .
-exit 0
-EOF
+
 
 # Reboot to test it out:
 shutdown -r now
@@ -215,6 +214,11 @@ extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
 ```
 
 This method uses my own extras/IndoorTemp script, based closely on *find this original author's name* script.
+
+I have the DS18B20 attached to the RPi as follows: 
+- Red -> Pin 4 (5V)
+- Black -> Pin 6 (GND)
+- Blue -> Pin 7 (GPIO 4)
 
 #### No Indoor Temperature Data
 
