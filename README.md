@@ -35,8 +35,16 @@ ensor probes.  Colors and fonts are easily configurable.
 ![HyperClock 3.0 Screenshot](HyperClock-3.0-ScreenShot_052118b.jpg?raw=true "Screen Shot")
 
 
-## Installation:
+<html>
+<body>
+<p>
+<img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" 
+     width="200" align="middle">
+</p> 
+</body>
+</html>
 
+## Installation:
 - Download and install your favorite SD Card imager.  I use Win32DiskImager .
 - Download and write the latest Raspbian image to the microSD card (don't get any "Lite" version, or pygame will be very difficult to install)
 - Insert microSD card and boot the RPi
