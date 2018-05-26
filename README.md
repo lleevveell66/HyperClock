@@ -13,8 +13,8 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
 Table of Contents
 =================
 
-   * [HyperClock]()
-      * [Description:]()
+   * [HyperClock](#hyperclock)
+      * [Description:](#description)
       * [Requirements:]()
       * [Installation:]()
       * [Customization:]()
