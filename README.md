@@ -32,7 +32,7 @@ ensor probes.  Colors and fonts are easily configurable.
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
-![HyperClock 3.0 Screenshot](HyperClock-3.0-ScreenShot_052118a.jpg?raw=true "Screen Shot")
+![HyperClock 3.0 Screenshot](HyperClock-3.0-ScreenShot_052118b.jpg?raw=true "Screen Shot")
 
 
 ## Installation:
