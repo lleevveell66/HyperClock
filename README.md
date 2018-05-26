@@ -10,6 +10,26 @@
 This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
 
 
+Table of Contents
+=================
+
+   * [HyperClock]()
+      * [Description:]()
+      * [Requirements:]()
+      * [Installation:]()
+      * [Customization:]()
+         * [Fonts:]()
+         * [Colors:]()
+         * [Topology and Weather Retreival:]()
+            * [Standalone:]()
+            * [Networked:]()
+         * [Indoor Temperature Retreival:]()
+            * [Honeywell Wifi Thermostat (via My Total Connect):]()
+            * [DS18B20-Based Temperature Probe]()
+            * [No Indoor Temperature Data]()
+            * [BONUS Method:]()
+
+
 
 ## Description:
 
