@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+  <data>
+    <now date="Monday 04/23/2018" time="02:30 AM"/>
+    <astral moonphase="First Quarter" moonphasenum="2" sunrise="6:48 am" sunset="8:3 pm"/>
+    <weather>
+      <current code="31" condition="Clear" humidity="74" indoor="NA" pressure="994.0" rising="0" setting="NA" temp="55" windchill="54" winddirection="310" windspeed="11"/>
+      <forecast>
+        <day0 code="30" condition="Partly Cloudy" date="23 Apr 2018" day="Mon" high="74" low="52" precip="100"/>
+        <day1 code="32" condition="Sunny" date="24 Apr 2018" day="Tue" high="79" low="57" precip="100"/>
+        <day2 code="39" condition="Scattered Showers" date="25 Apr 2018" day="Wed" high="67" low="55" precip="100"/>
+        <day3 code="30" condition="Partly Cloudy" date="26 Apr 2018" day="Thu" high="70" low="47" precip="100"/>
+        <day4 code="34" condition="Mostly Sunny" date="27 Apr 2018" day="Fri" high="70" low="53" precip="100"/>
+      </forecast>
+    </weather>
+  </data>

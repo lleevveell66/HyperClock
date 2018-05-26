@@ -13,9 +13,9 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
 
 ## Description:
 
-HyperClock is a simple clock with weather and astral information displayed on any HDMI-capable 
-display you want.  It has also worked on a tiny 3.5" LCD display via I2C. HyperClock is a 
-Python script running on a Raspberry Pi board. It has been tested to work on RPi B+, 2B, 3B,
+HyperClock is a Python script running on a Raspberry Pi board showing a simple clock with 
+weather and astral information displayed on any HDMI-capable display you want.  It has also 
+worked on 3.5" and 7" LCD displays via I2C.  It has been tested to work on RPi B+, 2B, 3B,
 Zero W, and Zero WH in Raspbian Wheezy, Jessie, and Stretch.  I am sure it could work on 
 any Linux system with Python, Pygame, and graphic capability, though.  The reason I built it 
 on RPis with huge HDMI TV displays is because I am as blind as a bat, these days.  I have one 
@@ -40,6 +40,7 @@ ensor probes.  Colors and fonts are easily configurable.
 - CNTL-ALT-F6 and login as pi/raspberry
   - I do this all from CLI, but you can also do it from X11 GUI.
   - I also do everything as root.  Feel free to sudo everything.
+
 ```
 # Switch User to root:
 sudo su -
@@ -245,6 +246,11 @@ extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
 ```
 
 This method uses my own extras/IndoorTemp script, based closely on *find this original author's name* script.
+
+I have the DS18B20 attached to the RPi as follows: 
+- Red -> Pin 4 (5V)
+- Black -> Pin 6 (GND)
+- Blue -> Pin 7 (GPIO 4)
 
 #### No Indoor Temperature Data
 
