@@ -9,27 +9,22 @@
 **URL:** https://github.com/lleevveell66/HyperClock<br>
 This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
 
-
-Table of Contents
-=================
-
    * [HyperClock](#hyperclock)
+   * [Table of Contents](#table-of-contents)
       * [Description:](#description)
-      * [Requirements:]()
-      * [Installation:]()
-      * [Customization:]()
-         * [Fonts:]()
-         * [Colors:]()
-         * [Topology and Weather Retreival:]()
-            * [Standalone:]()
-            * [Networked:]()
-         * [Indoor Temperature Retreival:]()
-            * [Honeywell Wifi Thermostat (via My Total Connect):]()
-            * [DS18B20-Based Temperature Probe]()
-            * [No Indoor Temperature Data]()
-            * [BONUS Method:]()
-
-
+      * [Requirements:](#requirements)
+      * [Installation:](#installation)
+      * [Customization:](#customization)
+         * [Fonts:](#fonts)
+         * [Colors:](#colors)
+         * [Topology and Weather Retreival:](#topology-and-weather-retreival)
+            * [Standalone:](#standalone)
+            * [Networked:](#networked)
+         * [Indoor Temperature Retreival:](#indoor-temperature-retreival)
+            * [Honeywell Wifi Thermostat (via My Total Connect):](#honeywell-wifi-thermostat-via-my-total-connect)
+            * [DS18B20-Based Temperature Probe](#ds18b20-based-temperature-probe)
+            * [No Indoor Temperature Data](#no-indoor-temperature-data)
+            * [BONUS Method:](#bonus-method)
 
 ## Description:
 
@@ -52,19 +47,7 @@ ensor probes.  Colors and fonts are easily configurable.
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
-![HyperClock 3.0 Screenshot](HyperClock-3.0-ScreenShot_052118b.jpg?raw=true "Screen Shot")
-
-
-<html>
-<body>
-<center>
-<p>
-<img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" 
-     width="300" align="middle">
-</p>
-</center>
-</body>
-</html>
+<html><body><center><p><center><img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle"></center></p></center></body></html>
 
 ## Installation:
 - Download and install your favorite SD Card imager.  I use Win32DiskImager .
