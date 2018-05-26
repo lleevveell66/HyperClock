@@ -1,8 +1,8 @@
 #!/bin/sh
 ##################################################################
-# HyperClock 2.0 by level6 of LIE
+# HyperClock 3.0 by level6
+# https://github.com/lleevveell66/HyperClock
 ##################################################################
-# http://www.awja.org:8090/display/~level6/HyperClock
 # Find complete instructions on the HyperClock page.
 ##################################################################
 
@@ -18,7 +18,7 @@ echo "Done!"
 echo "  Remember to edit /usr/local/HyperClock/HyperClock.conf to customize your HyperClock"
 echo "  To run it:  /usr/local/HyperClock/HyperClock"
 echo "  See the webpage for other instructions (making it run upon boot on an RPI, etc.):"
-echo "    http://www.awja.org:8090/display/~level6/HyperClock"
+echo "    https://github.com/lleevveell66/HyperClock"
 
 exit 0
 

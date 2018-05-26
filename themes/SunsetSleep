@@ -1,0 +1,19 @@
+# HyperClock Theme - Sunset Sleep
+# Colors in Red, Green, Blue
+timecolor = 244,122,66
+datecolor = 240,240,30
+weathercolor = 255,255,128
+tempcolor = 255,167,45
+itempcolor = 240,170,60
+highcolor = 255,209,45
+lowcolor = 193,154,13
+windcolor = 206,95,68
+pressurecolor = 181,82,57
+humiditycolor = 160,69,46
+day1color = 255,128,255
+day2color = 255,128,255
+day3color = 255,128,255
+day4color = 255,128,255
+sunrisecolor = 255,225,0
+sunsetcolor = 255,178,0
+lastcolor = 50,89,58

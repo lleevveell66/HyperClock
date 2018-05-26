@@ -1,14 +1,26 @@
 #!/usr/bin/env python
 ##########################################################
-# HyperConfig v2.0 by Raymond Spangle (level6@leper.org)
+# HyperConfig v3.0 by level6
+# https://github.com/lleevveell66/HyperClock
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Read in HyperClock configuration information from HyperClock.conf
 ##########################################################
 
-import os, pygame, time, datetime, random, sys, urllib, ConfigParser
+import os, pygame, time, datetime, random, sys, urllib, ConfigParser, syslog
 
 config=ConfigParser.ConfigParser()
-config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
+
+try:
+	config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
+except:
+	e=sys.exc_info()[0]
+	print "HyperClock.conf Parsing Error: %s" % e
+	print "/usr/local/HyperClock/HyperClock.conf exists?"
+	syslog.syslog(syslog.LOG_ERR,"HyperClock.conf Parsing Error: %s" % e)
+	syslog.syslog(syslog.LOG_ERR,"/usr/local/HyperClock/HyperClock.conf exists?")
+	print "Exiting."
+	syslog.syslog(syslog.LOG_ERR,"Exiting.")
+	sys.exit();
 
 cfg_Topology=config.get('HyperClock','topology')
 cfg_AstralDataFile=config.get('HyperClock','AstralDataFile')

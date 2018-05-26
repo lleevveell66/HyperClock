@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 #import os, pygame, time, datetime, random, sys, urllib, math, decimal
-import os, time, datetime, random, sys, urllib, math, decimal, subprocess, re, csv, HyperConfig
+import os, time, datetime, random, sys, urllib, math, decimal, subprocess, re, csv, syslog
+import HyperConfig
 
 from datetime import datetime
 from xml.dom import minidom
@@ -20,8 +21,8 @@ woeid=HyperConfig.cfg_woeid
 wurl='https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D'+str(woeid)
 wser='http://xml.weather.yahoo.com/ns/rss/1.0'
 
-def position(now=None): 
-   if now is None: 
+def position(now=None):
+   if now is None:
       now = datetime.now()
 
    diff = now - datetime(2001, 1, 1)
@@ -30,37 +31,44 @@ def position(now=None):
 
    return lunations % dec(1)
 
-def phase(pos): 
+def phase(pos):
    index = (pos * dec(8)) + dec("0.5")
    index = math.floor(index)
    return {
-      0: "New Moon", 
-      1: "Waxing Crescent", 
-      2: "First Quarter", 
-      3: "Waxing Gibbous", 
-      4: "Full Moon", 
-      5: "Waning Gibbous", 
-      6: "Last Quarter", 
+      0: "New Moon",
+      1: "Waxing Crescent",
+      2: "First Quarter",
+      3: "Waxing Gibbous",
+      4: "Full Moon",
+      5: "Waning Gibbous",
+      6: "Last Quarter",
       7: "Waning Crescent"
    }[int(index) & 7]
 
-def phasenum(pos): 
+def phasenum(pos):
    index = (pos * dec(8)) + dec("0.5")
    index = math.floor(index)
    return {
-      0: "0", 
-      1: "1", 
-      2: "2", 
-      3: "3", 
-      4: "4", 
-      5: "5", 
-      6: "6", 
+      0: "0",
+      1: "1",
+      2: "2",
+      3: "3",
+      4: "4",
+      5: "5",
+      6: "6",
       7: "7"
    }[int(index) & 7]
 
 def getWeather(woeid):
 	url=wurl
-	dom=minidom.parse(urllib.urlopen(url))
+
+	try:
+		dom=minidom.parse(urllib.urlopen(url))
+	except:
+                e=sys.exc_info()[0]
+                print "Error: %s" % e
+                syslog.syslog(syslog.LOG_ERR,"Error: %s" % e)
+		
 	forecasts = []
 	for node in dom.getElementsByTagNameNS(wser, 'forecast'):
 		forecasts.append({
@@ -94,10 +102,15 @@ def getWeather(woeid):
 def downloadAndWriteWeather(woeid):
 	seconds=int(datetime.now().strftime("%s"))
 	currenttime=datetime.now().strftime("%I:%M %p")
-	
+
 	currentdate=datetime.now().strftime("%A %m/%d/%Y")
 
-	weather=getWeather(woeid)
+	try:
+		weather=getWeather(woeid)
+	except:
+		e=sys.exc_info()[0]
+		print "Error: %s" % e
+		syslog.syslog(syslog.LOG_ERR,"Error: %s" % e)
 
 	current_condition=weather['current_condition']
 	current_temp=weather['current_temp']
@@ -120,7 +133,6 @@ def downloadAndWriteWeather(woeid):
 	# IndoorSetting=subprocess.check_output('{}'.format(getIndoorSettingCmd),shell=True)
 	#IndoorSetting=subprocess.Popen(format(getIndoorSettingCmd),shell=True)
 	IndoorSetting="NA"
-
 
 	day0date=weather['forecasts'][0]['date']
 	day0day=weather['forecasts'][0]['day']

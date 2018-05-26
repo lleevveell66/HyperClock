@@ -3,10 +3,10 @@
 
 # HyperClock
 
-**Current Version:** 2.0<br>
-**Last Update:** 07/12/16<br>
-**Author:** Raymond Spangle<br>
-**URL:** http://www.awja.org:8090/display/~level6/HyperClock?flashId=-637453519<br>
+**Current Version:** 3.0<br>
+**Last Update:** 05/26/18<br>
+**Author:** level6<br>
+**URL:** https://github.com/lleevveell66/HyperClock<br>
 This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
 
 
@@ -14,32 +14,113 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
 ## Description:
 
 HyperClock is a simple clock with weather and astral information displayed on any HDMI-capable 
-display you want. HyperClock is a Python script running on a Raspberry Pi board. It has been 
-tested to work on RPi B+, 2B, and 3B in Raspbian Wheezy and Jessie.  I am sure it could work on 
-any Linux system with Python, Pygame, and graphic capability, though.  The reason I built it on RPis
-with huge HDMI TV displays is because I am as blind as a bat, these days.  I have one in almost 
-every room of my house, now.
+display you want.  It has also worked on a tiny 3.5" LCD display via I2C. HyperClock is a 
+Python script running on a Raspberry Pi board. It has been tested to work on RPi B+, 2B, 3B,
+Zero W, and Zero WH in Raspbian Wheezy, Jessie, and Stretch.  I am sure it could work on 
+any Linux system with Python, Pygame, and graphic capability, though.  The reason I built it 
+on RPis with huge HDMI TV displays is because I am as blind as a bat, these days.  I have one 
+in almost every room of my house, now.
 
-Weather data is retrieved every 15 minutes over the network from the Yahoo Weather API. The time is 
-spoken in a robotic voice, on the hour.  There is support for external temperature sensor probes.
-Colors and fonts are easily configurable.
+Weather data is retrieved every 15 minutes over the network from the Yahoo Weather API. The 
+time is spoken in a robotic voice, on the hour.  There is support for external temperature s
+ensor probes.  Colors and fonts are easily configurable.
 
 ## Requirements:
-- Raspberry Pi B+, 2B, or 3B
-- Raspbian (Wheezy or Jessie)
+- Raspberry Pi B+, 2B, 3B, ZeroW, ZeroWH
+- Raspbian (Wheezy, Jessie, or Stretch)
 - Python
 - Pygame
-- Graphics capability (I have this running on 19" and 32" HDMI TVs and on a 7" TFT display with an external speaker)
+- Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
 ## Installation:
 
+- Download and install your favorite SD Card imager.  I use Win32DiskImager .
+- Download and write the latest Raspbian image to the microSD card (don't get any "Lite" version, or pygame will be very difficult to install)
+- Insert microSD card and boot the RPi
+- CNTL-ALT-F6 and login as pi/raspberry
+  - I do this all from CLI, but you can also do it from X11 GUI.
+  - I also do everything as root.  Feel free to sudo everything.
 ```
-apt-get install git python python-pygame
+# Switch User to root:
+sudo su -
+
+# Set it to boot into normal textual login, no more X:
+systemctl set-default multi-user.target
+
+raspi-config
+# change password
+# change hostname
+# change locale, timezone, wifi country
+# enable SSH and 1-wire (if using DS18B20-based temperature probe)
+# expand disk
+# set up networking 
+# reboot
+
+# SSH back in as pi user, and switch user to root
+# If you find this annoying, you can allow root SSH login with the following:
+# # Allow root user SSH logins (OPTIONAL):
+# perl -p -i -e 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# service sshd restart
+# passwd root
+
+# Install some required packages and update everything:
+apt-get install ntp ntpdate git python-pip python3-pip
+apt-get -y upgrade
+apt-get update
+
+# Disable IPv6 (OPTIONAL):
+cat <<'EOF'>/etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+EOF
+sysctl -p
+
+# Get NTP working:
+service ntp stop
+ntpdate 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
+service ntp start
+update-rc.d ntp enable
+date
+ntpq -p
+
+# Install pygame for python and python3 (you can do this only for python, if you like):
+pip install pygame
+pip3 install pygame
+pip install setuptools
+pip3 install setuptools
+
+# Clean-up unused packages
+apt-get autoremove -y
+
+# Install HyperClock from git repo:
 cd /usr/local/src
 git clone https://github.com/lleevveell66/HyperClock
 cd HyperClock
 ./install.sh
-/usr/local/HyperClock/HyperClock
+
+# Customize (decribed below):
+vi /usr/local/HyperClock/HyperClock.conf
+# pay special attention to: topology, woeid
+
+# Test it out:
+/usr/local/HyperClock/HyperClock  # Hit CTRL-C to stop
+
+# Make it run HyperClock on boot:
+vi /etc/rc.local
+.
+.
+# Uncomment and edit these for your chosen indoor temperature solution (described below): 
+#printf "Getting the initial indoor temp reading ...\n"
+#/usr/local/HyperClock/extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+
+printf "HyperClock: Starting HyperClock ...\n"
+sudo /usr/local/HyperClock/HyperClock &
+.
+.
+
+# Reboot to test it out:
+shutdown -r now
+
 ``` 
 
 ## Customization:

@@ -1,0 +1,20 @@
+# HyperClock Theme - Midnight Forest
+# Colors in Red, Green, Blue
+timecolor = 64,255,64
+datecolor = 240,240,30
+weathercolor = 255,255,128
+tempcolor = 80,255,0
+itempcolor = 240,170,60
+highcolor = 65,235,180
+lowcolor = 70,130,255
+windcolor = 128,128,255
+pressurecolor = 128,128,255
+humiditycolor = 128,128,255
+day1color = 255,128,255
+day2color = 255,128,255
+day3color = 255,128,255
+day4color = 255,128,255
+sunrisecolor = 128,255,255
+sunsetcolor = 128,255,255
+lastcolor = 50,89,58
+
