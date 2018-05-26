@@ -37,10 +37,12 @@ ensor probes.  Colors and fonts are easily configurable.
 
 <html>
 <body>
+<center>
 <p>
 <img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" 
-     width="200" align="middle">
-</p> 
+     width="300" align="middle">
+</p>
+</center>
 </body>
 </html>
 
