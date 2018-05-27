@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/github.css">
+<link rel="stylesheet" type="text/css" href="css/github.css">
 
 ![HyperClock 2.0 Screenshot](snapshots/HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
 
@@ -48,9 +48,9 @@ ensor probes.  Colors and fonts are easily configurable.
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
-<p class="aligncenter">
-<img src="snapshots/HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
-</p>
+<h1 align="center">
+  <img src="snapshots/HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
+</h1>
 
 ## Installation:
 - Download and install your favorite SD Card imager.  I use Win32DiskImager .
