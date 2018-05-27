@@ -197,12 +197,7 @@ lastcolor = 50,89,58
 Several pre-built "themes" are included in the /usr/local/HyperClock/themes/ directory.  These include only 
 the color section values. You can use those values in your own HyperClock.conf file.
 
-Here is a simple HTML5 color picker, in case your browser supports it:
-
-<center><p>
-<label for="my-color">Choose a color :</label> 
-<input id="my-color" type="color" />
-</p></center>
+If you need a color picker, just hit Google's: https://www.google.com/search?q=html+color+picker
 
 ### Topology and Weather Retreival:
 
