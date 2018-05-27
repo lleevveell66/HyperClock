@@ -1,10 +1,6 @@
-<style>
-.aligncenter {
-    text-align: center;
-}
-</style>
+<link rel="stylesheet" href="css/github.css">
 
-![HyperClock 2.0 Screenshot](HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
+![HyperClock 2.0 Screenshot](snapshots/HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
 
 # HyperClock
 
@@ -53,7 +49,7 @@ ensor probes.  Colors and fonts are easily configurable.
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
 <p class="aligncenter">
-<img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
+<img src="snapshots/HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
 </p>
 
 ## Installation:
@@ -127,7 +123,7 @@ vi /usr/local/HyperClock/HyperClock.conf
 # pay special attention to: topology, woeid
 
 # Test it out:
-/usr/local/HyperClock/HyperClock  # Hit CTRL-C to stop
+/usr/local/HyperClock/HyperClock  # Hit CTRL+C to stop
 
 # Make it run HyperClock on boot:
 vi /etc/rc.local
