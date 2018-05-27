@@ -196,8 +196,10 @@ the color section values. You can use those values in your own HyperClock.conf f
 
 Here is a simple HTML5 color picker, in case your browser supports it:
 
+<html><body><center><p><center>
 <label for="my-color">Choose a color :</label> 
 <input id="my-color" type="color" />
+</center></p></center></body></html>
 
 ### Topology and Weather Retreival:
 
