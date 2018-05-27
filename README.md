@@ -1,3 +1,8 @@
+<style>
+.aligncenter {
+    text-align: center;
+}
+</style>
 
 ![HyperClock 2.0 Screenshot](HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
 
@@ -47,7 +52,9 @@ ensor probes.  Colors and fonts are easily configurable.
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
 
-<html><body><center><p><center><img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle"></center></p></center></body></html>
+<p class="aligncenter">
+<img src="HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
+</p>
 
 ## Installation:
 - Download and install your favorite SD Card imager.  I use Win32DiskImager .
@@ -196,10 +203,10 @@ the color section values. You can use those values in your own HyperClock.conf f
 
 Here is a simple HTML5 color picker, in case your browser supports it:
 
-<html><body><center><p><center>
+<center><p>
 <label for="my-color">Choose a color :</label> 
 <input id="my-color" type="color" />
-</center></p></center></body></html>
+</p></center>
 
 ### Topology and Weather Retreival:
 
