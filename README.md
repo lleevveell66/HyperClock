@@ -1,5 +1,9 @@
 <link rel="stylesheet" type="text/css" href="css/github.css">
 
+<h1 align="center">
+  <img src="snapshots/HyperClock.gif" alt="HyperClock Logo" width="75%" align="middle">
+</h1>
+
 ![HyperClock 2.0 Screenshot](snapshots/HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
 
 # HyperClock
@@ -205,10 +209,18 @@ There are two methods of weather data retrieval:
 
 #### Standalone:
 
+<h1 align="center">
+  <img src="snapshots/HyperClock_standalone.jpg" alt="HyperClock Standalone Diagram" width="400" align="middle">
+</h1>
+
 This is the default method of weather and astral data retrieval.  The *topology* parameter is set to *standalone* in the HyperClock.conf file for this method.  Every 15 minutes (900 seconds), HyperClock will use built-in code to retrieve the data 
 from the Yahoo! Weather API.  This is fine for a single HyperClock, but when running multiple HyperClocks, please try to use a networked topology, as described below.
 
 #### Networked:
+
+<h1 align="center">
+  <img src="snapshots/HyperClock_networked.jpg" alt="HyperClock Networked Diagram" width="400" align="middle">
+</h1>
 
 This method is slightly more complicated.  It is important to think about using this method of data retrieval when running more than a single HyperClock, as it will create much less traffic to the Yahoo! Weather API, which has remained free, to date, but... who knows, once they begin to get tens of thousands of requests per site, per day.  
 
@@ -272,6 +284,11 @@ I have the DS18B20 attached to the RPi as follows:
 - Red -> Pin 4 (5V)
 - Black -> Pin 6 (GND)
 - Blue -> Pin 7 (GPIO 4)
+
+A 4.7k resistor must be soldered between the red and yellow wires (power and data), 
+which is required as a pullup from the DATA to VCC line when using the sensor. 
+
+A photo tutorial will be coming soon...
 
 #### No Indoor Temperature Data
 
