@@ -281,7 +281,7 @@ I have the DS18B20 attached to the RPi as follows:
 A 4.7k resistor must be soldered between the red and yellow wires (power and data), 
 which is required as a pull-up from the DATA to VCC line when using the sensor. 
 
-A photo tutorial will be coming soon...
+Here is how I build mine:
 <h1 align="center">
  <table cellspacing="3" cellpadding="3" border="0">
   <tr>
@@ -380,6 +380,6 @@ Build, buy, and/or write your own!  It's fun!   If you do this, I would humbly r
 Send kitty HyperClock pix!
 
 <h1 align="center">
-  <img src="snapshots/Patches_Hyperclock.jpg" alt="Patches with HyperClock in background" width="50%" align="middle">
+  <img src="snapshots/Patches_HyperClock.jpg" alt="Patches with HyperClock in background" width="50%" align="middle">
 </h1>
 
