@@ -269,17 +269,6 @@ This method uses the extras/therm.py script written by Brad Goodman.  I made a f
 
 #### DS18B20-Based Temperature Probe
 
-You will find code in the included *GetIndoorTemp.sh* script (which has been 
-commented out) which will retrieve this data from a DS18B20-based temperature probe, 
-via 1-wire on the GPIO pins.
-
-```
-# Use this for a DS18B20 type of probe
-# (https://www.amazon.com/gp/product/B00Q9YBIJI/ref=oh_aui_detailpage_o06_s01?ie=UTF8&psc=1)
-
-extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
-```
-
 This method uses my own */usr/local/HyperClock/extras/IndoorTemp* script.
 
 Remember to enable 1-Wire in raspi-config and reboot, if you haven't done so, already.
@@ -290,9 +279,35 @@ I have the DS18B20 attached to the RPi as follows:
 - Blue -> Pin 7 (GPIO 4)
 
 A 4.7k resistor must be soldered between the red and yellow wires (power and data), 
-which is required as a pullup from the DATA to VCC line when using the sensor. 
+which is required as a pull-up from the DATA to VCC line when using the sensor. 
 
 A photo tutorial will be coming soon...
+<h1 align="center">
+ <table cellspacing="3" cellpadding="3" border="0">
+  <tr>
+  <td>
+   <img src="snapshots/DS18B20-Build-1.jpg" alt="DS18B20 Build Photo 1" align="middle">
+  </td>
+  <td>
+   <img src="snapshots/DS18B20-Build-2.jpg" alt="DS18B20 Build Photo 3" align="middle">
+  </td>
+  <td>
+   <img src="snapshots/DS18B20-Build-3.jpg" alt="DS18B20 Build Photo 3" align="middle">
+  </td>
+  </tr>
+  <tr>
+  <td>
+   <img src="snapshots/DS18B20-Build-4.jpg" alt="DS18B20 Build Photo 4" align="middle">
+  </td>
+  <td>
+   <img src="snapshots/DS18B20-Build-5.jpg" alt="DS18B20 Build Photo 5" align="middle">
+  </td>
+  <td>
+   <img src="snapshots/DS18B20-Build-6.jpg" alt="DS18B20 Build Photo 6" align="middle">
+  </td>
+  </tr>
+ </table>
+</h1>
 
 
 Run this twice to test (the first time is always an unreasonable number on these sensors):
@@ -359,4 +374,12 @@ If the script defined in *IndoorTempCommand* writes a **9999** into the file def
 
 Build, buy, and/or write your own!  It's fun!   If you do this, I would humbly request that you branch the code and include your magic.  If you are not git-savvy, simply send me an email with a description and include the code you used.
 
+
+#### A Personal Request
+
+Send kitty HyperClock pix!
+
+<h1 align="center">
+  <img src="snapshots/Patches_Hyperclock.jpg" alt="Patches with HyperClock in background" width="50%" align="middle">
+</h1>
 
