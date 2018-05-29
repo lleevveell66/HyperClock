@@ -269,7 +269,9 @@ This method uses the extras/therm.py script written by Brad Goodman.  I made a f
 
 #### DS18B20-Based Temperature Probe
 
-You will find code in the included *GetIndoorTemp.sh* script (which has been commented out) which will retrieve this data from a DS18B20-based temperature probe, via 1-wire on the GPIO pins.
+You will find code in the included *GetIndoorTemp.sh* script (which has been 
+commented out) which will retrieve this data from a DS18B20-based temperature probe, 
+via 1-wire on the GPIO pins.
 
 ```
 # Use this for a DS18B20 type of probe
@@ -278,7 +280,9 @@ You will find code in the included *GetIndoorTemp.sh* script (which has been com
 extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
 ```
 
-This method uses my own extras/IndoorTemp script, based closely on *find this original author's name* script.
+This method uses my own */usr/local/HyperClock/extras/IndoorTemp* script.
+
+Remember to enable 1-Wire in raspi-config and reboot, if you haven't done so, already.
 
 I have the DS18B20 attached to the RPi as follows: 
 - Red -> Pin 4 (5V)
@@ -289,6 +293,63 @@ A 4.7k resistor must be soldered between the red and yellow wires (power and dat
 which is required as a pullup from the DATA to VCC line when using the sensor. 
 
 A photo tutorial will be coming soon...
+
+
+Run this twice to test (the first time is always an unreasonable number on these sensors):
+
+```
+/usr/local/HyperClock/extras/IndoorTemp
+/usr/local/HyperClock/extras/IndoorTemp
+```
+
+You should see a reasonable temperature reported back.  If not, check your 1-Wire configuration.
+
+Every 15 minutes, HyperClock executes the script configured as *IndoorTempCommand* and 
+places the results into the file configured as *IndoorTempFile* in the HyperClock.conf file.
+
+The defaults are:
+
+```
+# Defines the location of the text file which contains the Current Indoor Temperature
+IndoorTempFile = /usr/local/HyperClock/CurrentIndoorTemp
+
+# Defines the external command used to retreive the Indoor Temperature
+IndoorTempCommand = /usr/local/HyperClock/GetIndoorTemp.sh
+```
+
+That means that HyperClock will execute a script called 
+*/usr/local/HyperClock/GetIndoorTemp.sh* and place the result into a file called
+*/usr/local/HyperClock/CurrentIndoorTemp*, every 15 minutes.
+
+The GetIndoorTemp.sh script defaults to a "No Indoor Temperature Data" scenario, simply 
+echoing "9999" into the /usr/local/HyperClock/CurrentIndoorTemp file.  We need to change
+the /usr/local/HyperClock/GetIndoorTemp.sh as follows:
+
+```
+#!/bin/sh
+
+# Use this for a WiFi Honeywell thermostat via My Total Connect
+#USERNAME=CHANGEME@CHANGEME.CH
+#PASSWORD=CHANGEME
+#DEVICEID=CHANGME
+#extras/therm.py -U $USERNAME -P $PASSWORD -D $DEVICEID -q | grep ^CurrentTemp|cut -d\  -f2|sed 's/\..*//'>/usr/local/HyperClock/CurrentIndoorTemp
+
+# Use this for a DS18B20 type of probe
+# (https://www.amazon.com/gp/product/B00Q9YBIJI/ref=oh_aui_detailpage_o06_s01?ie=UTF8&psc=1)
+/usr/local/HyperClock/extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+
+# Dummy to show no indoor temperature
+#echo "9999" > /usr/local/HyperClock/CurrentIndoorTemp
+```
+
+Comment out the "echo 9999" line, and uncomment the "IndoorTemp" line.
+
+That's it!  Your indoor temperature should update int he next 15 minutes.  You can force it now
+simply running that line:
+
+```
+/usr/local/HyperClock/extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+```
 
 #### No Indoor Temperature Data
 
