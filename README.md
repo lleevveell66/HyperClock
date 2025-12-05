@@ -8,8 +8,8 @@
 
 # HyperClock
 
-**Current Version:** 3.0<br>
-**Last Update:** 05/26/18<br>
+**Current Version:** 4.0<br>
+**Last Update:** 05-Dec-2025<br>
 **Author:** level6<br>
 **URL:** https://github.com/lleevveell66/HyperClock<br>
 This is HyperClock, the customizable clock and weather display of the futuuuurreeee... <br>
