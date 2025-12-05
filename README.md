@@ -30,6 +30,7 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
             * [DS18B20-Based Temperature Probe](#ds18b20-based-temperature-probe)
             * [No Indoor Temperature Data](#no-indoor-temperature-data)
             * [BONUS Method:](#bonus-method)
+            * [A Personal Request:](#a-personal-request)
 
 ## Description:
 
@@ -50,7 +51,8 @@ ensor probes.  Colors and fonts are easily configurable.
 - Raspbian (Wheezy, Jessie, or Stretch)
 - Python
 - Pygame
-- Graphics capability (I have this running on 19" and 32" HDMI TVs and on 3.5 and 7" TFT display via I2C with an external speakers)
+- Graphics capability (I have this running on 19" and 32" HDMI TVs and 
+on 3.5 and 7" TFT displays via I2C with an external speaker)
 
 <h1 align="center">
   <img src="snapshots/HyperClock-3.0-ScreenShot_052118b.jpg" alt="HyperClock 3.0 Screenshot" width="300" align="middle">
@@ -58,7 +60,8 @@ ensor probes.  Colors and fonts are easily configurable.
 
 ## Installation:
 - Download and install your favorite SD Card imager.  I use Win32DiskImager .
-- Download and write the latest Raspbian image to the microSD card (don't get any "Lite" version, or pygame will be very difficult to install)
+- Download and write the latest Raspbian image to the microSD card (don't get any 
+"Lite" version, or pygame will be very difficult to install)
 - Insert microSD card and boot the RPi
 - CNTL-ALT-F6 and login as pi/raspberry
   - I do this all from CLI, but you can also do it from X11 GUI.
@@ -281,7 +284,7 @@ I have the DS18B20 attached to the RPi as follows:
 A 4.7k resistor must be soldered between the red and yellow wires (power and data), 
 which is required as a pull-up from the DATA to VCC line when using the sensor. 
 
-Here is how I build mine:
+Here is how I build mine for headered RPis:
 <h1 align="center">
  <table cellspacing="3" cellpadding="3" border="0">
   <tr>
