@@ -11,6 +11,8 @@ echo " - Changing file modes of executables"
 /bin/chmod 755 HyperClock
 /bin/chmod 755 GetIndoorTemp.sh
 /bin/chmod 755 GetWeather.sh
+echo " - Removing any previous directory /usr/local/HyperClock/"
+\rm -r /usr/local/HyperClock/
 echo " - Making the /usr/local/HyperClock/ directory"
 /bin/mkdir -p /usr/local/HyperClock/
 

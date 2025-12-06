@@ -121,8 +121,8 @@ def get_current_data():
     file_handle.close()
 
     return {
-        'moon_phase': astral.attributes["moonphase"].value,
-        'moon_phase_num': astral.attributes["moonphase_num"].value,
+        'moon_phase': astral.attributes["moon_phase"].value,
+        'moon_phase_num': astral.attributes["moon_phase_num"].value,
         'sunrise': astral.attributes["sunrise"].value,
         'sunset': astral.getAttribute("sunset"),
         'code': current.getAttribute("code"),
@@ -383,7 +383,7 @@ while True:
         sunriseset_img=pygame.transform.scale(sunriseset_img,(int(.09*maxX),int(.09*maxX)))
         sunriseset_img_pos=sunriseset_img.get_rect(center=(minX+int(.11*maxX),midY+int(.10*maxY)))
 
-        FILE_NAME='/usr/local/HyperClock/images/moon/'+moonphase_num+'.png'
+        FILE_NAME='/usr/local/HyperClock/images/moon/'+moon_phase_num+'.png'
         moon_img=pygame.image.load(FILE_NAME)
         moon_img=pygame.transform.scale(moon_img,(int(.09*maxX),int(.09*maxX)))
         moon_img_pos=moon_img.get_rect(center=(maxX-int(.11*maxX),midY+int(.10*maxY)))

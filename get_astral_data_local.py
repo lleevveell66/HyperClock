@@ -12,7 +12,7 @@ import subprocess
 import re
 import csv
 import syslog
-import HyperConfig
+import hyper_config
 
 from datetime import datetime
 from xml.dom import minidom
@@ -22,7 +22,7 @@ dec=decimal.Decimal
 
 # http://woeid.rosselliot.co.nz/
 # http://woeid.factormystic.net/
-woeid=HyperConfig.cfg_woeid
+woeid=hyper_config.cfg_woeid
 
 #wurl='http://xml.weather.yahoo.com/forecastrss?p=%s'
 #wurl='http://weather.yahooapis.com/forecastrss?p=%s'
@@ -189,8 +189,8 @@ def downloadAndWriteWeather(woeid):
 	astral.setAttribute("sunset",sunset)
 
 	pos=position()
-	moonphasename=phase(pos)
-	moonphasenum=phasenum(pos)
+	moon_phase_name=phase(pos)
+	moon_phase_num=phasenum(pos)
 
 	astral.setAttribute("moonphase",moonphasename)
 	astral.setAttribute("moonphasenum",moonphasenum)
@@ -264,7 +264,7 @@ def downloadAndWriteWeather(woeid):
 	data.appendChild(weather)
 
 	# doc.writexml(open("/usr/local/HyperClock/AstralData.txt","wb"),indent="  ",addindent="  ",newl='\n')
-	doc.writexml(open(HyperConfig.cfg_AstralDataFile,"wb"),indent="  ",addindent="  ",newl='\n')
+	doc.writexml(open(hyper_config.cfg_astral_data_file,"wb"),indent="  ",addindent="  ",newl='\n')
 
 	doc.unlink()
 
