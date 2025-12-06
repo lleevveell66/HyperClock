@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 ##########################################################
-# HyperClock v3.0 by level6
+# HyperClock v4.0 by level6
 # https://github.com/lleevveell66/HyperClock
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # This program will make a full-screened clock with astral
@@ -30,7 +30,7 @@ pygame.mouse.set_visible(False)
 
 myscreen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
 myDisplayInfo=pygame.display.Info()
-print "Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h)
+print("Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
 syslog.syslog(syslog.LOG_INFO,"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
 minX=0
 maxX=myDisplayInfo.current_w
@@ -420,6 +420,6 @@ while True:
 				pygame.time.delay(1)
 
 	except KeyboardInterrupt:
-		print "Program interrupted by keyboard.  Exiting cleanly."
+		print("Program interrupted by keyboard.  Exiting cleanly.")
 		syslog.syslog(syslog.LOG_INFO,"Program interrupted by keyboard.  Exiting cleanly.")
 		sys.exit()

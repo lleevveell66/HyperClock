@@ -1,24 +1,24 @@
 #!/usr/bin/env python
 ##########################################################
-# HyperConfig v3.0 by level6
+# HyperConfig v4.0 by level6
 # https://github.com/lleevveell66/HyperClock
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Read in HyperClock configuration information from HyperClock.conf
 ##########################################################
 
-import os, pygame, time, datetime, random, sys, urllib, ConfigParser, syslog
+import os, pygame, time, datetime, random, sys, urllib, configparser, syslog
 
-config=ConfigParser.ConfigParser()
+config=configparser.ConfigParser()
 
 try:
 	config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
 except:
 	e=sys.exc_info()[0]
-	print "HyperClock.conf Parsing Error: %s" % e
-	print "/usr/local/HyperClock/HyperClock.conf exists?"
+	print("HyperClock.conf Parsing Error: %s" % e)
+	print("/usr/local/HyperClock/HyperClock.conf exists?")
 	syslog.syslog(syslog.LOG_ERR,"HyperClock.conf Parsing Error: %s" % e)
 	syslog.syslog(syslog.LOG_ERR,"/usr/local/HyperClock/HyperClock.conf exists?")
-	print "Exiting."
+	print("Exiting.")
 	syslog.syslog(syslog.LOG_ERR,"Exiting.")
 	sys.exit();
 
