@@ -83,6 +83,12 @@ raspi-config
 # set up networking 
 # reboot
 
+# The manual method of enabling 1-wire is:
+# Connect your w1 temp probe
+# echo "dtoverlay=w1-gpio" >> /boot/firmware/config.txt
+# shutdown -rf now
+
+
 # SSH back in as pi user, and switch user to root
 # If you find this annoying, you can allow root SSH login with the following:
 # # Allow root user SSH logins (OPTIONAL):
@@ -91,30 +97,35 @@ raspi-config
 # passwd root
 
 # Install some required packages and update everything:
-apt-get install ntp ntpdate git python-pip python3-pip
+apt-get install git python3-pip
 apt-get -y upgrade
 apt-get update
 
 # Disable IPv6 (OPTIONAL):
-cat <<'EOF'>/etc/sysctl.conf
+# Disable IPv6:
+cat >> /etc/sysctl.conf <<EOL
+# Disable IPv6
 net.ipv6.conf.all.disable_ipv6=1
 net.ipv6.conf.default.disable_ipv6=1
-EOF
+net.ipv4.tcp_timestamps = 0
+EOL
 sysctl -p
+sed -i '/^::1/d' /etc/hosts
 
 # Get NTP working:
-service ntp stop
-ntpdate 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
-service ntp start
-update-rc.d ntp enable
-date
-ntpq -p
+#service ntp stop
+#ntpdate 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
+#service ntp start
+#update-rc.d ntp enable
+#date
+#ntpq -p
 
-# Install pygame for python and python3 (you can do this only for python, if you like):
-pip install pygame
-pip3 install pygame
-pip install setuptools
-pip3 install setuptools
+# Install pygame for python3:
+apt -y install python3-pygame
+apt -y install python3-setuptools
+
+# Install the python3 configparser library:
+pip3 install --break-system-packages configparser
 
 # Clean-up unused packages
 apt-get autoremove -y
