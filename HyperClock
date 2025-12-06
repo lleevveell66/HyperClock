@@ -9,14 +9,9 @@ This program will make a full-screened clock with astral
 and weather data on your Raspberry Pi screen.
 """
 
-#import os
-#import time
 import datetime
-#import random
 import sys
-#import urllib
 import re
-#import subprocess
 import syslog
 
 from datetime import datetime
@@ -27,13 +22,13 @@ from pygame.locals import *
 
 import pygame
 
-import HyperConfig
-import get_astral_data
+import hyper_config
+import get_astral_data_local
 
 def BuildRGBA(color_list):
     """
     This function takes {color_list} in the format of (R,G,B) and returns a pygame.Color
-    """ 
+    """
 
     red, green, blue = color_list.split(',')
     red=int(red)
@@ -48,8 +43,8 @@ pygame.mouse.set_visible(False)
 
 myscreen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
 myDisplayInfo=pygame.display.Info()
-print("Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
-syslog.syslog(syslog.LOG_INFO,"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
+print(f"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
+syslog.syslog(syslog.LOG_INFO,f"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
 minX=0
 maxX=myDisplayInfo.current_w
 midX=int(maxX/2)
@@ -57,13 +52,13 @@ minY=0
 maxY=myDisplayInfo.current_h
 midY=int(maxY/2)
 
-def getCurrentData():
+def get_current_data():
     """
     This function gets the current weather data
     """
 
     doc=Document()
-    doc=minidom.parse(HyperConfig.cfg_AstralDataFile)
+    doc=minidom.parse(hyper_config.cfg_astral_data_file)
 
     astral=doc.getElementsByTagName("astral")[0]
     weather=doc.getElementsByTagName("weather")[0]
@@ -75,7 +70,7 @@ def getCurrentData():
     day4=doc.getElementsByTagName("day4")[0]
     now=doc.getElementsByTagName("now")[0]
 
-    unicodeArrows={
+    unicode_arrows={
         'W': '\u2190',
         'N': '\u2191',
         'E': '\u2192',
@@ -87,47 +82,47 @@ def getCurrentData():
         'NONE': '\u2022'
     }
 
-    winddirdeg=int(current.getAttribute("winddirection"))
-    winddirection="N"
-    if winddirdeg>22:
-        winddirection=unicodeArrows['N']
-    if winddirdeg>67:
-        winddirection=unicodeArrows['E']
-    if winddirdeg>112:
-        winddirection=unicodeArrows['SE']
-    if winddirdeg>158:
-        winddirection=unicodeArrows['S']
-    if winddirdeg>202:
-        winddirection=unicodeArrows['SW']
-    if winddirdeg>248:
-        winddirection=unicodeArrows['W']
-    if winddirdeg>292:
-        winddirection=unicodeArrows['NW']
-    if winddirdeg>338:
-        winddirection=unicodeArrows['N']
+    wind_dir_deg=int(current.getAttribute("winddirection"))
+    wind_direction="N"
+    if wind_dir_deg>22:
+        wind_direction=unicode_arrows['N']
+    if wind_dir_deg>67:
+        wind_direction=unicode_arrows['E']
+    if wind_dir_deg>112:
+        wind_direction=unicode_arrows['SE']
+    if wind_dir_deg>158:
+        wind_direction=unicode_arrows['S']
+    if wind_dir_deg>202:
+        wind_direction=unicode_arrows['SW']
+    if wind_dir_deg>248:
+        wind_direction=unicode_arrows['W']
+    if wind_dir_deg>292:
+        wind_direction=unicode_arrows['NW']
+    if wind_dir_deg>338:
+        wind_direction=unicode_arrows['N']
 
     rising="?"
-    risingnum=int(current.getAttribute("rising"))
-    if risingnum==0:
-        rising=unicodeArrows['NONE']
-    if risingnum==1:
-        rising=unicodeArrows['N']
-    if risingnum==2:
-        rising=unicodeArrows['S']
+    rising_num=int(current.getAttribute("rising"))
+    if rising_num==0:
+        rising=unicode_arrows['NONE']
+    if rising_num==1:
+        rising=unicode_arrows['N']
+    if rising_num==2:
+        rising=unicode_arrows['S']
 
 #base_dir = '/sys/bus/w1/devices/'
 #device_folder = glob.glob(base_dir + '28*')[0]
 
-    itempfile=HyperConfig.cfg_IndoorTempFile
+    indoor_temp_file=hyper_config.cfg_indoor_temp_file
 
-    f=open(itempfile,'r')
-    itemp=f.read()
-    itemp=itemp[:-1]
-    f.close()
+    file_handle=open(indoor_temp_file,'r',encoding="utf-8")
+    indoor_temp=file_handle.read()
+    indoor_temp=indoor_temp[:-1]
+    file_handle.close()
 
     return {
-        'moonphase': astral.attributes["moonphase"].value,
-        'moonphasenum': astral.attributes["moonphasenum"].value,
+        'moon_phase': astral.attributes["moonphase"].value,
+        'moon_phase_num': astral.attributes["moonphase_num"].value,
         'sunrise': astral.attributes["sunrise"].value,
         'sunset': astral.getAttribute("sunset"),
         'code': current.getAttribute("code"),
@@ -135,35 +130,35 @@ def getCurrentData():
         'humidity': current.getAttribute("humidity"),
         'pressure': current.getAttribute("pressure"),
         'rising': rising,
-        'indoor': itemp,
+        'indoor': indoor_temp,
         'temp': current.getAttribute("temp"),
-        'windchill': current.getAttribute("windchill"),
-        'winddirection': winddirection,
-        'windspeed': current.getAttribute("windspeed"),
+        'wind_chill': current.getAttribute("wind_chill"),
+        'wind_direction': wind_direction,
+        'wind_speed': current.getAttribute("wind_speed"),
         'high': day0.getAttribute("high"),
         'low': day0.getAttribute("low"),
-        'day1code': day1.getAttribute("code"),
-        'day1condition': day1.getAttribute("condition"),
-        'day1day': day1.getAttribute("day"),
-        'day1high': day1.getAttribute("high"),
-        'day1low': day1.getAttribute("low"),
-        'day2code': day2.getAttribute("code"),
-        'day2condition': day2.getAttribute("condition"),
-        'day2day': day2.getAttribute("day"),
-        'day2high': day2.getAttribute("high"),
-        'day2low': day2.getAttribute("low"),
-        'day3code': day3.getAttribute("code"),
-        'day3condition': day3.getAttribute("condition"),
-        'day3day': day3.getAttribute("day"),
-        'day3high': day3.getAttribute("high"),
-        'day3low': day3.getAttribute("low"),
-        'day4code': day4.getAttribute("code"),
-        'day4condition': day4.getAttribute("condition"),
-        'day4day': day4.getAttribute("day"),
-        'day4high': day4.getAttribute("high"),
-        'day4low': day4.getAttribute("low"),
-        'lastdate': now.getAttribute("date"),
-        'lasttime': now.getAttribute("time")
+        'day1_code': day1.getAttribute("code"),
+        'day1_condition': day1.getAttribute("condition"),
+        'day1_day': day1.getAttribute("day"),
+        'day1_high': day1.getAttribute("high"),
+        'day1_low': day1.getAttribute("low"),
+        'day2_code': day2.getAttribute("code"),
+        'day2_condition': day2.getAttribute("condition"),
+        'day2_day': day2.getAttribute("day"),
+        'day2_high': day2.getAttribute("high"),
+        'day2_low': day2.getAttribute("low"),
+        'day3_code': day3.getAttribute("code"),
+        'day3_condition': day3.getAttribute("condition"),
+        'day3_day': day3.getAttribute("day"),
+        'day3_high': day3.getAttribute("high"),
+        'day3_low': day3.getAttribute("low"),
+        'day4_code': day4.getAttribute("code"),
+        'day4_condition': day4.getAttribute("condition"),
+        'day4_day': day4.getAttribute("day"),
+        'day4_high': day4.getAttribute("high"),
+        'day4_low': day4.getAttribute("low"),
+        'last_date': now.getAttribute("date"),
+        'last_time': now.getAttribute("time")
 }
 
 def get_astral_data():
@@ -171,26 +166,26 @@ def get_astral_data():
     This function will retreive the astral data
     """
 
-    result=re.match("standalone",HyperConfig.cfg_Topology,flags=re.I)
+    result=re.match("standalone",hyper_config.cfg_topology,flags=re.I)
     if result is None:
-        astralDataCmd=HyperConfig.cfg_AstralDataCommand
-        call(astralDataCmd,shell=True)
+        astral_data_cmd=hyper_config.cfg_astral_data_command
+        call(astral_data_cmd,shell=True)
 
     else:
-        get_astral_data.downloadAndWriteWeather(HyperConfig.cfg_woeid)
+        get_astral_data.downloadAndWriteWeather(hyper_config.cfg_woeid)
 
 def get_indoor_temp():
     """
     This function retreives the indoor temperature
     """
 
-    iTempCmd=HyperConfig.cfg_IndoorTempCommand
-    call(iTempCmd,shell=True)
+    indoor_temp_cmd=hyper_config.cfg_indoor_temp_command
+    call(indoor_temp_cmd,shell=True)
 
 
 get_astral_data()
 get_indoor_temp()
-currentData=getCurrentData()
+current_data=get_current_data()
 
 
 while True:
@@ -204,23 +199,23 @@ while True:
 
         seconds=int(datetime.now().strftime("%s"))
         if seconds % 2 == 0:
-            currenttime=datetime.now().strftime("%I:%M %p")
+            current_time=datetime.now().strftime("%I:%M %p")
         else:
-            currenttime=datetime.now().strftime("%I %M %p")
+            current_time=datetime.now().strftime("%I %M %p")
 
-        currentdate=datetime.now().strftime("%A     %m / %d / %Y")
+        current_date=datetime.now().strftime("%A     %m / %d / %Y")
 
         if seconds % 900 == 0:
             get_astral_data()
             get_indoor_temp()
 
         if seconds % 30 == 0:
-            currentData=getCurrentData()
+            current_data=get_current_data()
 
-        moonphase=currentData['moonphase']
-        moonphasenum=currentData['moonphasenum']
-        sunrise=currentData['sunrise']
-        sunset=currentData['sunset']
+        moon_phase=current_data['moon_phase']
+        moon_phase_num=current_data['moon_phase_num']
+        sunrise=current_data['sunrise']
+        sunset=current_data['sunset']
 
         # Fix what appears to be a bug in the Yahoo Weather API, whereas sunrise/sunset times do not pad with zeros for single digit times
         #if(re.match(".*\d:\d .*",sunrise)):
@@ -229,195 +224,195 @@ while True:
         #if(re.match(".*\d:\d .*",sunset)):
         #    sunset=re.sub(':',':0',sunset);
 
-        code=currentData['code']
-        condition=currentData['condition']
-        humidity=currentData['humidity']
-        pressure=currentData['pressure']
-        rising=currentData['rising']
-        temp=currentData['temp']
-        indoor=currentData['indoor']
-        windchill=currentData['windchill']
-        winddirection=currentData['winddirection']
-        windspeed=currentData['windspeed']
-        high=currentData['high']
-        low=currentData['low']
-        day1code=currentData['day1code']
-        day1condition=currentData['day1condition']
-        day1day=currentData['day1day']
-        day1high=currentData['day1high']
-        day1low=currentData['day1low']
-        day2code=currentData['day2code']
-        day2condition=currentData['day2condition']
-        day2day=currentData['day2day']
-        day2high=currentData['day2high']
-        day2low=currentData['day2low']
-        day3code=currentData['day3code']
-        day3condition=currentData['day3condition']
-        day3day=currentData['day3day']
-        day3high=currentData['day3high']
-        day3low=currentData['day3low']
-        day4code=currentData['day4code']
-        day4condition=currentData['day4condition']
-        day4day=currentData['day4day']
-        day4high=currentData['day4high']
-        day4low=currentData['day4low']
-        lastdate=currentData['lastdate']
-        lasttime=currentData['lasttime']
+        code=current_data['code']
+        condition=current_data['condition']
+        humidity=current_data['humidity']
+        pressure=current_data['pressure']
+        rising=current_data['rising']
+        temp=current_data['temp']
+        indoor=current_data['indoor']
+        wind_chill=current_data['wind_chill']
+        wind_direction=current_data['wind_direction']
+        wind_speed=current_data['wind_speed']
+        high=current_data['high']
+        low=current_data['low']
+        day1_code=current_data['day1_code']
+        day1_condition=current_data['day1_condition']
+        day1_day=current_data['day1_day']
+        day1_high=current_data['day1_high']
+        day1_low=current_data['day1_low']
+        day2_code=current_data['day2_code']
+        day2_condition=current_data['day2_condition']
+        day2_day=current_data['day2_day']
+        day2_high=current_data['day2_high']
+        day2_low=current_data['day2_low']
+        day3_code=current_data['day3_code']
+        day3_condition=current_data['day3_condition']
+        day3_day=current_data['day3_day']
+        day3_high=current_data['day3_high']
+        day3_low=current_data['day3_low']
+        day4_code=current_data['day4_code']
+        day4_condition=current_data['day4_condition']
+        day4_day=current_data['day4_day']
+        day4_high=current_data['day4_high']
+        day4_low=current_data['day4_low']
+        last_date=current_data['last_date']
+        last_time=current_data['last_time']
 
-        last='(Last update: '+lastdate+' '+lasttime+')'
+        last='(Last update: '+last_date+' '+last_time+')'
 
-        currenttemp=temp+'F'
-        currentitemp='Indoor: '+str(indoor)+'F'
-        currenthigh=high
-        currentlow=low
-        currentweather=condition
-        day1weather=day1day+' '+day1high+'F/'+day1low+'F'
-        day2weather=day2day+' '+day2high+'F/'+day2low+'F'
-        day3weather=day3day+' '+day3high+'F/'+day3low+'F'
-        day4weather=day4day+' '+day4high+'F/'+day4low+'F'
+        current_temp=temp+'F'
+        current_indoor_temp='Indoor: '+str(indoor)+'F'
+        current_high=high
+        current_low=low
+        current_weather=condition
+        day1_weather=day1_day+' '+day1_high+'F/'+day1_low+'F'
+        day2_weather=day2_day+' '+day2_high+'F/'+day2_low+'F'
+        day3_weather=day3_day+' '+day3_high+'F/'+day3_low+'F'
+        day4_weather=day4_day+' '+day4_high+'F/'+day4_low+'F'
 
-        timesize=int(.20*maxX)
-        datesize=int(.06*maxX)
-        weathersize=int(.06*maxX)
-        tempsize=int(.07*maxX)
-        itempsize=int(.03*maxX)
-        highsize=int(.03*maxX)
-        lowsize=int(.03*maxX)
-        forecastsize=int(.02*maxX)
-        windsize=int(.04*maxX)
-        pressuresize=int(.04*maxX)
-        humiditysize=int(.04*maxX)
-        sunrisesetsize=int(.02*maxX)
-        lastsize=int(.02*maxX)
+        time_size=int(.20*maxX)
+        date_size=int(.06*maxX)
+        weather_size=int(.06*maxX)
+        temp_size=int(.07*maxX)
+        indoor_temp_size=int(.03*maxX)
+        high_size=int(.03*maxX)
+        low_size=int(.03*maxX)
+        forecast_size=int(.02*maxX)
+        wind_size=int(.04*maxX)
+        pressure_size=int(.04*maxX)
+        humidity_size=int(.04*maxX)
+        sunriseset_size=int(.02*maxX)
+        last_size=int(.02*maxX)
 
-        timefont=pygame.font.Font(HyperConfig.cfg_timefont,timesize)
-        datefont=pygame.font.Font(HyperConfig.cfg_datefont,datesize)
-        weatherfont=pygame.font.Font(HyperConfig.cfg_weatherfont,weathersize)
-        tempfont=pygame.font.Font(HyperConfig.cfg_tempfont,tempsize)
-        itempfont=pygame.font.Font(HyperConfig.cfg_itempfont,itempsize)
-        highfont=pygame.font.Font(HyperConfig.cfg_highfont,highsize)
-        lowfont=pygame.font.Font(HyperConfig.cfg_lowfont,lowsize)
-        forecastfont=pygame.font.Font(HyperConfig.cfg_forecastfont,forecastsize)
-        windfont=pygame.font.Font(HyperConfig.cfg_windfont,windsize)
-        pressurefont=pygame.font.Font(HyperConfig.cfg_pressurefont,pressuresize)
-        humidityfont=pygame.font.Font(HyperConfig.cfg_humidityfont,humiditysize)
-        sunrisesetfont=pygame.font.Font(HyperConfig.cfg_sunrisesetfont,sunrisesetsize)
-        lastfont=pygame.font.Font(HyperConfig.cfg_lastfont,lastsize)
+        time_font=pygame.font.Font(hyper_config.cfg_time_font,time_size)
+        date_font=pygame.font.Font(hyper_config.cfg_date_font,date_size)
+        weather_font=pygame.font.Font(hyper_config.cfg_weather_font,weather_size)
+        temp_font=pygame.font.Font(hyper_config.cfg_temp_font,temp_size)
+        indoor_temp_font=pygame.font.Font(hyper_config.cfg_indoor_temp_font,indoor_temp_size)
+        high_font=pygame.font.Font(hyper_config.cfg_high_font,high_size)
+        low_font=pygame.font.Font(hyper_config.cfg_low_font,low_size)
+        forecast_font=pygame.font.Font(hyper_config.cfg_forecast_font,forecast_size)
+        wind_font=pygame.font.Font(hyper_config.cfg_wind_font,wind_size)
+        pressure_font=pygame.font.Font(hyper_config.cfg_pressure_font,pressure_size)
+        humidity_font=pygame.font.Font(hyper_config.cfg_humidity_font,humidity_size)
+        sunriseset_font=pygame.font.Font(hyper_config.cfg_sunriseset_font,sunriseset_size)
+        last_font=pygame.font.Font(hyper_config.cfg_last_font,last_size)
 
-        timetext=timefont.render(currenttime,True,BuildRGBA(HyperConfig.cfg_timecolor))
-        datetext=datefont.render(currentdate,True,BuildRGBA(HyperConfig.cfg_datecolor))
-        weathertext=weatherfont.render(currentweather,True,BuildRGBA(HyperConfig.cfg_weathercolor))
-        temptext=tempfont.render(currenttemp,True,BuildRGBA(HyperConfig.cfg_tempcolor))
-        itemptext=itempfont.render(currentitemp,True,BuildRGBA(HyperConfig.cfg_itempcolor))
-        hightext=highfont.render(currenthigh,True,BuildRGBA(HyperConfig.cfg_highcolor))
-        lowtext=lowfont.render(currentlow,True,BuildRGBA(HyperConfig.cfg_lowcolor))
-        windtext=windfont.render(winddirection+' '+windspeed+'mph',True,BuildRGBA(HyperConfig.cfg_windcolor))
-        pressuretext=windfont.render(pressure+' '+rising,True,BuildRGBA(HyperConfig.cfg_pressurecolor))
-        humiditytext=windfont.render(humidity+'%',True,BuildRGBA(HyperConfig.cfg_humiditycolor))
-        day1text=forecastfont.render(day1weather,True,BuildRGBA(HyperConfig.cfg_day1color))
-        day2text=forecastfont.render(day2weather,True,BuildRGBA(HyperConfig.cfg_day2color))
-        day3text=forecastfont.render(day3weather,True,BuildRGBA(HyperConfig.cfg_day3color))
-        day4text=forecastfont.render(day4weather,True,BuildRGBA(HyperConfig.cfg_day4color))
-        sunrisetext=sunrisesetfont.render(sunrise,True,BuildRGBA(HyperConfig.cfg_sunrisecolor))
-        sunsettext=sunrisesetfont.render(sunset,True,BuildRGBA(HyperConfig.cfg_sunsetcolor))
-        lasttext=lastfont.render(last,True,BuildRGBA(HyperConfig.cfg_lastcolor))
+        time_text=time_font.render(current_time,True,BuildRGBA(hyper_config.cfg_time_color))
+        date_text=date_font.render(current_date,True,BuildRGBA(hyper_config.cfg_date_color))
+        weather_text=weather_font.render(current_weather,True,BuildRGBA(hyper_config.cfg_weather_color))
+        temp_text=temp_font.render(current_temp,True,BuildRGBA(hyper_config.cfg_temp_color))
+        indoor_temp_text=indoor_temp_font.render(current_indoor_temp,True,BuildRGBA(hyper_config.cfg_indoor_temp_color))
+        high_text=high_font.render(current_high,True,BuildRGBA(hyper_config.cfg_high_color))
+        low_text=low_font.render(current_low,True,BuildRGBA(hyper_config.cfg_low_color))
+        wind_text=wind_font.render(wind_direction+' '+wind_speed+'mph',True,BuildRGBA(hyper_config.cfg_wind_color))
+        pressure_text=wind_font.render(pressure+' '+rising,True,BuildRGBA(hyper_config.cfg_pressure_color))
+        humidity_text=wind_font.render(humidity+'%',True,BuildRGBA(hyper_config.cfg_humidity_color))
+        day1_text=forecast_font.render(day1_weather,True,BuildRGBA(hyper_config.cfg_day1_color))
+        day2_text=forecast_font.render(day2_weather,True,BuildRGBA(hyper_config.cfg_day2_color))
+        day3_text=forecast_font.render(day3_weather,True,BuildRGBA(hyper_config.cfg_day3_color))
+        day4_text=forecast_font.render(day4_weather,True,BuildRGBA(hyper_config.cfg_day4_color))
+        sunrise_text=sunriseset_font.render(sunrise,True,BuildRGBA(hyper_config.cfg_sunrise_color))
+        sunset_text=sunriseset_font.render(sunset,True,BuildRGBA(hyper_config.cfg_sunset_color))
+        last_text=last_font.render(last,True,BuildRGBA(hyper_config.cfg_last_color))
 
-        timetext_rect=timetext.get_rect()
-        datetext_rect=datetext.get_rect()
-        weathertext_rect=weathertext.get_rect()
-        temptext_rect=temptext.get_rect()
-        itemptext_rect=itemptext.get_rect()
-        hightext_rect=hightext.get_rect()
-        lowtext_rect=lowtext.get_rect()
-        windtext_rect=windtext.get_rect()
-        pressuretext_rect=pressuretext.get_rect()
-        humiditytext_rect=humiditytext.get_rect()
-        day1text_rect=day1text.get_rect()
-        day2text_rect=day2text.get_rect()
-        day3text_rect=day3text.get_rect()
-        day4text_rect=day4text.get_rect()
-        sunrisetext_rect=sunrisetext.get_rect()
-        sunsettext_rect=sunsettext.get_rect()
-        lasttext_rect=lasttext.get_rect()
+        time_text_rect=time_text.get_rect()
+        date_text_rect=date_text.get_rect()
+        weather_text_rect=weather_text.get_rect()
+        temp_text_rect=temp_text.get_rect()
+        indoor_temp_text_rect=indoor_temp_text.get_rect()
+        high_text_rect=high_text.get_rect()
+        low_text_rect=low_text.get_rect()
+        wind_text_rect=wind_text.get_rect()
+        pressure_text_rect=pressure_text.get_rect()
+        humidity_text_rect=humidity_text.get_rect()
+        day1_text_rect=day1_text.get_rect()
+        day2_text_rect=day2_text.get_rect()
+        day3_text_rect=day3_text.get_rect()
+        day4_text_rect=day4_text.get_rect()
+        sunrise_text_rect=sunrise_text.get_rect()
+        sunset_text_rect=sunset_text.get_rect()
+        last_text_rect=last_text.get_rect()
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(code)+'.png'
-        currentimg=pygame.image.load(FILE_NAME)
-        currentimg=pygame.transform.scale(currentimg,(int(.18*maxX),int(.18*maxX)))
-        currentimg_pos=currentimg.get_rect(topright=(midX+(int(.04*maxX)),midY-(int(.05*maxY))))
+        current_img=pygame.image.load(FILE_NAME)
+        current_img=pygame.transform.scale(current_img,(int(.18*maxX),int(.18*maxX)))
+        current_img_pos=current_img.get_rect(topright=(midX+(int(.04*maxX)),midY-(int(.05*maxY))))
 
-        timetext_pos=timetext.get_rect(center=(midX,0+(timesize/2)))
-        datetext_pos=datetext.get_rect(center=(midX,0+timesize+datesize/2))
-        weathertext_pos=weathertext.get_rect(midbottom=(midX,maxY-forecastsize-int(.30*maxY)))
-        temptext_pos=temptext.get_rect(midright=(midX-(int(.16*maxX)),midY+int(.10*maxY)))
-        itemptext_pos=itemptext.get_rect(midright=(midX-(int(.13*maxX)),midY+int(.17*maxY)+(itempsize/2)))
-        hightext_pos=hightext.get_rect(midright=(midX-int(.13*maxX),midY+int(.08*maxY)-(highsize/2)))
-        lowtext_pos=lowtext.get_rect(midright=(midX-int(.13*maxX),midY+int(.11*maxY)+(lowsize/2)))
-        windtext_pos=windtext.get_rect(topleft=(midX+int(.04*maxX),midY))
-        pressuretext_pos=pressuretext.get_rect(topleft=(midX+int(.04*maxX),midY+windsize))
-        humiditytext_pos=humiditytext.get_rect(topleft=(midX+int(.04*maxX),midY+windsize+pressuresize))
-        day1text_pos=day1text.get_rect(midbottom=(minX+int(.18*maxX),maxY))
-        day2text_pos=day2text.get_rect(midbottom=((midX/2)+int(.15*maxX),maxY))
-        day3text_pos=day3text.get_rect(midbottom=(midX+(midX/2)-int(.15*maxX),maxY))
-        day4text_pos=day4text.get_rect(midbottom=(maxX-int(.18*maxX),maxY))
-        sunrisetext_pos=sunrisetext.get_rect(midtop=(minX+int(.11*maxX),midY-int(.01*maxX)))
-        sunsettext_pos=sunsettext.get_rect(midbottom=(minX+int(.11*maxX),midY+int(.13*maxX)))
-        lasttext_pos=lasttext.get_rect(midtop=(midX,midY+windsize+pressuresize+humiditysize+int(.01*maxX)))
+        time_text_pos=time_text.get_rect(center=(midX,0+(time_size/2)))
+        date_text_pos=date_text.get_rect(center=(midX,0+time_size+date_size/2))
+        weather_text_pos=weather_text.get_rect(midbottom=(midX,maxY-forecast_size-int(.30*maxY)))
+        temp_text_pos=temp_text.get_rect(midright=(midX-(int(.16*maxX)),midY+int(.10*maxY)))
+        indoor_temp_text_pos=indoor_temp_text.get_rect(midright=(midX-(int(.13*maxX)),midY+int(.17*maxY)+(indoor_temp_size/2)))
+        high_text_pos=high_text.get_rect(midright=(midX-int(.13*maxX),midY+int(.08*maxY)-(high_size/2)))
+        low_text_pos=low_text.get_rect(midright=(midX-int(.13*maxX),midY+int(.11*maxY)+(low_size/2)))
+        wind_text_pos=wind_text.get_rect(topleft=(midX+int(.04*maxX),midY))
+        pressure_text_pos=pressure_text.get_rect(topleft=(midX+int(.04*maxX),midY+wind_size))
+        humidity_text_pos=humidity_text.get_rect(topleft=(midX+int(.04*maxX),midY+wind_size+pressure_size))
+        day1_text_pos=day1_text.get_rect(midbottom=(minX+int(.18*maxX),maxY))
+        day2_text_pos=day2_text.get_rect(midbottom=((midX/2)+int(.15*maxX),maxY))
+        day3_text_pos=day3_text.get_rect(midbottom=(midX+(midX/2)-int(.15*maxX),maxY))
+        day4_text_pos=day4_text.get_rect(midbottom=(maxX-int(.18*maxX),maxY))
+        sunrise_text_pos=sunrise_text.get_rect(midtop=(minX+int(.11*maxX),midY-int(.01*maxX)))
+        sunset_text_pos=sunset_text.get_rect(midbottom=(minX+int(.11*maxX),midY+int(.13*maxX)))
+        last_text_pos=last_text.get_rect(midtop=(midX,midY+wind_size+pressure_size+humidity_size+int(.01*maxX)))
 
-        FILE_NAME='/usr/local/HyperClock/images/'+str(day1code)+'.png'
-        day1img=pygame.image.load(FILE_NAME)
-        day1img=pygame.transform.scale(day1img,(int(.09*maxX),int(.09*maxX)))
-        day1img_pos=day1img.get_rect(midbottom=(minX+int(.18*maxX),maxY-int(.03*maxY)))
+        FILE_NAME='/usr/local/HyperClock/images/'+str(day1_code)+'.png'
+        day1_img=pygame.image.load(FILE_NAME)
+        day1_img=pygame.transform.scale(day1_img,(int(.09*maxX),int(.09*maxX)))
+        day1_img_pos=day1_img.get_rect(midbottom=(minX+int(.18*maxX),maxY-int(.03*maxY)))
 
-        FILE_NAME='/usr/local/HyperClock/images/'+str(day2code)+'.png'
-        day2img=pygame.image.load(FILE_NAME)
-        day2img=pygame.transform.scale(day2img,(int(.09*maxX),int(.09*maxX)))
-        day2img_pos=day2img.get_rect(midbottom=((midX/2)+int(.15*maxX),maxY-int(.03*maxY)))
+        FILE_NAME='/usr/local/HyperClock/images/'+str(day2_code)+'.png'
+        day2_img=pygame.image.load(FILE_NAME)
+        day2_img=pygame.transform.scale(day2_img,(int(.09*maxX),int(.09*maxX)))
+        day2_img_pos=day2_img.get_rect(midbottom=((midX/2)+int(.15*maxX),maxY-int(.03*maxY)))
 
-        FILE_NAME='/usr/local/HyperClock/images/'+str(day3code)+'.png'
-        day3img=pygame.image.load(FILE_NAME)
-        day3img=pygame.transform.scale(day3img,(int(.09*maxX),int(.09*maxX)))
-        day3img_pos=day3img.get_rect(midbottom=(midX+(midX/2)-int(.15*maxX),maxY-int(.03*maxY)))
+        FILE_NAME='/usr/local/HyperClock/images/'+str(day3_code)+'.png'
+        day3_img=pygame.image.load(FILE_NAME)
+        day3_img=pygame.transform.scale(day3_img,(int(.09*maxX),int(.09*maxX)))
+        day3_img_pos=day3_img.get_rect(midbottom=(midX+(midX/2)-int(.15*maxX),maxY-int(.03*maxY)))
 
-        FILE_NAME='/usr/local/HyperClock/images/'+str(day4code)+'.png'
-        day4img=pygame.image.load(FILE_NAME)
-        day4img=pygame.transform.scale(day4img,(int(.09*maxX),int(.09*maxX)))
-        day4img_pos=day4img.get_rect(midbottom=(maxX-int(.18*maxX),maxY-int(.03*maxY)))
+        FILE_NAME='/usr/local/HyperClock/images/'+str(day4_code)+'.png'
+        day4_img=pygame.image.load(FILE_NAME)
+        day4_img=pygame.transform.scale(day4_img,(int(.09*maxX),int(.09*maxX)))
+        day4_img_pos=day4_img.get_rect(midbottom=(maxX-int(.18*maxX),maxY-int(.03*maxY)))
 
         FILE_NAME='/usr/local/HyperClock/images/sunriseset.png'
-        sunrisesetimg=pygame.image.load(FILE_NAME)
-        sunrisesetimg=pygame.transform.scale(sunrisesetimg,(int(.09*maxX),int(.09*maxX)))
-        sunrisesetimg_pos=sunrisesetimg.get_rect(center=(minX+int(.11*maxX),midY+int(.10*maxY)))
+        sunriseset_img=pygame.image.load(FILE_NAME)
+        sunriseset_img=pygame.transform.scale(sunriseset_img,(int(.09*maxX),int(.09*maxX)))
+        sunriseset_img_pos=sunriseset_img.get_rect(center=(minX+int(.11*maxX),midY+int(.10*maxY)))
 
-        FILE_NAME='/usr/local/HyperClock/images/moon/'+moonphasenum+'.png'
-        moonimg=pygame.image.load(FILE_NAME)
-        moonimg=pygame.transform.scale(moonimg,(int(.09*maxX),int(.09*maxX)))
-        moonimg_pos=moonimg.get_rect(center=(maxX-int(.11*maxX),midY+int(.10*maxY)))
+        FILE_NAME='/usr/local/HyperClock/images/moon/'+moonphase_num+'.png'
+        moon_img=pygame.image.load(FILE_NAME)
+        moon_img=pygame.transform.scale(moon_img,(int(.09*maxX),int(.09*maxX)))
+        moon_img_pos=moon_img.get_rect(center=(maxX-int(.11*maxX),midY+int(.10*maxY)))
 
-        myscreen.blit(timetext,(timetext_pos))
-        myscreen.blit(datetext,(datetext_pos))
+        myscreen.blit(time_text,(time_text_pos))
+        myscreen.blit(date_text,(date_text_pos))
 #        myscreen.blit(weathertext,(weathertext_pos))
-        myscreen.blit(temptext,(temptext_pos))
+        myscreen.blit(temp_text,(temp_text_pos))
         if int(indoor) != 9999:
-            myscreen.blit(itemptext,(itemptext_pos))
-        myscreen.blit(hightext,(hightext_pos))
-        myscreen.blit(lowtext,(lowtext_pos))
-        myscreen.blit(windtext,(windtext_pos))
-        myscreen.blit(pressuretext,(pressuretext_pos))
-        myscreen.blit(humiditytext,(humiditytext_pos))
-        myscreen.blit(day1text,(day1text_pos))
-        myscreen.blit(day2text,(day2text_pos))
-        myscreen.blit(day3text,(day3text_pos))
-        myscreen.blit(day4text,(day4text_pos))
-        myscreen.blit(currentimg,(currentimg_pos))
-        myscreen.blit(day1img,(day1img_pos))
-        myscreen.blit(day2img,(day2img_pos))
-        myscreen.blit(day3img,(day3img_pos))
-        myscreen.blit(day4img,(day4img_pos))
-        myscreen.blit(sunrisesetimg,(sunrisesetimg_pos))
-        myscreen.blit(sunrisetext,(sunrisetext_pos))
-        myscreen.blit(sunsettext,(sunsettext_pos))
-        myscreen.blit(lasttext,(lasttext_pos))
-        myscreen.blit(moonimg,(moonimg_pos))
+            myscreen.blit(indoor_temp_text,(indoor_temp_text_pos))
+        myscreen.blit(high_text,(high_text_pos))
+        myscreen.blit(low_text,(low_text_pos))
+        myscreen.blit(wind_text,(wind_text_pos))
+        myscreen.blit(pressure_text,(pressure_text_pos))
+        myscreen.blit(humidity_text,(humidity_text_pos))
+        myscreen.blit(day1_text,(day1_text_pos))
+        myscreen.blit(day2_text,(day2_text_pos))
+        myscreen.blit(day3_text,(day3_text_pos))
+        myscreen.blit(day4_text,(day4_text_pos))
+        myscreen.blit(current_img,(current_img_pos))
+        myscreen.blit(day1_img,(day1_img_pos))
+        myscreen.blit(day2_img,(day2_img_pos))
+        myscreen.blit(day3_img,(day3_img_pos))
+        myscreen.blit(day4_img,(day4_img_pos))
+        myscreen.blit(sunriseset_img,(sunriseset_img_pos))
+        myscreen.blit(sunrise_text,(sunrise_text_pos))
+        myscreen.blit(sunset_text,(sunset_text_pos))
+        myscreen.blit(last_text,(last_text_pos))
+        myscreen.blit(moon_img,(moon_img_pos))
 
         pygame.display.update()
 

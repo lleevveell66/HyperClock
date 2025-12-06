@@ -1,7 +1,17 @@
 #!/usr/bin/env python
 
-#import os, pygame, time, datetime, random, sys, urllib, math, decimal
-import os, time, datetime, random, sys, urllib, math, decimal, subprocess, re, csv, syslog
+import os
+import time
+import datetime
+import random
+import sys
+import urllib
+import math
+import decimal
+import subprocess
+import re
+import csv
+import syslog
 import HyperConfig
 
 from datetime import datetime

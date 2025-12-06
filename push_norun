@@ -6,7 +6,7 @@
 
 randomText=$(/usr/bin/openssl rand -base64 16 | /usr/bin/tr -cd '[:alnum:]._-' | /bin/cut -c 1-16)
 
-echo "$randomText" > forced_change_file
+echo "$randomText" > tmp/forced_change_file
 
 git add . && git commit -m "Just pushing code with no pipeline runs..." && git push origin 4.0
 
