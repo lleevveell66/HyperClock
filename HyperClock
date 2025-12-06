@@ -25,7 +25,7 @@ def BuildRGBA(colorlist):
 
 pygame.init()
 pygame.font.init()
-pygame.mixer.init()
+pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=2048)
 pygame.mouse.set_visible(False)
 
 myscreen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
