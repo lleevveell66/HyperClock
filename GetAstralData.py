@@ -66,7 +66,7 @@ def getWeather(woeid):
 		dom=minidom.parse(urllib.urlopen(url))
 	except:
                 e=sys.exc_info()[0]
-                print "Error: %s" % e
+                print("Error: %s" % e)
                 syslog.syslog(syslog.LOG_ERR,"Error: %s" % e)
 		
 	forecasts = []
@@ -109,7 +109,7 @@ def downloadAndWriteWeather(woeid):
 		weather=getWeather(woeid)
 	except:
 		e=sys.exc_info()[0]
-		print "Error: %s" % e
+		print("Error: %s" % e)
 		syslog.syslog(syslog.LOG_ERR,"Error: %s" % e)
 
 	current_condition=weather['current_condition']

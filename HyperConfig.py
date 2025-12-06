@@ -11,7 +11,8 @@ import os, pygame, time, datetime, random, sys, urllib, configparser, syslog
 config=configparser.ConfigParser()
 
 try:
-	config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
+#	config.readfp(open(r'/usr/local/HyperClock/HyperClock.conf'))
+	config.read('/usr/local/HyperClock/HyperClock.conf')
 except:
 	e=sys.exc_info()[0]
 	print("HyperClock.conf Parsing Error: %s" % e)
@@ -59,4 +60,11 @@ cfg_sunrisecolor=config.get('HyperClock','sunrisecolor')
 cfg_sunsetcolor=config.get('HyperClock','sunsetcolor')
 cfg_lastcolor=config.get('HyperClock','lastcolor')
 
-
+print(" ")
+print(" ")
+print("I have read the following configuration from /usr/local/HyperClock/HyperClock.conf :")
+print("             Topology: ",cfg_Topology)
+print("     Astral Data File: ",cfg_AstralDataFile)
+print("  Astral Data Command: ",cfg_AstralDataCommand)
+print("     Indoor Temp File: ",cfg_IndoorTempFile)
+print("  Indoor Temp command: ",cfg_IndoorTempCommand)
