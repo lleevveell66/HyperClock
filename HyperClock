@@ -82,7 +82,8 @@ def get_current_data():
         'NONE': '\u2022'
     }
 
-    wind_dir_deg=int(current.getAttribute("winddirection"))
+    print(f"Wind Direction: %s " % current.getAttribute("wind_direction"))
+    wind_dir_deg=int(current.getAttribute("wind_direction"))
     wind_direction="N"
     if wind_dir_deg>22:
         wind_direction=unicode_arrows['N']
@@ -172,7 +173,7 @@ def get_astral_data():
         call(astral_data_cmd,shell=True)
 
     else:
-        get_astral_data.downloadAndWriteWeather(hyper_config.cfg_woeid)
+        get_astral_data.download_and_write_weather(hyper_config.cfg_woeid)
 
 def get_indoor_temp():
     """
