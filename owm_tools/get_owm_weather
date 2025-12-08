@@ -1,0 +1,209 @@
+#!/usr/bin/python
+#################################################################
+# get_owm_weather v0.0 by level6 of LiE
+# -----------------------------------------------
+
+"""
+# This script will take a zip code as argument and return the
+# lat/long coordinates in a JSON structure, similar to:
+#
+# {
+#   "zip": "77338",
+#   "name": "Humble",
+#   "lat": 30.0041,
+#   "lon": -95.2825,
+#   "country": "US"
+# }
+#
+# You need to subscribe to a free API on openweathermap.org
+# and add it to the file: /usr/local/etc/api_keys.txt .  It needs
+# to be in the following format:
+#
+# owm_api = <YOUR_OPENWEATHERMAP_API>
+"""
+
+#################################################################
+
+import sys
+import json
+import requests
+
+##########################################################
+# Functions
+##########################################################
+
+def zip_info(api_key,zip_code):
+    """
+    This function queries OpenWeatherMap for information about {zip_code}
+    using your {api_key} and returns the result as a JSON structure
+    """
+
+    # {"zip": "75081", "name": "Richardson", "lat": 32.9462, "lon": -96.7058, "country": "US"}
+
+    url = f"http://api.openweathermap.org/geo/1.0/zip?zip={zip_code}&appid={api_key}"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        data = response.json()
+
+        return json.dumps(data)
+
+    except requests.exceptions.RequestException as request_error:
+        print(f"Request Error: {request_error}")
+        return None
+    except json.JSONDecodeError as decode_error:
+        print(f"JSON Decode Error: {decode_error}")
+        return None
+
+def coords_from_zip(api_key,zip_code):
+    """
+    This function queries OpenWeatherMap for information about {zip_code}
+    using your {api_key} and returns the latitude and longitude as a tuple,
+    or (None, None) if they are not found.
+    """
+
+    # {"zip": "75081", "name": "Richardson", "lat": 32.9462, "lon": -96.7058, "country": "US"}
+
+    url = f"http://api.openweathermap.org/geo/1.0/zip?zip={zip_code}&appid={api_key}"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        data = response.json()
+
+        lat=data.get("lat")
+        lon=data.get("lon")
+
+        if lat is not None and lon is not None:
+            return lat, lon
+        else:
+            print("Error: 'lat' or 'lon' key not found in response.")
+            return None, None
+
+    except requests.exceptions.RequestException as request_error:
+        print(f"Request Error: {request_error}")
+        return None
+    except json.JSONDecodeError as decode_error:
+        print(f"JSON Decode Error: {decode_error}")
+        return None
+
+def validate_zip(zip_code):
+    """
+    This function validates {zip_code} as a 5-digit numeric string and returns True or False
+    """
+
+    # Is it a string?
+    if not isinstance(zip_code, str):
+        return False
+
+    # Is it 5 characters?
+    if len(zip_code) != 5:
+        return False
+
+    # Is it all digits?
+    if not zip_code.isdigit():
+        return False
+
+    # Seems ok
+    return True
+
+def read_api_key(file_path, api_name):
+    """
+    This function reads and returns your owm_api from {file_path} and returns
+    the API key if found, None of not
+    """
+
+    try:
+        with open(file_path,'r',encoding="utf-8") as open_file:
+            for line in open_file:
+                line=line.strip()  # remove leading/trailing whitespace
+                if line.startswith(api_name + " = "):
+                    parts=line.split(" = ")
+                    if len(parts) == 2:
+                        return parts[1].strip()  # return the API key
+            print(f"Error: API '{api_name}' not found in {file_path}")
+            return None
+
+    except FileNotFoundError:
+        print(f"Error: The {file_path} file was not found")
+        return None
+    except PermissionError:
+        print(f"Error: Permission denied to read: {file_path}")
+        return None
+    except UnicodeDecodeError:
+        print(f"Error: Could not decode file: {file_path}.  Check encoding.")
+        return None
+    except IOError as other_error:    # Catch other IO errors
+        print(f"IOError: {other_error}")
+        return None
+
+def get_owm_weather_from_coords(api_key,lat,lon):
+    """
+    This function queries OpenWeatherMap for information about {zip_code}
+    using your {api_key} and returns the result as a JSON structure
+    """
+
+    url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial&exclude=minutely,hourly"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        data = response.json()
+
+        return json.dumps(data)
+
+    except requests.exceptions.RequestException as request_error:
+        print(f"Request Error: {request_error}")
+        return None
+    except json.JSONDecodeError as decode_error:
+        print(f"JSON Decode Error: {decode_error}")
+        return None
+
+
+
+##########################################################
+# Main Code
+##########################################################
+
+if __name__ == "__main__":
+
+    # Was a command line argument supplied?
+    if len(sys.argv)<2:
+        # Nope.  Give them the syntax
+        print("SYNTAX: ./ZipInfo <zipcode>")
+        sys.exit(1)
+    else:
+        # Yep.  Must be a zip code, right?
+        zip_arg=sys.argv[1]
+
+        # Well, we should make sure
+        if not validate_zip(zip_arg):
+            print(f"Error: Invalid zip code: {zip_arg}.  Please supply only a 5-digit number.")
+            sys.exit(1)
+
+    owm_api_key=read_api_key("/usr/local/etc/api_keys.conf","owm_api")
+    if owm_api_key is None:
+        sys.exit(1)
+
+    # geo_json = zip_info(owm_api_key,zip_arg)
+    latitude, longitude = coords_from_zip(owm_api_key,zip_arg)
+
+    if latitude is None or longitude is None:
+        print(f"Failed to get coordinates for zip {zip_arg}")
+        sys.exit(1)
+
+    weather_json = get_owm_weather_from_coords(owm_api_key,latitude,longitude)
+
+    if weather_json:
+        print(weather_json)
+    else:
+        print(f"Error: Failed to get weather data for {latitude},{longitude}")
+
+    #if geo_json:
+    #    print(geo_json)
+    #else:
+    #    print("Failed to retreive zip code information.")
