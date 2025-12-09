@@ -9,8 +9,8 @@
 echo "Installing HyperClock:"
 echo " - Changing file modes of executables"
 /bin/chmod 755 HyperClock
-/bin/chmod 755 GetIndoorTemp.sh
-/bin/chmod 755 GetWeather.sh
+/bin/chmod 755 scripts/get_indoor_temp.sh
+/bin/chmod 755 scripts/get_weather.sh
 echo " - Removing any previous directory /usr/local/HyperClock/"
 \rm -r /usr/local/HyperClock/
 echo " - Making the /usr/local/HyperClock/ directory"
