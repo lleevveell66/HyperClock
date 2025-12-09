@@ -1,0 +1,70 @@
+{
+  "current": {
+    "datetime": 1765171275,
+    "sunrise": 1765113434,
+    "sunset": 1765149636,
+    "moonrise": 1765160640,
+    "moonset": 1765124100,
+    "moon_phase": 0.61,
+    "temp": 37.83,
+    "pressure": 1026,
+    "humidity": 82,
+    "wind_speed": 8.99,
+    "wind_deg": 332,
+    "weather": [
+      { 
+        "id": 800,
+        "main": "Clear",
+        "description": "clear sky",
+        "icon": "01n"
+      }
+    ]
+  },
+  "daily": [
+    {
+      "datetime": 1765216800,
+      "temp_high": 52.03,
+      "temp_low": 32.97,
+      "weather": {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+      }
+    },
+    {
+      "datetime": 1765216800,
+      "temp_high": 52.03,
+      "temp_low": 32.97,
+      "weather": {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+      }
+    },
+    {
+      "datetime": 1765216800,
+      "temp_high": 52.03,
+      "temp_low": 32.97,
+      "weather": {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+      }
+    },
+    {
+      "datetime": 1765216800,
+      "temp_high": 52.03,
+      "temp_low": 32.97,
+      "weather": {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+      }
+    }
+  ]
+}
+

@@ -142,7 +142,7 @@ def read_api_key(file_path, api_name):
 
 def get_owm_weather_from_coords(api_key,lat,lon):
     """
-    This function queries OpenWeatherMap for information about {zip_code}
+    This function queries OpenWeatherMap for information about {lat},{lon}
     using your {api_key} and returns the result as a JSON structure
     """
 
@@ -163,7 +163,33 @@ def get_owm_weather_from_coords(api_key,lat,lon):
         print(f"JSON Decode Error: {decode_error}")
         return None
 
+def write_weather_data(weather_dict):
+    """
+    This function will extract what we need from {weather_dict}, convert
+    it to a JSON string, and write it to data/weather_data.json
+    """
 
+    new_json_structure = {
+          "current": {
+            "datetime": weather_dict["current"]["dt"],
+            "sunrise": weather_dict["current"]["sunrise"],
+            "sunset": weather_dict["current"]["sunset"],
+            "temp": weather_dict["current"]["temp"],
+            "pressure": weather_dict["current"]["pressure"],
+            "humidity": weather_dict["current"]["humidity"],
+            "wind_speed": weather_dict["current"]["wind_speed"],
+            "wind_deg": weather_dict["current"]["wind_deg"],
+            "moonrise": weather_dict["daily"][1]["moonrise"],
+            "moonset": weather_dict["daily"][1]["moonset"],
+            "moon_phase": weather_dict["daily"][1]["moon_phase"],
+          }
+    }
+
+    json_string=json.dumps(new_json_structure, indent=4)
+
+    filename="/usr/local/HyperClock/data/weather_data.json"
+    with open(filename,"w") as weather_file:
+        weather_file.write(json_string)
 
 ##########################################################
 # Main Code
@@ -196,12 +222,22 @@ if __name__ == "__main__":
         print(f"Failed to get coordinates for zip {zip_arg}")
         sys.exit(1)
 
+    # Get the JSON string repsonse
     weather_json = get_owm_weather_from_coords(owm_api_key,latitude,longitude)
 
     if weather_json:
         print(weather_json)
+
+        # Turn the JSON string into a python dictionary
+        weather_dict = json.loads(weather_json)
+
+        # Get what we need and save it to data/weather_data.json
+        write_weather_data(weather_dict)
     else:
         print(f"Error: Failed to get weather data for {latitude},{longitude}")
+
+    current_temp=weather_dict["current"]["temp"]
+    print(f"Current Temp: {current_temp}")
 
     #if geo_json:
     #    print(geo_json)
