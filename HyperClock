@@ -40,7 +40,7 @@ def av_init()
     """
     This function will initialize the audio and video with pygame.  It will
     determine the screen resolution and return the minimum, maximum, and mid 
-    values for X and Y.
+    values for X and Y, as well as the screen object.
     """
 
     pygame.init()
@@ -48,18 +48,18 @@ def av_init()
     pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=2048)
     pygame.mouse.set_visible(False)
 
-    myscreen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
-    myDisplayInfo=pygame.display.Info()
-    print(f"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
-    syslog.syslog(syslog.LOG_INFO,f"Current Resolution: %s x %s\n" % (myDisplayInfo.current_w,myDisplayInfo.current_h))
+    my_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
+    my_display_info=pygame.display.Info()
+    print(f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
+    syslog.syslog(syslog.LOG_INFO,f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
     min_x=0
-    max_x=myDisplayInfo.current_w
+    max_x=my_display_info.current_w
     mid_x=int(max_x/2)
     min_y=0
-    max_y=myDisplayInfo.current_h
+    max_y=my_display_info.current_h
     mid_y=int(max_y/2)
 
-    return min_x, max_x, min_y, max_y, mid_x, mid_y
+    return my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y
 
 def get_current_data():
     """
@@ -197,7 +197,7 @@ def get_indoor_temp():
 get_astral_data()
 get_indoor_temp()
 current_data=get_current_data()
-min_x, max_x, min_y, max_y, mid_x, mid_y = av_init()
+screen, min_x, max_x, min_y, max_y, mid_x, mid_y = av_init()
 
 while True:
     try:
@@ -206,7 +206,7 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-        myscreen.fill((0,0,0))
+        screen.fill((0,0,0))
 
         seconds=int(datetime.now().strftime("%s"))
         if seconds % 2 == 0:
