@@ -22,11 +22,9 @@ import hyper_config
 
 dec=decimal.Decimal
 
-# http://woeid.rosselliot.co.nz/
-# http://woeid.factormystic.net/
-woeid=hyper_config.cfg_woeid
+zip_code=hyper_config.cfg_zip_code
 
-WURL='https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D'+str(woeid)
+WURL='https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20zip_code%3D'+str(zip_code)
 WSER='http://xml.weather.yahoo.com/ns/rss/1.0'
 
 def position(now=None):
@@ -123,9 +121,9 @@ def get_weather():
         }
 
 
-def download_and_write_weather(woeid):
+def download_and_write_weather(zip_code):
     """
-    Downloads the weather for a woeid
+    Downloads the weather for a zip_code
     """
 
     # seconds=int(datetime.now().strftime("%s"))
