@@ -226,7 +226,7 @@ if __name__ == "__main__":
     weather_json = get_owm_weather_from_coords(owm_api_key,latitude,longitude)
 
     if weather_json:
-        print(weather_json)
+        # print(weather_json)
 
         # Turn the JSON string into a python dictionary
         weather_dict = json.loads(weather_json)
@@ -236,8 +236,8 @@ if __name__ == "__main__":
     else:
         print(f"Error: Failed to get weather data for {latitude},{longitude}")
 
-    current_temp=weather_dict["current"]["temp"]
-    print(f"Current Temp: {current_temp}")
+    # current_temp=weather_dict["current"]["temp"]
+    # print(f"Current Temp: {current_temp}")
 
     #if geo_json:
     #    print(geo_json)

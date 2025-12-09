@@ -3,6 +3,7 @@
 # GetWeather.sh v4.0 by level6 of LIE
 #######################################################################
 
+ZIP_CODE="75240"
 
 #######################################################################
 # Uncomment this section to grab the data from a central server:
@@ -12,6 +13,13 @@
 # # Stage the downloaded file into tmp/ dir:
 # wget -q -N ${URL} -O /usr/local/HyperClock/tmp/weather_data.json
 #
+# # Check for an empty or corrupt file, or copy into place if good:
+# data=$(/usr/bin/cat /usr/local/HyperClock/tmp/weather_data.json | /usr/bin/grep weather)
+# if [ -z "$data" ]; then
+#   exit
+# else
+#   /usr/bin/cp /usr/local/HyperClock/tmp/weather_data.json /usr/local/HyperClock/data/weather_data.json
+# fi
 #######################################################################
 
 # or...
@@ -20,19 +28,10 @@
 # Uncomment this section to use the OpenWeatherMap API to gather weather data, locally:
 #######################################################################
 
-/usr/local/HyperClock/owm_tools/get_owm_weather > /usr/local/HyperClock/tmp/weather_data_json
+/usr/local/HyperClock/owm_tools/get_owm_weather ${ZIP_CODE}
 
 #######################################################################
 
-
-
-# Check for an empty or corrupt file, or copy into place if good:
-data=$(/usr/bin/cat /usr/local/HyperClock/tmp/weather_data.json | /usr/bin/grep weather)
-if [ -z "$data" ]; then
-  exit
-else
-  /usr/bin/cp /usr/local/HyperClock/tmp/weather_data.json /usr/local/HyperClock/data/weather_data.json
-fi
 
 
 exit 0
