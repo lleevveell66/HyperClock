@@ -36,7 +36,7 @@ def build_rgba(color_list):
     blue=int(blue)
     return pygame.Color(red, green, blue)
 
-def av_init()
+def av_init():
     """
     This function will initialize the audio and video with pygame.  It will
     determine the screen resolution and return the minimum, maximum, and mid 
@@ -197,7 +197,7 @@ def get_indoor_temp():
 get_astral_data()
 get_indoor_temp()
 current_data=get_current_data()
-screen, min_x, max_x, min_y, max_y, mid_x, mid_y = av_init()
+my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y = av_init()
 
 while True:
     try:
@@ -206,7 +206,7 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-        screen.fill((0,0,0))
+        my_screen.fill((0,0,0))
 
         seconds=int(datetime.now().strftime("%s"))
         if seconds % 2 == 0:
@@ -399,31 +399,31 @@ while True:
         moon_img=pygame.transform.scale(moon_img,(int(.09*max_x),int(.09*max_x)))
         moon_img_pos=moon_img.get_rect(center=(max_x-int(.11*max_x),mid_y+int(.10*max_y)))
 
-        myscreen.blit(time_text,(time_text_pos))
-        myscreen.blit(date_text,(date_text_pos))
-#        myscreen.blit(weathertext,(weathertext_pos))
-        myscreen.blit(temp_text,(temp_text_pos))
+        my_screen.blit(time_text,(time_text_pos))
+        my_screen.blit(date_text,(date_text_pos))
+#        my_screen.blit(weathertext,(weathertext_pos))
+        my_screen.blit(temp_text,(temp_text_pos))
         if int(indoor) != 9999:
-            myscreen.blit(indoor_temp_text,(indoor_temp_text_pos))
-        myscreen.blit(high_text,(high_text_pos))
-        myscreen.blit(low_text,(low_text_pos))
-        myscreen.blit(wind_text,(wind_text_pos))
-        myscreen.blit(pressure_text,(pressure_text_pos))
-        myscreen.blit(humidity_text,(humidity_text_pos))
-        myscreen.blit(day1_text,(day1_text_pos))
-        myscreen.blit(day2_text,(day2_text_pos))
-        myscreen.blit(day3_text,(day3_text_pos))
-        myscreen.blit(day4_text,(day4_text_pos))
-        myscreen.blit(current_img,(current_img_pos))
-        myscreen.blit(day1_img,(day1_img_pos))
-        myscreen.blit(day2_img,(day2_img_pos))
-        myscreen.blit(day3_img,(day3_img_pos))
-        myscreen.blit(day4_img,(day4_img_pos))
-        myscreen.blit(sunriseset_img,(sunriseset_img_pos))
-        myscreen.blit(sunrise_text,(sunrise_text_pos))
-        myscreen.blit(sunset_text,(sunset_text_pos))
-        myscreen.blit(last_text,(last_text_pos))
-        myscreen.blit(moon_img,(moon_img_pos))
+            my_screen.blit(indoor_temp_text,(indoor_temp_text_pos))
+        my_screen.blit(high_text,(high_text_pos))
+        my_screen.blit(low_text,(low_text_pos))
+        my_screen.blit(wind_text,(wind_text_pos))
+        my_screen.blit(pressure_text,(pressure_text_pos))
+        my_screen.blit(humidity_text,(humidity_text_pos))
+        my_screen.blit(day1_text,(day1_text_pos))
+        my_screen.blit(day2_text,(day2_text_pos))
+        my_screen.blit(day3_text,(day3_text_pos))
+        my_screen.blit(day4_text,(day4_text_pos))
+        my_screen.blit(current_img,(current_img_pos))
+        my_screen.blit(day1_img,(day1_img_pos))
+        my_screen.blit(day2_img,(day2_img_pos))
+        my_screen.blit(day3_img,(day3_img_pos))
+        my_screen.blit(day4_img,(day4_img_pos))
+        my_screen.blit(sunriseset_img,(sunriseset_img_pos))
+        my_screen.blit(sunrise_text,(sunrise_text_pos))
+        my_screen.blit(sunset_text,(sunset_text_pos))
+        my_screen.blit(last_text,(last_text_pos))
+        my_screen.blit(moon_img,(moon_img_pos))
 
         pygame.display.update()
 
