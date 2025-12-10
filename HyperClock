@@ -204,7 +204,7 @@ def get_current_data():
                 day1_low = data["daily"][1]["temp_low"]
                 day1_datetime = data["daily"][1]["datetime"]
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.datetime.utcfromtimestamp(day1_datetime)
+                dt_object = datetime.fromtimestamp(day1_datetime, timezone.utc)
                 # Format the date
                 day1_day = dt_object.strftime("%A")
 
@@ -213,7 +213,7 @@ def get_current_data():
                 day2_low = data["daily"][2]["temp_low"]
                 day2_datetime = data["daily"][2]["datetime"]
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.datetime.utcfromtimestamp(day2_datetime)
+                dt_object = datetime.fromtimestamp(day2_datetime, timezone.utc)
                 # Format the date
                 day2_day = dt_object.strftime("%A")
 
@@ -222,7 +222,7 @@ def get_current_data():
                 day3_low = data["daily"][3]["temp_low"]
                 day3_datetime = data["daily"][3]["datetime"]
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.datetime.utcfromtimestamp(day3_datetime)
+                dt_object = datetime.fromtimestamp(day3_datetime, timezone.utc)
                 # Format the date
                 day3_day = dt_object.strftime("%A")
 
@@ -231,7 +231,7 @@ def get_current_data():
                 day4_low = data["daily"][4]["temp_low"]
                 day4_datetime = data["daily"][4]["datetime"]
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.datetime.utcfromtimestamp(day4_datetime)
+                dt_object = datetime.fromtimestamp(day4_datetime, timezone.utc)
                 # Format the date
                 day4_day = dt_object.strftime("%A")
 
