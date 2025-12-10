@@ -54,7 +54,7 @@ def av_init():
 
     pygame.init()
     pygame.font.init()
-    pygame.mixer.init(frequency=44100, size=-16, channels=1, buffer=8192)
+    pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=2048)
     pygame.mouse.set_visible(False)
 
     my_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
