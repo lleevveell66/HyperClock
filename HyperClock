@@ -107,7 +107,7 @@ def get_current_data():
             data = json.load(weather_data_file)
         if data:
             if "current" in data:
-                current_datetime = data["current"]["datetime"]
+                current_datetime = int(data["current"]["datetime"])
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.datetime.utcfromtimestamp(current_datetime)
                 # Format the date
@@ -115,29 +115,29 @@ def get_current_data():
                 # Format the time
                 last_time = dt_object.strftime("%I:%M %p")
 
-                sunrise_datetime = data["current"]["sunrise"]
+                sunrise_datetime = int(data["current"]["sunrise"])
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.datetime.utcfromtimestamp(sunrise_datetime)
                 # Format the time
                 sunrise = dt_object.strftime("%I:%M %p")
 
-                sunset_datetime = data["current"]["sunset"]
+                sunset_datetime = int(data["current"]["sunset"])
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.datetime.utcfromtimestamp(sunset_date)
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
-                pressure = data["current"]["pressure"]
-                humidity = data["current"]["humidity"]
+                pressure = int(data["current"]["pressure"])
+                humidity = int(data["current"]["humidity"])
 
-                current_temp = data["current"]["temp"]
-                temp_high = data["daily"][1]["temp_high"]
-                temp_low = data["daily"][1]["temp_low"]
+                current_temp = int(data["current"]["temp"])
+                temp_high = int(data["daily"][1]["temp_high"])
+                temp_low = int(data["daily"][1]["temp_low"])
                 current_condition = data["current"]["weather"]["main"]
                 current_icon = data["current"]["weather"]["icon"]
 
-                wind_speed = data["current"]["wind_speed"]
-                wind_deg = data["current"]["wind_dir"]
+                wind_speed = int(data["current"]["wind_speed"])
+                wind_deg = int(data["current"]["wind_dir"])
                 
                 if wind_dir_deg > 338:                        # (339 - 360) North
                     wind_direction=unicode_arrows['N']
@@ -158,7 +158,7 @@ def get_current_data():
                 elif wind_deg > 22:                           # (  0 -  22) North 
                     wind_direction=unicode_arrows['N']
 
-                moon_phase_percent = data["current"]["moon_phase"]
+                moon_phase_percent = float(data["current"]["moon_phase"])
                 if moon_phase_percent >= 0.89:                # (0.89 - 1.00) New Moon
                     moon_phase_num=0
                 elif moon_phase_percent >= 0.76:              # (0.76 - 0.88) Waning Crescent
