@@ -1,70 +1,45 @@
 {
-  "current": {
-    "datetime": 1765171275,
-    "sunrise": 1765113434,
-    "sunset": 1765149636,
-    "moonrise": 1765160640,
-    "moonset": 1765124100,
-    "moon_phase": 0.61,
-    "temp": 37.83,
-    "pressure": 1026,
-    "humidity": 82,
-    "wind_speed": 8.99,
-    "wind_deg": 332,
-    "weather": [
-      { 
-        "id": 800,
-        "main": "Clear",
-        "description": "clear sky",
+    "current": {
+        "datetime": 1765356832,
+        "sunrise": 1765372767,
+        "sunset": 1765408860,
+        "temp": 49.05,
+        "temp_high": 61.97,
+        "temp_low": 46.36,
+        "pressure": 1011,
+        "humidity": 67,
+        "wind_speed": 10,
+        "wind_dir": 172,
+        "moonrise": 1765431780,
+        "moonset": 1765389900,
+        "moon_phase": 0.71,
+        "condition": "Clear",
         "icon": "01n"
-      }
+    },
+    "daily": [
+        {
+            "datetime": 1765476000,
+            "temp_high": 61.3,
+            "temp_low": 46.96,
+            "icon": "01d"
+        },
+        {
+            "datetime": 1765562400,
+            "temp_high": 68.7,
+            "temp_low": 52.86,
+            "icon": "01d"
+        },
+        {
+            "datetime": 1765648800,
+            "temp_high": 62.62,
+            "temp_low": 53.33,
+            "icon": "04d"
+        },
+        {
+            "datetime": 1765735200,
+            "temp_high": 52.79,
+            "temp_low": 44.22,
+            "icon": "04d"
+        }
     ]
-  },
-  "daily": [
-    {
-      "datetime": 1765216800,
-      "temp_high": 52.03,
-      "temp_low": 32.97,
-      "weather": {
-          "id": 800,
-          "main": "Clear",
-          "description": "clear sky",
-          "icon": "01d"
-      }
-    },
-    {
-      "datetime": 1765216800,
-      "temp_high": 52.03,
-      "temp_low": 32.97,
-      "weather": {
-          "id": 800,
-          "main": "Clear",
-          "description": "clear sky",
-          "icon": "01d"
-      }
-    },
-    {
-      "datetime": 1765216800,
-      "temp_high": 52.03,
-      "temp_low": 32.97,
-      "weather": {
-          "id": 800,
-          "main": "Clear",
-          "description": "clear sky",
-          "icon": "01d"
-      }
-    },
-    {
-      "datetime": 1765216800,
-      "temp_high": 52.03,
-      "temp_low": 32.97,
-      "weather": {
-          "id": 800,
-          "main": "Clear",
-          "description": "clear sky",
-          "icon": "01d"
-      }
-    }
-  ]
 }
-
