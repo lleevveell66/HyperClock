@@ -53,7 +53,19 @@ def av_init():
     values for X and Y, as well as the screen object.
     """
 
+    from io import StringIO
+
+    # Redirect stdout to a temporary buffer (a total hack to get rid of the
+    # stupid-assed pygame community welcome message)
+    old_stdout = sys.stdout
+    old_stdout = sys.stdout
+
     pygame.init()
+
+    # Restore stdout
+    sys.stdout = old_stdout
+
+
     pygame.font.init()
     pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=2048)
     pygame.mouse.set_visible(False)
