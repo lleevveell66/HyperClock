@@ -584,22 +584,22 @@ while True:
 
         # Speak the time on the hour
         if minutes % 60 == 0 and seconds % 60 == 0:
-            timesound=pygame.mixer.Sound("/usr/local/HyperClock/audio/TheTimeIs.ogg")
+            timesound=pygame.mixer.Sound("/usr/local/HyperClock/audio/TheTimeIs_64k.ogg")
             timesound.set_volume(1.0)
             playing=timesound.play()
             while playing.get_busy():
                 pygame.time.delay(1)
-            hoursound=pygame.mixer.Sound('/usr/local/HyperClock/audio/'+str(hours)+'.ogg')
+            hoursound=pygame.mixer.Sound('/usr/local/HyperClock/audio/'+str(hours)+'_64k.ogg')
             hoursound.set_volume(1.0)
             playing=hoursound.play()
             while playing.get_busy():
                 pygame.time.delay(1)
-            oclocksound=pygame.mixer.Sound('/usr/local/HyperClock/audio/oclock.ogg')
+            oclocksound=pygame.mixer.Sound('/usr/local/HyperClock/audio/oclock_64k.ogg')
             oclocksound.set_volume(1.0)
             playing=oclocksound.play()
             while playing.get_busy():
                 pygame.time.delay(1)
-            ampmsound=pygame.mixer.Sound('/usr/local/HyperClock/audio/'+ampm+'.ogg')
+            ampmsound=pygame.mixer.Sound('/usr/local/HyperClock/audio/'+ampm+'_64k.ogg')
             ampmsound.set_volume(1.0)
             playing=ampmsound.play()
             while playing.get_busy():
