@@ -330,6 +330,9 @@ def get_indoor_temp():
     indoor_temp_cmd=hyper_config.cfg_indoor_temp_command
     call(indoor_temp_cmd,shell=True)
 
+debug_print("HyperClock v4.0 by level6 of LiE")
+debug_print("--------------------------------")
+
 # Retreive the weather data
 get_weather_data()
 
