@@ -15,7 +15,7 @@ import re
 import syslog
 import json
 
-from datetime import datetime
+from datetime import datetime, timezone
 from xml.dom import minidom
 from xml.dom.minidom import Document
 from subprocess import call
@@ -25,6 +25,16 @@ import pygame
 
 import hyper_config
 import get_astral_data_local
+
+DEBUG=1
+
+def debug_print(string_to_print):
+    """
+    This function will print the supplied string_to_print, if DEBUG == 1
+    """
+
+    if DEBUG == 1:
+        print(string_to_print)
 
 def build_rgba(color_list):
     """
@@ -109,7 +119,7 @@ def get_current_data():
             if "current" in data:
                 current_datetime = int(data["current"]["datetime"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.fromtimestamp(current_datetime, datetime.UTC)
+                dt_object = datetime.fromtimestamp(current_datetime, timezone.utc)
                 # Format the date
                 last_date = dt_object.strftime("%A %m/%d/%Y")
                 # Format the time
@@ -117,13 +127,13 @@ def get_current_data():
 
                 sunrise_datetime = int(data["current"]["sunrise"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.fromtimestamp(sunrise_datetime, datetime.UTC)
+                dt_object = datetime.fromtimestamp(sunrise_datetime, timezone.utc)
                 # Format the time
                 sunrise = dt_object.strftime("%I:%M %p")
 
                 sunset_datetime = int(data["current"]["sunset"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.fromtimestamp(sunset_datetime, datetime.UTC)
+                dt_object = datetime.fromtimestamp(sunset_datetime, timezone.utc)
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
@@ -281,9 +291,10 @@ def get_astral_data():
     result=re.match("standalone",hyper_config.cfg_topology,flags=re.I)
     if result is None:
         astral_data_cmd=hyper_config.cfg_astral_data_command
+        debug_print(f"Running astral_data_cmd {astral_data_cmd}")
         call(astral_data_cmd,shell=True)
-
     else:
+        debug_print(f"Calling get_astral_data.download_and_write_weather")
         get_astral_data.download_and_write_weather(hyper_config.cfg_woeid)
 
 def get_indoor_temp():
