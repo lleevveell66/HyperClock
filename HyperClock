@@ -137,8 +137,8 @@ def get_current_data():
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
-                pressure = data["current"]["pressure"]
-                humidity = data["current"]["humidity"]
+                pressure = str(round(data["current"]["pressure"]))
+                humidity = str(round(data["current"]["humidity"]))
 
                 current_temp = str(round(data["current"]["temp"]))
                 temp_high = str(round(data["current"]["temp_high"]))
