@@ -109,7 +109,7 @@ def get_current_data():
             if "current" in data:
                 current_datetime = int(data["current"]["datetime"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.utcfromtimestamp(current_datetime)
+                dt_object = datetime.fromtimestamp(current_datetime, datetime.UTC)
                 # Format the date
                 last_date = dt_object.strftime("%A %m/%d/%Y")
                 # Format the time
@@ -117,13 +117,13 @@ def get_current_data():
 
                 sunrise_datetime = int(data["current"]["sunrise"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.utcfromtimestamp(sunrise_datetime)
+                dt_object = datetime.fromtimestamp(sunrise_datetime, datetime.UTC)
                 # Format the time
                 sunrise = dt_object.strftime("%I:%M %p")
 
                 sunset_datetime = int(data["current"]["sunset"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.utcfromtimestamp(sunset_datetime)
+                dt_object = datetime.fromtimestamp(sunset_datetime, datetime.UTC)
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
