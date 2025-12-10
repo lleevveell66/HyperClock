@@ -180,7 +180,7 @@ def write_weather_data(weather_dict):
             "pressure": weather_dict["current"]["pressure"],
             "humidity": weather_dict["current"]["humidity"],
             "wind_speed": weather_dict["current"]["wind_speed"],
-            "wind_deg": weather_dict["current"]["wind_deg"],
+            "wind_dir": weather_dict["current"]["wind_deg"],
             "moonrise": weather_dict["daily"][0]["moonrise"],
             "moonset": weather_dict["daily"][0]["moonset"],
             "moon_phase": weather_dict["daily"][0]["moon_phase"],
