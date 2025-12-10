@@ -654,7 +654,8 @@ while True:
             while playing.get_busy():
                 pygame.time.delay(1)
 
-        clock.tick(7)
+        # We only need maybe 2 fps for this, if that
+        clock.tick(2)
 
     except KeyboardInterrupt:
         print("Program interrupted by keyboard.  Exiting cleanly.")
