@@ -364,6 +364,55 @@ last_font=pygame.font.Font(hyper_config.cfg_last_font,last_size)
 current_time=datetime.now().strftime("%I:%M %p")       # seconds ":" on
 current_date=datetime.now().strftime("%A     %m / %d / %Y")
 
+get_indoor_temp()
+current_data=get_current_data()
+moon_phase_num=str(current_data['moon_phase_num'])
+sunrise=current_data['sunrise']
+sunset=current_data['sunset']
+moonrise=current_data['moonrise']
+moonset=current_data['moonset']
+code=current_data['code']
+condition=current_data['condition']
+humidity=current_data['humidity']
+pressure=current_data['pressure']
+rising=current_data['rising']
+temp=current_data['temp']
+indoor=current_data['indoor']
+wind_direction=current_data['wind_direction']
+wind_speed=current_data['wind_speed']
+high=current_data['high']
+low=current_data['low']
+day1_code=current_data['day1_code']
+day1_day=current_data['day1_day']
+day1_high=current_data['day1_high']
+day1_low=current_data['day1_low']
+day2_code=current_data['day2_code']
+day2_day=current_data['day2_day']
+day2_high=current_data['day2_high']
+day2_low=current_data['day2_low']
+day3_code=current_data['day3_code']
+day3_day=current_data['day3_day']
+day3_high=current_data['day3_high']
+day3_low=current_data['day3_low']
+day4_code=current_data['day4_code']
+day4_day=current_data['day4_day']
+day4_high=current_data['day4_high']
+day4_low=current_data['day4_low']
+
+last_date=current_data['last_date']
+last_time=current_data['last_time']
+last='(Last update: '+last_date+' '+last_time+')'
+
+current_temp=temp+'F'
+current_indoor_temp='Indoor: '+indoor+'F'
+current_high=high
+current_low=low
+current_weather=condition
+day1_weather=day1_day+' '+day1_high+'F/'+day1_low+'F'
+day2_weather=day2_day+' '+day2_high+'F/'+day2_low+'F'
+day3_weather=day3_day+' '+day3_high+'F/'+day3_low+'F'
+day4_weather=day4_day+' '+day4_high+'F/'+day4_low+'F'
+
 # Set up the text to display
 time_text=time_font.render(current_time,True,build_rgba(hyper_config.cfg_time_color))
 date_text=date_font.render(current_date,True,build_rgba(hyper_config.cfg_date_color))
