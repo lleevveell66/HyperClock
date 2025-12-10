@@ -472,8 +472,8 @@ day3_text_pos=day3_text.get_rect(midbottom=(mid_x+(mid_x/2)-int(.15*max_x),max_y
 day4_text_pos=day4_text.get_rect(midbottom=(max_x-int(.18*max_x),max_y))
 sunrise_text_pos=sunrise_text.get_rect(midtop=(min_x+int(.11*max_x),mid_y-int(.01*max_x)))
 sunset_text_pos=sunset_text.get_rect(midbottom=(min_x+int(.11*max_x),mid_y+int(.13*max_x)))
-moonrise_text_pos=sunrise_text.get_rect(midtop=(max_x-int(.11*max_x),mid_y-int(.01*max_x)))
-moonset_text_pos=sunset_text.get_rect(midbottom=(max_x-int(.11*max_x),mid_y+int(.13*max_x)))
+moonrise_text_pos=moonrise_text.get_rect(midtop=(max_x-int(.11*max_x),mid_y-int(.01*max_x)))
+moonset_text_pos=moonset_text.get_rect(midbottom=(max_x-int(.11*max_x),mid_y+int(.13*max_x)))
 last_text_pos=last_text.get_rect(midtop=(mid_x,mid_y+wind_size+pressure_size+humidity_size+int(.01*max_x)))
 
 clock = pygame.time.Clock()
