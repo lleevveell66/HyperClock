@@ -175,6 +175,8 @@ def write_weather_data(weather_dict):
             "sunrise": weather_dict["current"]["sunrise"],
             "sunset": weather_dict["current"]["sunset"],
             "temp": weather_dict["current"]["temp"],
+            "temp_high": weather_dict["daily"][0]["temp"]["max"],
+            "temp_low": weather_dict["daily"][0]["temp"]["min"],
             "pressure": weather_dict["current"]["pressure"],
             "humidity": weather_dict["current"]["humidity"],
             "wind_speed": weather_dict["current"]["wind_speed"],
