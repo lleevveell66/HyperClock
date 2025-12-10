@@ -478,6 +478,8 @@ last_text_pos=last_text.get_rect(midtop=(mid_x,mid_y+wind_size+pressure_size+hum
 
 clock = pygame.time.Clock()
 
+first_iteration = True
+
 while True:
     try:
         for event in pygame.event.get():
@@ -506,7 +508,8 @@ while True:
             get_astral_data()
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
-        if (seconds % (60 * 5) == 0):
+        if (seconds % (60 * 5) == 0) or first_iteration:
+            first_iteration = False
             get_indoor_temp()
             current_data=get_current_data()
             moon_phase_num=str(current_data['moon_phase_num'])
