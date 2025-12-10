@@ -59,7 +59,7 @@ def av_init():
     max_y=my_display_info.current_h
     mid_y=int(max_y/2)
 
-    return my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y
+    return { my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y }
 
 def get_current_data():
     """
@@ -67,19 +67,9 @@ def get_current_data():
     the current indoor temp from the {current_indoor_temp} file
     """
 
-    doc=Document()
-    doc=minidom.parse(hyper_config.cfg_astral_data_file)
-
-    astral=doc.getElementsByTagName("astral")[0]
-    weather=doc.getElementsByTagName("weather")[0]
-    current=doc.getElementsByTagName("current")[0]
-    day0=doc.getElementsByTagName("day0")[0]
-    day1=doc.getElementsByTagName("day1")[0]
-    day2=doc.getElementsByTagName("day2")[0]
-    day3=doc.getElementsByTagName("day3")[0]
-    day4=doc.getElementsByTagName("day4")[0]
-    now=doc.getElementsByTagName("now")[0]
-
+    weather_data_filename=hyper_config.cfg_astral_data_file
+    indoor_temp_filename=hyper_config.cfg_indoor_temp_file
+    
     unicode_arrows={
         'W': '\u2190',
         'N': '\u2191',
@@ -92,85 +82,195 @@ def get_current_data():
         'NONE': '\u2022'
     }
 
-    print(f"Wind Direction: %s " % current.getAttribute("wind_direction"))
-    wind_dir_deg=int(current.getAttribute("wind_direction"))
-    wind_direction="N"
-    if wind_dir_deg>22:
-        wind_direction=unicode_arrows['N']
-    if wind_dir_deg>67:
-        wind_direction=unicode_arrows['E']
-    if wind_dir_deg>112:
-        wind_direction=unicode_arrows['SE']
-    if wind_dir_deg>158:
-        wind_direction=unicode_arrows['S']
-    if wind_dir_deg>202:
-        wind_direction=unicode_arrows['SW']
-    if wind_dir_deg>248:
-        wind_direction=unicode_arrows['W']
-    if wind_dir_deg>292:
-        wind_direction=unicode_arrows['NW']
-    if wind_dir_deg>338:
-        wind_direction=unicode_arrows['N']
+    try:
+        with open(indoor_temp_filename,'r',encoding="utf-8") as file_handle:
+            indoor_temp=file_handle.read()
+            indoor_temp=indoor_temp[:-1]
+            file_handle.close()
 
-    rising="?"
-    rising_num=int(current.getAttribute("rising"))
-    if rising_num==0:
-        rising=unicode_arrows['NONE']
-    if rising_num==1:
-        rising=unicode_arrows['N']
-    if rising_num==2:
-        rising=unicode_arrows['S']
+    except FileNotFoundError:
+        print(f"Error: The file {indoor_temp_filename} was not found")
+        sys.exit(1)
+    except PermissionError:
+        print(f"Error: Permission denied to read: {indoor_temp_filename}")
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f"Error: Could not decode file: {indoor_temp_filename} .  Check encoding.")
+        sys.exit(1)
+    except IOError as other_error:    # Catch other IO errors
+        print(f"IOError: {other_error}")
+        sys.exit(1)
 
-    # base_dir = '/sys/bus/w1/devices/'
-    # device_folder = glob.glob(base_dir + '28*')[0]
+    try:
+        with open(weather_data_filename,'r',encoding="utf-8") as weather_data_file:
+            data = json.load(weather_data_file)
+        if data:
+            if "current" in data:
+                current_datetime = data["current"]["datetime"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(current_datetime)
+                # Format the date
+                last_date = dt_object.strftime("%A %m/%d/%Y")
+                # Format the time
+                last_time = dt_object.strftime("%I:%M %p")
 
-    indoor_temp_file=hyper_config.cfg_indoor_temp_file
+                sunrise_datetime = data["current"]["sunrise"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(sunrise_datetime)
+                # Format the time
+                sunrise = dt_object.strftime("%I:%M %p")
 
-    file_handle=open(indoor_temp_file,'r',encoding="utf-8")
-    indoor_temp=file_handle.read()
-    indoor_temp=indoor_temp[:-1]
-    file_handle.close()
+                sunset_datetime = data["current"]["sunset"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(sunset_date)
+                # Format the time
+                sunset = dt_object.strftime("%I:%M %p")
 
-    return {
-        'moon_phase': astral.attributes["moon_phase"].value,
-        'moon_phase_num': astral.attributes["moon_phase_num"].value,
-        'sunrise': astral.attributes["sunrise"].value,
-        'sunset': astral.getAttribute("sunset"),
-        'code': current.getAttribute("code"),
-        'condition': current.getAttribute("condition"),
-        'humidity': current.getAttribute("humidity"),
-        'pressure': current.getAttribute("pressure"),
-        'rising': rising,
-        'indoor': indoor_temp,
-        'temp': current.getAttribute("temp"),
-        'wind_chill': current.getAttribute("wind_chill"),
-        'wind_direction': wind_direction,
-        'wind_speed': current.getAttribute("wind_speed"),
-        'high': day0.getAttribute("high"),
-        'low': day0.getAttribute("low"),
-        'day1_code': day1.getAttribute("code"),
-        'day1_condition': day1.getAttribute("condition"),
-        'day1_day': day1.getAttribute("day"),
-        'day1_high': day1.getAttribute("high"),
-        'day1_low': day1.getAttribute("low"),
-        'day2_code': day2.getAttribute("code"),
-        'day2_condition': day2.getAttribute("condition"),
-        'day2_day': day2.getAttribute("day"),
-        'day2_high': day2.getAttribute("high"),
-        'day2_low': day2.getAttribute("low"),
-        'day3_code': day3.getAttribute("code"),
-        'day3_condition': day3.getAttribute("condition"),
-        'day3_day': day3.getAttribute("day"),
-        'day3_high': day3.getAttribute("high"),
-        'day3_low': day3.getAttribute("low"),
-        'day4_code': day4.getAttribute("code"),
-        'day4_condition': day4.getAttribute("condition"),
-        'day4_day': day4.getAttribute("day"),
-        'day4_high': day4.getAttribute("high"),
-        'day4_low': day4.getAttribute("low"),
-        'last_date': now.getAttribute("date"),
-        'last_time': now.getAttribute("time")
-}
+                pressure = data["current"]["pressure"]
+                humidity = data["current"]["humidity"]
+
+                current_temp = data["current"]["temp"]
+                temp_high = data["daily"][1]["temp_high"]
+                temp_low = data["daily"][1]["temp_low"]
+                current_condition = data["current"]["weather"]["main"]
+                current_icon = data["current"]["weather"]["icon"]
+
+                wind_speed = data["current"]["wind_speed"]
+                wind_deg = data["current"]["wind_dir"]
+                
+                if wind_dir_deg > 338:                        # (339 - 360) North
+                    wind_direction=unicode_arrows['N']
+                elif wind_dir_deg > 292:                      # (293 - 338) Nortwest
+                    wind_direction=unicode_arrows['NW']
+                elif wind_dir_deg > 248:                      # (249 - 337) West
+                    wind_direction=unicode_arrows['W']
+                elif wind_dir_deg > 202:                      # (203 - 248) Southwest
+                    wind_direction=unicode_arrows['SW']
+                elif wind_dir_deg > 158:                      # (159 - 202) South
+                    wind_direction=unicode_arrows['S']
+                elif wind_dir_deg > 112:                      # (113 - 158) Southeast
+                    wind_direction=unicode_arrows['SE']
+                elif wind_dir_deg > 67:                       # ( 68 - 112) East
+                    wind_direction=unicode_arrows['E']
+                elif wind_deg > 22:                           # ( 23 -  67) Northeast 
+                    wind_direction=unicode_arrows['NE']
+                elif wind_deg > 22:                           # (  0 -  22) North 
+                    wind_direction=unicode_arrows['N']
+
+                moon_phase_percent = data["current"]["moon_phase"]
+                if moon_phase_percent >= 0.89:                # (0.89 - 1.00) New Moon
+                    moon_phase_num=0
+                elif moon_phase_percent >= 0.76:              # (0.76 - 0.88) Waning Crescent
+                    moon_phase_num=7
+                elif moon_phase_percent >= 0.63:              # (0.63 - 0.75) Last Quarter
+                    moon_phase_num=6
+                elif moon_phase_percent >= 0.51:              # (0.51 - 0.62) Waning Gibbous
+                    moon_phase_num=5 
+                elif moon_phase_percent >= 0.39:              # (0.39 - 0.50) Full Moon
+                    moon_phase_num=4
+                elif moon_phase_percent >= 0.26:              # (0.26 - 0.38) Waxing gibbous
+                    moon_phase_num=3
+                elif moon_phase_percent >= 0.13:              # (0.13 - 0.25) First Quarter
+                    moon_phase_num=2
+                elif moon_phase_percent >= 0.00:              # (0.00 - 0.12) Waxing Crescent
+                    moon_phase_num=1
+
+                #rising="?"
+                #rising_num=int(current.getAttribute("rising"))
+                #if rising_num==0:
+                #    rising=unicode_arrows['NONE']
+                #if rising_num==1:
+                #    rising=unicode_arrows['N']
+                #if rising_num==2:
+                #    rising=unicode_arrows['S']
+                rising=unicode_arrows['NONE']
+
+                # base_dir = '/sys/bus/w1/devices/'
+                # device_folder = glob.glob(base_dir + '28*')[0]
+
+                day1_code = data["daily"][2]["weather"]["icon"]
+                day1_high = data["daily"][2]["temp_high"]
+                day1_low = data["daily"][2]["temp_low"]
+                day1_datetime = data["daily"][2]["datetime"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(day1_datetime)
+                # Format the date
+                day1_day = dt_object.strftime("%A")
+
+                day2_code = data["daily"][3]["weather"]["icon"]
+                day2_high = data["daily"][3]["temp_high"]
+                day2_low = data["daily"][3]["temp_low"]
+                day2_datetime = data["daily"][3]["datetime"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(day2_datetime)
+                # Format the date
+                day2_day = dt_object.strftime("%A")
+
+                day3_code = data["daily"][4]["weather"]["icon"]
+                day3_high = data["daily"][4]["temp_high"]
+                day3_low = data["daily"][4]["temp_low"]
+                day3_datetime = data["daily"][4]["datetime"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(day3_datetime)
+                # Format the date
+                day3_day = dt_object.strftime("%A")
+
+                day4_code = data["daily"][5]["weather"]["icon"]
+                day4_high = data["daily"][5]["temp_high"]
+                day4_low = data["daily"][5]["temp_low"]
+                day4_datetime = data["daily"][5]["datetime"]
+                # Convert timestamp to datetime object (UTC)
+                dt_object = datetime.datetime.utcfromtimestamp(day4_datetime)
+                # Format the date
+                day4_day = dt_object.strftime("%A")
+
+                return {
+                    'moon_phase_num': moon_phase_num,
+                    'sunrise': sunrise,
+                    'sunset': sunset,
+                    'code': current_icon,
+                    'condition': current_condition,
+                    'humidity': humidity,
+                    'pressure': pressure,
+                    'rising': rising,
+                    'indoor': indoor_temp,
+                    'temp': current_temp,
+                    'wind_direction': wind_direction,
+                    'wind_speed': wind_speed,
+                    'high': temp_high,
+                    'low': temp_low,
+                    'day1_code': day1_code,
+                    'day1_day': day1_day,
+                    'day1_high': day1_high,
+                    'day1_low': day1_low,
+                    'day2_code': day2_code,
+                    'day2_day': day2_day,
+                    'day2_high': day2_high,
+                    'day2_low': day2_low,
+                    'day3_code': day3_code,
+                    'day3_day': day3_day,
+                    'day3_high': day3_high,
+                    'day3_low': day3_low,
+                    'day4_code': day4_code,
+                    'day4_day': day4_day,
+                    'day4_high': day4_high,
+                    'day4_low': day4_low,
+                    'last_date': last_date,
+                    'last_time': last_time
+                    }
+
+    except FileNotFoundError:
+        print(f"Error: The file {weather_data_filename} was not found")
+        sys.exit(1)
+    except PermissionError:
+        print(f"Error: Permission denied to read: {weather_data_filename}")
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f"Error: Could not decode file: {weather_data_filename} .  Check encoding.")
+        sys.exit(1)
+    except IOError as other_error:    # Catch other IO errors
+        print(f"IOError: {other_error}")
+        sys.exit(1)
 
 def get_astral_data():
     """
@@ -220,21 +320,12 @@ while True:
             get_astral_data()
             get_indoor_temp()
 
-        if seconds % 30 == 0:
+        if seconds % 900 == 0:
             current_data=get_current_data()
 
-        moon_phase=current_data['moon_phase']
         moon_phase_num=current_data['moon_phase_num']
         sunrise=current_data['sunrise']
         sunset=current_data['sunset']
-
-        # Fix what appears to be a bug in the Yahoo Weather API, whereas sunrise/sunset times do not pad with zeros for single digit times
-        #if(re.match(".*\d:\d .*",sunrise)):
-        #    sunrise=re.sub(':',':0',sunrise);
-
-        #if(re.match(".*\d:\d .*",sunset)):
-        #    sunset=re.sub(':',':0',sunset);
-
         code=current_data['code']
         condition=current_data['condition']
         humidity=current_data['humidity']
@@ -242,31 +333,27 @@ while True:
         rising=current_data['rising']
         temp=current_data['temp']
         indoor=current_data['indoor']
-        wind_chill=current_data['wind_chill']
         wind_direction=current_data['wind_direction']
         wind_speed=current_data['wind_speed']
         high=current_data['high']
         low=current_data['low']
         day1_code=current_data['day1_code']
-        day1_condition=current_data['day1_condition']
         day1_day=current_data['day1_day']
         day1_high=current_data['day1_high']
         day1_low=current_data['day1_low']
         day2_code=current_data['day2_code']
-        day2_condition=current_data['day2_condition']
         day2_day=current_data['day2_day']
         day2_high=current_data['day2_high']
         day2_low=current_data['day2_low']
         day3_code=current_data['day3_code']
-        day3_condition=current_data['day3_condition']
         day3_day=current_data['day3_day']
         day3_high=current_data['day3_high']
         day3_low=current_data['day3_low']
         day4_code=current_data['day4_code']
-        day4_condition=current_data['day4_condition']
         day4_day=current_data['day4_day']
         day4_high=current_data['day4_high']
         day4_low=current_data['day4_low']
+
         last_date=current_data['last_date']
         last_time=current_data['last_time']
 

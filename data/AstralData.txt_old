@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+  <data>
+    <now date="Tuesday 07/12/2016" time="05:30 PM"/>
+    <astral moonphase="First Quarter" moonphasenum="2" sunrise="6:28 am" sunset="8:37 pm"/>
+    <weather>
+      <current code="23" condition="Breezy" humidity="44" indoor="NA" pressure="989.0" rising="0" setting="NA" temp="95" windchill="95" winddirection="180" windspeed="29"/>
+      <forecast>
+        <day0 code="23" condition="Breezy" date="12 Jul 2016" day="Tue" high="91" low="77" precip="100"/>
+        <day1 code="23" condition="Breezy" date="13 Jul 2016" day="Wed" high="94" low="77" precip="100"/>
+        <day2 code="34" condition="Mostly Sunny" date="14 Jul 2016" day="Thu" high="95" low="78" precip="100"/>
+        <day3 code="4" condition="Thunderstorms" date="15 Jul 2016" day="Fri" high="93" low="79" precip="100"/>
+        <day4 code="47" condition="Scattered Thunderstorms" date="16 Jul 2016" day="Sat" high="92" low="78" precip="100"/>
+      </forecast>
+    </weather>
+  </data>
