@@ -137,6 +137,18 @@ def get_current_data():
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
+                moonrise_datetime = int(data["current"]["moonrise"])
+                # Convert timestamp to datetime object
+                dt_object = datetime.fromtimestamp(moonrise_datetime)
+                # Format the time
+                moonrise = dt_object.strftime("%I:%M %p")
+
+                moonset_datetime = int(data["current"]["moonset"])
+                # Convert timestamp to datetime object
+                dt_object = datetime.fromtimestamp(moonset_datetime)
+                # Format the time
+                moonset = dt_object.strftime("%I:%M %p")
+
                 pressure = str(round(data["current"]["pressure"]))
                 humidity = str(round(data["current"]["humidity"]))
 
@@ -239,6 +251,8 @@ def get_current_data():
                     'moon_phase_num': moon_phase_num,
                     'sunrise': sunrise,
                     'sunset': sunset,
+                    'moonrise': moonrise,
+                    'moonset': moonset,
                     'code': current_icon,
                     'condition': current_condition,
                     'humidity': humidity,
@@ -338,6 +352,8 @@ while True:
         moon_phase_num=str(current_data['moon_phase_num'])
         sunrise=current_data['sunrise']
         sunset=current_data['sunset']
+        moonrise=current_data['moonrise']
+        moonset=current_data['moonset']
         code=current_data['code']
         condition=current_data['condition']
         humidity=current_data['humidity']
@@ -393,6 +409,7 @@ while True:
         pressure_size=int(.04*max_x)
         humidity_size=int(.04*max_x)
         sunriseset_size=int(.02*max_x)
+        moonriseset_size=int(.02*max_x)
         last_size=int(.02*max_x)
 
         time_font=pygame.font.Font(hyper_config.cfg_time_font,time_size)
@@ -407,6 +424,7 @@ while True:
         pressure_font=pygame.font.Font(hyper_config.cfg_pressure_font,pressure_size)
         humidity_font=pygame.font.Font(hyper_config.cfg_humidity_font,humidity_size)
         sunriseset_font=pygame.font.Font(hyper_config.cfg_sunriseset_font,sunriseset_size)
+        moonriseset_font=pygame.font.Font(hyper_config.cfg_sunriseset_font,sunriseset_size)
         last_font=pygame.font.Font(hyper_config.cfg_last_font,last_size)
 
         time_text=time_font.render(current_time,True,build_rgba(hyper_config.cfg_time_color))
@@ -425,6 +443,8 @@ while True:
         day4_text=forecast_font.render(day4_weather,True,build_rgba(hyper_config.cfg_day4_color))
         sunrise_text=sunriseset_font.render(sunrise,True,build_rgba(hyper_config.cfg_sunrise_color))
         sunset_text=sunriseset_font.render(sunset,True,build_rgba(hyper_config.cfg_sunset_color))
+        moonrise_text=moonriseset_font.render(moonrise,True,build_rgba(hyper_config.cfg_sunrise_color))
+        moonset_text=moonriseset_font.render(moonset,True,build_rgba(hyper_config.cfg_sunset_color))
         last_text=last_font.render(last,True,build_rgba(hyper_config.cfg_last_color))
 
         time_text_rect=time_text.get_rect()
@@ -443,6 +463,8 @@ while True:
         day4_text_rect=day4_text.get_rect()
         sunrise_text_rect=sunrise_text.get_rect()
         sunset_text_rect=sunset_text.get_rect()
+        moonrise_text_rect=moonrise_text.get_rect()
+        moonset_text_rect=moonset_text.get_rect()
         last_text_rect=last_text.get_rect()
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(code)+'.png'
@@ -466,6 +488,8 @@ while True:
         day4_text_pos=day4_text.get_rect(midbottom=(max_x-int(.18*max_x),max_y))
         sunrise_text_pos=sunrise_text.get_rect(midtop=(min_x+int(.11*max_x),mid_y-int(.01*max_x)))
         sunset_text_pos=sunset_text.get_rect(midbottom=(min_x+int(.11*max_x),mid_y+int(.13*max_x)))
+        moonrise_text_pos=sunrise_text.get_rect(midtop=(min_x-int(.11*max_x),mid_y-int(.01*max_x)))
+        moonset_text_pos=sunset_text.get_rect(midbottom=(min_x-int(.11*max_x),mid_y+int(.13*max_x)))
         last_text_pos=last_text.get_rect(midtop=(mid_x,mid_y+wind_size+pressure_size+humidity_size+int(.01*max_x)))
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(day1_code)+'.png'
@@ -521,6 +545,8 @@ while True:
         my_screen.blit(sunriseset_img,(sunriseset_img_pos))
         my_screen.blit(sunrise_text,(sunrise_text_pos))
         my_screen.blit(sunset_text,(sunset_text_pos))
+        my_screen.blit(sunrise_text,(moonrise_text_pos))
+        my_screen.blit(sunset_text,(moonset_text_pos))
         my_screen.blit(last_text,(last_text_pos))
         my_screen.blit(moon_img,(moon_img_pos))
 
