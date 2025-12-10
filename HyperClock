@@ -654,7 +654,7 @@ while True:
             while playing.get_busy():
                 pygame.time.delay(1)
 
-        clock.tick(30)
+        clock.tick(7)
 
     except KeyboardInterrupt:
         print("Program interrupted by keyboard.  Exiting cleanly.")
