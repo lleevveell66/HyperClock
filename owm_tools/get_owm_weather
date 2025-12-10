@@ -179,10 +179,38 @@ def write_weather_data(weather_dict):
             "humidity": weather_dict["current"]["humidity"],
             "wind_speed": weather_dict["current"]["wind_speed"],
             "wind_deg": weather_dict["current"]["wind_deg"],
-            "moonrise": weather_dict["daily"][1]["moonrise"],
-            "moonset": weather_dict["daily"][1]["moonset"],
-            "moon_phase": weather_dict["daily"][1]["moon_phase"],
-          }
+            "moonrise": weather_dict["daily"][0]["moonrise"],
+            "moonset": weather_dict["daily"][0]["moonset"],
+            "moon_phase": weather_dict["daily"][0]["moon_phase"],
+            "condition": weather_dict["current"]["weather"][0]["main"],
+            "icon": weather_dict["current"]["weather"][0]["icon"]
+          },
+          "daily": [
+            {
+              "datetime": weather_dict["daily"][1]["dt"],
+              "temp_high": weather_dict["daily"][1]["temp"]["max"],
+              "temp_low": weather_dict["daily"][1]["temp"]["min"],
+              "icon": weather_dict["daily"][1]["weather"][0]["icon"], 
+            },
+            {
+              "datetime": weather_dict["daily"][2]["dt"],
+              "temp_high": weather_dict["daily"][2]["temp"]["max"],
+              "temp_low": weather_dict["daily"][2]["temp"]["min"],
+              "icon": weather_dict["daily"][2]["weather"][0]["icon"], 
+            },
+            {
+              "datetime": weather_dict["daily"][3]["dt"],
+              "temp_high": weather_dict["daily"][3]["temp"]["max"],
+              "temp_low": weather_dict["daily"][3]["temp"]["min"],
+              "icon": weather_dict["daily"][3]["weather"][0]["icon"], 
+            },
+            {
+              "datetime": weather_dict["daily"][4]["dt"],
+              "temp_high": weather_dict["daily"][4]["temp"]["max"],
+              "temp_low": weather_dict["daily"][4]["temp"]["min"],
+              "icon": weather_dict["daily"][4]["weather"][0]["icon"], 
+            }
+          ]
     }
 
     json_string=json.dumps(new_json_structure, indent=4)
