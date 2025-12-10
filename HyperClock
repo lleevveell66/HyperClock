@@ -452,7 +452,7 @@ while True:
 
         time_text_pos=time_text.get_rect(center=(mid_x,0+(time_size/2)))
         date_text_pos=date_text.get_rect(center=(mid_x,0+time_size+date_size/2))
-        weather_text_pos=weather_text.get_rect(mid_bottom=(mid_x,max_y-forecast_size-int(.30*max_y)))
+        weather_text_pos=weather_text.get_rect(midbottom=(mid_x,max_y-forecast_size-int(.30*max_y)))
         temp_text_pos=temp_text.get_rect(midright=(mid_x-(int(.16*max_x)),mid_y+int(.10*max_y)))
         indoor_temp_text_pos=indoor_temp_text.get_rect(midright=(mid_x-(int(.13*max_x)),mid_y+int(.17*max_y)+(indoor_temp_size/2)))
         high_text_pos=high_text.get_rect(midright=(mid_x-int(.13*max_x),mid_y+int(.08*max_y)-(high_size/2)))
@@ -460,33 +460,33 @@ while True:
         wind_text_pos=wind_text.get_rect(topleft=(mid_x+int(.04*max_x),mid_y))
         pressure_text_pos=pressure_text.get_rect(topleft=(mid_x+int(.04*max_x),mid_y+wind_size))
         humidity_text_pos=humidity_text.get_rect(topleft=(mid_x+int(.04*max_x),mid_y+wind_size+pressure_size))
-        day1_text_pos=day1_text.get_rect(mid_bottom=(min_x+int(.18*max_x),max_y))
-        day2_text_pos=day2_text.get_rect(mid_bottom=((mid_x/2)+int(.15*max_x),max_y))
-        day3_text_pos=day3_text.get_rect(mid_bottom=(mid_x+(mid_x/2)-int(.15*max_x),max_y))
-        day4_text_pos=day4_text.get_rect(mid_bottom=(max_x-int(.18*max_x),max_y))
-        sunrise_text_pos=sunrise_text.get_rect(mid_top=(min_x+int(.11*max_x),mid_y-int(.01*max_x)))
-        sunset_text_pos=sunset_text.get_rect(mid_bottom=(min_x+int(.11*max_x),mid_y+int(.13*max_x)))
-        last_text_pos=last_text.get_rect(mid_top=(mid_x,mid_y+wind_size+pressure_size+humidity_size+int(.01*max_x)))
+        day1_text_pos=day1_text.get_rect(midbottom=(min_x+int(.18*max_x),max_y))
+        day2_text_pos=day2_text.get_rect(midbottom=((mid_x/2)+int(.15*max_x),max_y))
+        day3_text_pos=day3_text.get_rect(midbottom=(mid_x+(mid_x/2)-int(.15*max_x),max_y))
+        day4_text_pos=day4_text.get_rect(midbottom=(max_x-int(.18*max_x),max_y))
+        sunrise_text_pos=sunrise_text.get_rect(midtop=(min_x+int(.11*max_x),mid_y-int(.01*max_x)))
+        sunset_text_pos=sunset_text.get_rect(midbottom=(min_x+int(.11*max_x),mid_y+int(.13*max_x)))
+        last_text_pos=last_text.get_rect(midtop=(mid_x,mid_y+wind_size+pressure_size+humidity_size+int(.01*max_x)))
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(day1_code)+'.png'
         day1_img=pygame.image.load(FILE_NAME)
         day1_img=pygame.transform.scale(day1_img,(int(.09*max_x),int(.09*max_x)))
-        day1_img_pos=day1_img.get_rect(mid_bottom=(min_x+int(.18*max_x),max_y-int(.03*max_y)))
+        day1_img_pos=day1_img.get_rect(midbottom=(min_x+int(.18*max_x),max_y-int(.03*max_y)))
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(day2_code)+'.png'
         day2_img=pygame.image.load(FILE_NAME)
         day2_img=pygame.transform.scale(day2_img,(int(.09*max_x),int(.09*max_x)))
-        day2_img_pos=day2_img.get_rect(mid_bottom=((mid_x/2)+int(.15*max_x),max_y-int(.03*max_y)))
+        day2_img_pos=day2_img.get_rect(midbottom=((mid_x/2)+int(.15*max_x),max_y-int(.03*max_y)))
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(day3_code)+'.png'
         day3_img=pygame.image.load(FILE_NAME)
         day3_img=pygame.transform.scale(day3_img,(int(.09*max_x),int(.09*max_x)))
-        day3_img_pos=day3_img.get_rect(mid_bottom=(mid_x+(mid_x/2)-int(.15*max_x),max_y-int(.03*max_y)))
+        day3_img_pos=day3_img.get_rect(midbottom=(mid_x+(mid_x/2)-int(.15*max_x),max_y-int(.03*max_y)))
 
         FILE_NAME='/usr/local/HyperClock/images/'+str(day4_code)+'.png'
         day4_img=pygame.image.load(FILE_NAME)
         day4_img=pygame.transform.scale(day4_img,(int(.09*max_x),int(.09*max_x)))
-        day4_img_pos=day4_img.get_rect(mid_bottom=(max_x-int(.18*max_x),max_y-int(.03*max_y)))
+        day4_img_pos=day4_img.get_rect(midbottom=(max_x-int(.18*max_x),max_y-int(.03*max_y)))
 
         FILE_NAME='/usr/local/HyperClock/images/sunriseset.png'
         sunriseset_img=pygame.image.load(FILE_NAME)
