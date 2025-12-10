@@ -70,7 +70,7 @@ def av_init():
     max_y=my_display_info.current_h
     mid_y=int(max_y/2)
 
-    return { my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y }
+    return my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y
 
 def get_current_data():
     """
