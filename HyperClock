@@ -123,7 +123,7 @@ def get_current_data():
 
                 sunset_datetime = int(data["current"]["sunset"])
                 # Convert timestamp to datetime object (UTC)
-                dt_object = datetime.utcfromtimestamp(sunset_date)
+                dt_object = datetime.utcfromtimestamp(sunset_datetime)
                 # Format the time
                 sunset = dt_object.strftime("%I:%M %p")
 
