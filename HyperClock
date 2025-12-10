@@ -5,8 +5,8 @@
 ##########################################################
 
 """
-This program will make a full-screened clock with astral
-and weather data on your Raspberry Pi screen.
+This program will make a full-screened clock with weather
+and astral data on your Raspberry Pi screen.
 """
 
 import datetime
@@ -18,11 +18,12 @@ import json
 from datetime import datetime
 from subprocess import call
 from pygame.locals import *
+from pygame.constants import QUIT
 
 import pygame
 
 import hyper_config
-import get_astral_data_local
+import get_weather_data_local
 
 DEBUG=1
 
@@ -72,11 +73,11 @@ def av_init():
 
 def get_current_data():
     """
-    This function gets the current weather data from the {astral_data_file} and
+    This function gets the current weather data from the {weather_data_file} and
     the current indoor temp from the {current_indoor_temp} file
     """
 
-    weather_data_filename=hyper_config.cfg_astral_data_file
+    weather_data_filename=hyper_config.cfg_weather_data_file
     indoor_temp_filename=hyper_config.cfg_indoor_temp_file
 
     unicode_arrows={
@@ -295,19 +296,19 @@ def get_current_data():
         print(f"IOError: {other_error}")
         sys.exit(1)
 
-def get_astral_data():
+def get_weather_data():
     """
-    This function will retreive the astral data
+    This function will retreive the weather data
     """
 
     result=re.match("standalone",hyper_config.cfg_topology,flags=re.I)
     if result is None:
-        astral_data_cmd=hyper_config.cfg_astral_data_command
-        debug_print(f"Running astral_data_cmd {astral_data_cmd}")
-        call(astral_data_cmd,shell=True)
+        weather_data_cmd=hyper_config.cfg_weather_data_command
+        debug_print(f"Running weather_data_cmd: {weather_data_cmd}")
+        call(weather_data_cmd,shell=True)
     else:
-        debug_print(f"Calling get_astral_data.download_and_write_weather")
-        get_astral_data.download_and_write_weather(hyper_config.cfg_woeid)
+        debug_print(f"Calling get_weather_data_local.download_and_write_weather")
+        get_weather_data_local.download_and_write_weather(hyper_config.cfg_zip_code)
 
 def get_indoor_temp():
     """
@@ -318,7 +319,7 @@ def get_indoor_temp():
     call(indoor_temp_cmd,shell=True)
 
 # Retreive the weather data
-get_astral_data()
+get_weather_data()
 
 # Get the indoor temperature
 get_indoor_temp()
@@ -505,7 +506,7 @@ while True:
 
         # Every 15 minutes, retrieve the new weather data
         if (seconds % (60 * 15) == 0):
-            get_astral_data()
+            get_weather_data()
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
         if (seconds % (60 * 5) == 0) or first_iteration:

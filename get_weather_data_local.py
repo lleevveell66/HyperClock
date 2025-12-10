@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 ####################################################
-# get_astral_data_local.py v4.0 by level6 of LiE
+# get_weather_data_local.py v4.0 by level6 of LiE
 ####################################################
 
 """
-This script will get astra data locally
+THIS SCRIPT IS TOTALLY BROKEN, RIGHT NOW.
+
+This script will get weather data locally
 """
 
 import datetime
@@ -279,6 +281,6 @@ def download_and_write_weather(zip_code):
     forecast.appendChild(day4)
     data.appendChild(weather)
 
-    doc.writexml(open(hyper_config.cfg_astral_data_file,"wb"),indent="  ",addindent="  ",newl='\n')
+    doc.writexml(open(hyper_config.cfg_weather_data_file,"wb"),indent="  ",addindent="  ",newl='\n')
 
     doc.unlink()
