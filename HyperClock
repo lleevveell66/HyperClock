@@ -335,7 +335,7 @@ while True:
         if seconds % 900 == 0:
             current_data=get_current_data()
 
-        moon_phase_num=current_data['moon_phase_num']
+        moon_phase_num=str(current_data['moon_phase_num'])
         sunrise=current_data['sunrise']
         sunset=current_data['sunset']
         code=current_data['code']
