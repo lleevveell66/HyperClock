@@ -11,6 +11,16 @@ Read in HyperClock configuration information from HyperClock.conf
 import sys
 import configparser
 
+DEBUG = 1
+
+def debug_print(string_to_print):
+    """
+    This function will print the supplied string_to_print, if DEBUG == 1
+    """
+
+    if DEBUG == 1:
+        print(string_to_print)
+
 config=configparser.ConfigParser()
 
 try:
@@ -70,13 +80,13 @@ cfg_moonrise_color=config.get('HyperClock','moonrise_color')
 cfg_moonset_color=config.get('HyperClock','moonset_color')
 cfg_last_color=config.get('HyperClock','last_color')
 
-print(" ")
-print(" ")
-print("I have read the following configuration from /usr/local/HyperClock/HyperClock.conf :")
-print("             Topology: ",cfg_topology)
-print("     Astral Data File: ",cfg_astral_data_file)
-print("  Astral Data Command: ",cfg_astral_data_command)
-print("     Indoor Temp File: ",cfg_indoor_temp_file)
-print("  Indoor Temp command: ",cfg_indoor_temp_command)
-print(" ")
-print(" ")
+debug_print(" ")
+debug_print(" ")
+debug_print("I have read the following configuration from /usr/local/HyperClock/HyperClock.conf :")
+debug_print("             Topology: ",cfg_topology)
+debug_print("     Astral Data File: ",cfg_astral_data_file)
+debug_print("  Astral Data Command: ",cfg_astral_data_command)
+debug_print("     Indoor Temp File: ",cfg_indoor_temp_file)
+debug_print("  Indoor Temp command: ",cfg_indoor_temp_command)
+debug_print(" ")
+debug_print(" ")

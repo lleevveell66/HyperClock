@@ -23,10 +23,14 @@ echo "Done!"
 echo ""
 echo "  Remember to edit /usr/local/HyperClock/HyperClock.conf to customize your HyperClock."
 echo ""
+echo ""
+echo "  Remember to edit /usr/local/etc/api_keys.conf to customize your API key for OWM, if you are using that."
+echo ""
 echo "  To run it:  /usr/local/HyperClock/HyperClock"
 echo ""
 echo "  See the following webpage for other instructions (making it run upon boot on an RPI, etc.):"
 echo "    https://github.com/lleevveell66/HyperClock"
+echo ""
 
 exit 0
 

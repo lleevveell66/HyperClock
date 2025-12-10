@@ -59,7 +59,7 @@ def av_init():
 
     my_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
     my_display_info=pygame.display.Info()
-    print(f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
+    debug_print(f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
     syslog.syslog(syslog.LOG_INFO,f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
     min_x=0
     max_x=my_display_info.current_w
