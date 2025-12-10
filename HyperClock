@@ -199,37 +199,37 @@ def get_current_data():
                 # base_dir = '/sys/bus/w1/devices/'
                 # device_folder = glob.glob(base_dir + '28*')[0]
 
-                day1_code = data["daily"][1]["icon"]
-                day1_high = data["daily"][1]["temp_high"]
-                day1_low = data["daily"][1]["temp_low"]
-                day1_datetime = data["daily"][1]["datetime"]
+                day1_code = data["daily"][0]["icon"]
+                day1_high = data["daily"][0]["temp_high"]
+                day1_low = data["daily"][0]["temp_low"]
+                day1_datetime = data["daily"][0]["datetime"]
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.fromtimestamp(day1_datetime, timezone.utc)
                 # Format the date
                 day1_day = dt_object.strftime("%A")
 
-                day2_code = data["daily"][2]["icon"]
-                day2_high = data["daily"][2]["temp_high"]
-                day2_low = data["daily"][2]["temp_low"]
-                day2_datetime = data["daily"][2]["datetime"]
+                day2_code = data["daily"][1]["icon"]
+                day2_high = data["daily"][1]["temp_high"]
+                day2_low = data["daily"][1]["temp_low"]
+                day2_datetime = data["daily"][1]["datetime"]
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.fromtimestamp(day2_datetime, timezone.utc)
                 # Format the date
                 day2_day = dt_object.strftime("%A")
 
-                day3_code = data["daily"][3]["icon"]
-                day3_high = data["daily"][3]["temp_high"]
-                day3_low = data["daily"][3]["temp_low"]
-                day3_datetime = data["daily"][3]["datetime"]
+                day3_code = data["daily"][2]["icon"]
+                day3_high = data["daily"][2]["temp_high"]
+                day3_low = data["daily"][2]["temp_low"]
+                day3_datetime = data["daily"][2]["datetime"]
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.fromtimestamp(day3_datetime, timezone.utc)
                 # Format the date
                 day3_day = dt_object.strftime("%A")
 
-                day4_code = data["daily"][4]["icon"]
-                day4_high = data["daily"][4]["temp_high"]
-                day4_low = data["daily"][4]["temp_low"]
-                day4_datetime = data["daily"][4]["datetime"]
+                day4_code = data["daily"][3]["icon"]
+                day4_high = data["daily"][3]["temp_high"]
+                day4_low = data["daily"][3]["temp_low"]
+                day4_datetime = data["daily"][3]["datetime"]
                 # Convert timestamp to datetime object (UTC)
                 dt_object = datetime.fromtimestamp(day4_datetime, timezone.utc)
                 # Format the date
