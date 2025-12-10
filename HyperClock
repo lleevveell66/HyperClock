@@ -358,7 +358,7 @@ wind_font=pygame.font.Font(hyper_config.cfg_wind_font,wind_size)
 pressure_font=pygame.font.Font(hyper_config.cfg_pressure_font,pressure_size)
 humidity_font=pygame.font.Font(hyper_config.cfg_humidity_font,humidity_size)
 sunriseset_font=pygame.font.Font(hyper_config.cfg_sunriseset_font,sunriseset_size)
-moonriseset_font=pygame.font.Font(hyper_config.cfg_sunriseset_font,sunriseset_size)
+moonriseset_font=pygame.font.Font(hyper_config.cfg_moonriseset_font,moonriseset_size)
 last_font=pygame.font.Font(hyper_config.cfg_last_font,last_size)
 
 current_time=datetime.now().strftime("%I:%M %p")       # seconds ":" on
@@ -430,8 +430,8 @@ day3_text=forecast_font.render(day3_weather,True,build_rgba(hyper_config.cfg_day
 day4_text=forecast_font.render(day4_weather,True,build_rgba(hyper_config.cfg_day4_color))
 sunrise_text=sunriseset_font.render(sunrise,True,build_rgba(hyper_config.cfg_sunrise_color))
 sunset_text=sunriseset_font.render(sunset,True,build_rgba(hyper_config.cfg_sunset_color))
-moonrise_text=moonriseset_font.render(moonrise,True,build_rgba(hyper_config.cfg_sunrise_color))
-moonset_text=moonriseset_font.render(moonset,True,build_rgba(hyper_config.cfg_sunset_color))
+moonrise_text=moonriseset_font.render(moonrise,True,build_rgba(hyper_config.cfg_moonrise_color))
+moonset_text=moonriseset_font.render(moonset,True,build_rgba(hyper_config.cfg_moonset_color))
 last_text=last_font.render(last,True,build_rgba(hyper_config.cfg_last_color))
 
 # Get the current text rectangles
@@ -616,8 +616,8 @@ while True:
         my_screen.blit(sunriseset_img,(sunriseset_img_pos))
         my_screen.blit(sunrise_text,(sunrise_text_pos))
         my_screen.blit(sunset_text,(sunset_text_pos))
-        my_screen.blit(sunrise_text,(moonrise_text_pos))
-        my_screen.blit(sunset_text,(moonset_text_pos))
+        my_screen.blit(moonrise_text,(moonrise_text_pos))
+        my_screen.blit(moonset_text,(moonset_text_pos))
         my_screen.blit(last_text,(last_text_pos))
         my_screen.blit(moon_img,(moon_img_pos))
 
