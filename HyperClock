@@ -502,12 +502,11 @@ while True:
         my_screen.blit(date_text,(date_text_pos))
 
         # Every 15 minutes, retrieve the new weather data
-        if seconds % (60 * 15) == 0 or first_iteration:
-            first_iteration = False
+        if (seconds % (60 * 15) == 0) or first_iteration:
             get_astral_data()
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
-        if seconds % (60 * 5) == 0 or first_iteration:
+        if (seconds % (60 * 5) == 0) or first_iteration:
             first_iteration = False
             get_indoor_temp()
             current_data=get_current_data()
