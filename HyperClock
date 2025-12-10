@@ -147,25 +147,25 @@ def get_current_data():
                 current_icon = data["current"]["icon"]
 
                 wind_speed = int(data["current"]["wind_speed"])
-                wind_deg = int(data["current"]["wind_dir"])
+                wind_dir = int(data["current"]["wind_dir"])
                 
-                if wind_dir_deg > 338:                        # (339 - 360) North
+                if wind_dir > 338:                            # (339 - 360) North
                     wind_direction=unicode_arrows['N']
-                elif wind_dir_deg > 292:                      # (293 - 338) Nortwest
+                elif wind_dir > 292:                          # (293 - 338) Nortwest
                     wind_direction=unicode_arrows['NW']
-                elif wind_dir_deg > 248:                      # (249 - 337) West
+                elif wind_dir > 248:                          # (249 - 337) West
                     wind_direction=unicode_arrows['W']
-                elif wind_dir_deg > 202:                      # (203 - 248) Southwest
+                elif wind_dir > 202:                          # (203 - 248) Southwest
                     wind_direction=unicode_arrows['SW']
-                elif wind_dir_deg > 158:                      # (159 - 202) South
+                elif wind_dir > 158:                          # (159 - 202) South
                     wind_direction=unicode_arrows['S']
-                elif wind_dir_deg > 112:                      # (113 - 158) Southeast
+                elif wind_dir > 112:                          # (113 - 158) Southeast
                     wind_direction=unicode_arrows['SE']
-                elif wind_dir_deg > 67:                       # ( 68 - 112) East
+                elif wind_dir > 67:                           # ( 68 - 112) East
                     wind_direction=unicode_arrows['E']
-                elif wind_deg > 22:                           # ( 23 -  67) Northeast 
+                elif wind_dir > 22:                           # ( 23 -  67) Northeast 
                     wind_direction=unicode_arrows['NE']
-                elif wind_deg > 22:                           # (  0 -  22) North 
+                elif wind_dir > 22:                           # (  0 -  22) North 
                     wind_direction=unicode_arrows['N']
 
                 moon_phase_percent = float(data["current"]["moon_phase"])
