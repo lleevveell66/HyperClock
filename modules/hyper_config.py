@@ -11,29 +11,29 @@ Read in HyperClock configuration information from HyperClock.conf
 import sys
 import configparser
 
-DEBUG = 1
+CONFIG_FILE='/usr/local/HyperClock/conf/hyper_clock.conf'
 
 def debug_print(string_to_print):
     """
-    This function will print the supplied string_to_print, if DEBUG == 1
+    This function will print the supplied string_to_print, if debug_on is True
     """
 
-    if DEBUG == 1:
+    if debug_on:
         print(string_to_print)
 
 config=configparser.ConfigParser()
 
 try:
-    config.read('/usr/local/HyperClock/HyperClock.conf')
+    config.read(CONFIG_FILE)
 
 except FileNotFoundError:
-    print("Error: The file /usr/local/HyperClock/HyperClock.conf was not found")
+    print("Error: The file {CONFIG_FILE} was not found")
     sys.exit(1)
 except PermissionError:
-    print("Error: Permission denied to read: /usr/local/HyperClock/HyperClock.conf")
+    print("Error: Permission denied to read: {CONFIG_FILE}")
     sys.exit(1)
 except UnicodeDecodeError:
-    print("Error: Could not decode file: /usr/local/HyperClock/HyperClock.conf .  Check encoding.")
+    print("Error: Could not decode file: {CONFIG_FILE} .  Check encoding.")
     sys.exit(1)
 except IOError as other_error:    # Catch other IO errors
     print(f"IOError: {other_error}")
@@ -46,6 +46,10 @@ cfg_weather_data_command=config.get('HyperClock','weather_data_command')
 cfg_indoor_temp_file=config.get('HyperClock','indoor_temp_file')
 cfg_indoor_temp_command=config.get('HyperClock','indoor_temp_command')
 cfg_zip_code=config.get('HyperClock','zip_code')
+cfg_units=config.get('HyperClock','units')
+cfg_debug_on=config.get('HyperClock','debug_on')
+cfg_syslog_on=config.get('HyperClock','syslog_on')
+cfg_hour_24=config.get('HyperClock','hour_24')
 cfg_time_font=config.get('HyperClock','time_font')
 cfg_date_font=config.get('HyperClock','date_font')
 cfg_weather_font=config.get('HyperClock','weather_font')
@@ -79,6 +83,8 @@ cfg_sunset_color=config.get('HyperClock','sunset_color')
 cfg_moonrise_color=config.get('HyperClock','moonrise_color')
 cfg_moonset_color=config.get('HyperClock','moonset_color')
 cfg_last_color=config.get('HyperClock','last_color')
+
+debug_on = cfg_debug_on
 
 debug_print(" ")
 debug_print(" ")

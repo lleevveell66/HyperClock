@@ -146,7 +146,11 @@ def get_owm_weather_from_coords(api_key,lat,lon):
     using your {api_key} and returns the result as a JSON structure
     """
 
-    url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial&exclude=minutely,hourly"
+    units="imperial"
+    exclude="hourly,minutely"
+    api_url = "https://api.openweathermap.org/data/3.0/onecall"
+    api_args = f"lat={lat}&lon={lon}&appid={api_key}&units={units}&exclude={exclude}"
+    url = f"{api_url}?{api_args}"
 
     try:
         response = requests.get(url)
@@ -192,25 +196,25 @@ def write_weather_data(weather_dict):
               "datetime": weather_dict["daily"][1]["dt"],
               "temp_high": weather_dict["daily"][1]["temp"]["max"],
               "temp_low": weather_dict["daily"][1]["temp"]["min"],
-              "icon": weather_dict["daily"][1]["weather"][0]["icon"], 
+              "icon": weather_dict["daily"][1]["weather"][0]["icon"],
             },
             {
               "datetime": weather_dict["daily"][2]["dt"],
               "temp_high": weather_dict["daily"][2]["temp"]["max"],
               "temp_low": weather_dict["daily"][2]["temp"]["min"],
-              "icon": weather_dict["daily"][2]["weather"][0]["icon"], 
+              "icon": weather_dict["daily"][2]["weather"][0]["icon"],
             },
             {
               "datetime": weather_dict["daily"][3]["dt"],
               "temp_high": weather_dict["daily"][3]["temp"]["max"],
               "temp_low": weather_dict["daily"][3]["temp"]["min"],
-              "icon": weather_dict["daily"][3]["weather"][0]["icon"], 
+              "icon": weather_dict["daily"][3]["weather"][0]["icon"],
             },
             {
               "datetime": weather_dict["daily"][4]["dt"],
               "temp_high": weather_dict["daily"][4]["temp"]["max"],
               "temp_low": weather_dict["daily"][4]["temp"]["min"],
-              "icon": weather_dict["daily"][4]["weather"][0]["icon"], 
+              "icon": weather_dict["daily"][4]["weather"][0]["icon"],
             }
           ]
     }
@@ -218,7 +222,7 @@ def write_weather_data(weather_dict):
     json_string=json.dumps(new_json_structure, indent=4)
 
     filename="/usr/local/HyperClock/data/weather_data.json"
-    with open(filename,"w") as weather_file:
+    with open(filename,"w",encoding="utf-8") as weather_file:
         weather_file.write(json_string)
 
 ##########################################################
@@ -259,10 +263,10 @@ if __name__ == "__main__":
         # print(weather_json)
 
         # Turn the JSON string into a python dictionary
-        weather_dict = json.loads(weather_json)
+        this_weather_dict = json.loads(weather_json)
 
         # Get what we need and save it to data/weather_data.json
-        write_weather_data(weather_dict)
+        write_weather_data(this_weather_dict)
     else:
         print(f"Error: Failed to get weather data for {latitude},{longitude}")
 

@@ -14,6 +14,7 @@ import sys
 import re
 import syslog
 import json
+import os
 
 from datetime import datetime
 from subprocess import call
@@ -22,18 +23,25 @@ from pygame.constants import QUIT
 
 import pygame
 
-import hyper_config
-import get_weather_data_local
-
-DEBUG=1
+from modules import hyper_config
+from modules import get_weather_data_local
+from modules import screen_shot
 
 def debug_print(string_to_print):
     """
-    This function will print the supplied string_to_print, if DEBUG == 1
+    This function will print the supplied string_to_print, if debug_on is True
     """
 
-    if DEBUG == 1:
+    if debug_on:
         print(string_to_print)
+
+def syslog_print(string_to_print):
+    """
+    This function will print the supplied string_to_print to syslog, if syslog_on is True
+    """
+
+    if syslog_on:
+        syslog.syslog(syslog.LOG_INFO,string_to_print)
 
 def build_rgba(color_list):
     """
@@ -53,8 +61,6 @@ def av_init():
     values for X and Y, as well as the screen object.
     """
 
-    from io import StringIO
-
     # Redirect stdout to a temporary buffer (a total hack to get rid of the
     # stupid-assed pygame community welcome message)
     old_stdout = sys.stdout
@@ -65,23 +71,24 @@ def av_init():
     # Restore stdout
     sys.stdout = old_stdout
 
-
     pygame.font.init()
     pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=2048)
     pygame.mouse.set_visible(False)
 
-    my_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
+    this_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
     my_display_info=pygame.display.Info()
-    debug_print(f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
-    syslog.syslog(syslog.LOG_INFO,f"HyperClock Started.  Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
-    min_x=0
-    max_x=my_display_info.current_w
-    mid_x=int(max_x/2)
-    min_y=0
-    max_y=my_display_info.current_h
-    mid_y=int(max_y/2)
+    my_width=my_display_info.current_w
+    my_height=my_display_info.current_h
+    debug_print(f"Current Resolution: {my_width} x {my_height}")
+    syslog_print(f"HyperClock Started.  Current Resolution: {my_width} x {my_height}")
+    this_min_x=0
+    this_max_x=my_display_info.current_w
+    this_mid_x=int(max_x/2)
+    this_min_y=0
+    this_max_y=my_display_info.current_h
+    this_mid_y=int(max_y/2)
 
-    return my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y
+    return this_screen, this_min_x, this_max_x, this_min_y, this_max_y, this_mid_x, this_mid_y
 
 def get_current_data():
     """
@@ -106,8 +113,8 @@ def get_current_data():
 
     try:
         with open(indoor_temp_filename,'r',encoding="utf-8") as file_handle:
-            indoor_temp=file_handle.read()
-            indoor_temp=indoor_temp[:-1]
+            new_indoor_temp=file_handle.read()
+            new_indoor_temp=new_indoor_temp[:-1]
             file_handle.close()
 
     except FileNotFoundError:
@@ -132,82 +139,82 @@ def get_current_data():
                 # Convert timestamp to datetime object
                 dt_object = datetime.fromtimestamp(current_datetime)
                 # Format the date
-                last_date = dt_object.strftime("%A %m/%d/%Y")
+                new_last_date = dt_object.strftime("%A %m/%d/%Y")
                 # Format the time
-                last_time = dt_object.strftime("%I:%M %p")
+                new_last_time = dt_object.strftime("%I:%M %p")
 
                 sunrise_datetime = int(data["current"]["sunrise"])
                 # Convert timestamp to datetime object
                 dt_object = datetime.fromtimestamp(sunrise_datetime)
                 # Format the time
-                sunrise = dt_object.strftime("%I:%M %p")
+                new_sunrise = dt_object.strftime("%I:%M %p")
 
                 sunset_datetime = int(data["current"]["sunset"])
                 # Convert timestamp to datetime object
                 dt_object = datetime.fromtimestamp(sunset_datetime)
                 # Format the time
-                sunset = dt_object.strftime("%I:%M %p")
+                new_sunset = dt_object.strftime("%I:%M %p")
 
                 moonrise_datetime = int(data["current"]["moonrise"])
                 # Convert timestamp to datetime object
                 dt_object = datetime.fromtimestamp(moonrise_datetime)
                 # Format the time
-                moonrise = dt_object.strftime("%I:%M %p")
+                new_moonrise = dt_object.strftime("%I:%M %p")
 
                 moonset_datetime = int(data["current"]["moonset"])
                 # Convert timestamp to datetime object
                 dt_object = datetime.fromtimestamp(moonset_datetime)
                 # Format the time
-                moonset = dt_object.strftime("%I:%M %p")
+                new_moonset = dt_object.strftime("%I:%M %p")
 
-                pressure = str(round(data["current"]["pressure"]))
-                humidity = str(round(data["current"]["humidity"]))
+                new_pressure = str(round(data["current"]["pressure"]))
+                new_humidity = str(round(data["current"]["humidity"]))
 
-                current_temp = str(round(data["current"]["temp"]))
+                new_current_temp = str(round(data["current"]["temp"]))
                 temp_high = str(round(data["current"]["temp_high"]))
                 temp_low = str(round(data["current"]["temp_low"]))
                 current_condition = data["current"]["condition"]
                 current_icon = data["current"]["icon"]
 
-                wind_speed = str(round(data["current"]["wind_speed"]))
+                new_wind_speed = str(round(data["current"]["wind_speed"]))
                 wind_dir = int(data["current"]["wind_dir"])
 
                 if wind_dir > 338:                            # (339 - 360) North
-                    wind_direction=unicode_arrows['N']
+                    new_wind_direction=unicode_arrows['N']
                 elif wind_dir > 292:                          # (293 - 338) Nortwest
-                    wind_direction=unicode_arrows['NW']
+                    new_wind_direction=unicode_arrows['NW']
                 elif wind_dir > 248:                          # (249 - 337) West
-                    wind_direction=unicode_arrows['W']
+                    new_wind_direction=unicode_arrows['W']
                 elif wind_dir > 202:                          # (203 - 248) Southwest
-                    wind_direction=unicode_arrows['SW']
+                    new_wind_direction=unicode_arrows['SW']
                 elif wind_dir > 158:                          # (159 - 202) South
-                    wind_direction=unicode_arrows['S']
+                    new_wind_direction=unicode_arrows['S']
                 elif wind_dir > 112:                          # (113 - 158) Southeast
-                    wind_direction=unicode_arrows['SE']
+                    new_wind_direction=unicode_arrows['SE']
                 elif wind_dir > 67:                           # ( 68 - 112) East
-                    wind_direction=unicode_arrows['E']
+                    new_wind_direction=unicode_arrows['E']
                 elif wind_dir > 22:                           # ( 23 -  67) Northeast
-                    wind_direction=unicode_arrows['NE']
+                    new_wind_direction=unicode_arrows['NE']
                 elif wind_dir >= 0:                            # (  0 -  22) North
-                    wind_direction=unicode_arrows['N']
+                    new_wind_direction=unicode_arrows['N']
 
                 moon_phase_percent = float(data["current"]["moon_phase"])
                 if moon_phase_percent >= 0.89:                # (0.89 - 1.00) New Moon
-                    moon_phase_num=0
+                    new_moon_phase_num=0
                 elif moon_phase_percent >= 0.76:              # (0.76 - 0.88) Waning Crescent
-                    moon_phase_num=7
+                    new_moon_phase_num=7
                 elif moon_phase_percent >= 0.63:              # (0.63 - 0.75) Last Quarter
-                    moon_phase_num=6
+                    new_moon_phase_num=6
                 elif moon_phase_percent >= 0.51:              # (0.51 - 0.62) Waning Gibbous
-                    moon_phase_num=5
+                    new_moon_phase_num=5
                 elif moon_phase_percent >= 0.39:              # (0.39 - 0.50) Full Moon
-                    moon_phase_num=4
+                    new_moon_phase_num=4
                 elif moon_phase_percent >= 0.26:              # (0.26 - 0.38) Waxing gibbous
-                    moon_phase_num=3
+                    new_moon_phase_num=3
                 elif moon_phase_percent >= 0.13:              # (0.13 - 0.25) First Quarter
-                    moon_phase_num=2
+                    new_moon_phase_num=2
                 elif moon_phase_percent >= 0.00:              # (0.00 - 0.12) Waxing Crescent
-                    moon_phase_num=1
+                    new_moon_phase_num=1
 
                 #rising="?"
                 #rising_num=int(current.getAttribute("rising"))
@@ -217,82 +224,82 @@ def get_current_data():
                 #    rising=unicode_arrows['N']
                 #if rising_num==2:
                 #    rising=unicode_arrows['S']
-                rising=unicode_arrows['NONE']
+                new_rising=unicode_arrows['NONE']
 
                 # base_dir = '/sys/bus/w1/devices/'
                 # device_folder = glob.glob(base_dir + '28*')[0]
 
-                day1_code = data["daily"][0]["icon"]
-                day1_high = str(round(data["daily"][0]["temp_high"]))
-                day1_low = str(round(data["daily"][0]["temp_low"]))
-                day1_datetime = data["daily"][0]["datetime"]
+                new_day1_code = data["daily"][0]["icon"]
+                new_day1_high = str(round(data["daily"][0]["temp_high"]))
+                new_day1_low = str(round(data["daily"][0]["temp_low"]))
+                this_datetime = data["daily"][0]["datetime"]
                 # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(day1_datetime)
+                dt_object = datetime.fromtimestamp(this_datetime)
                 # Format the date
-                day1_day = dt_object.strftime("%A")
+                new_day1_day = dt_object.strftime("%A")
 
-                day2_code = data["daily"][1]["icon"]
-                day2_high = str(round(data["daily"][1]["temp_high"]))
-                day2_low = str(round(data["daily"][1]["temp_low"]))
-                day2_datetime = data["daily"][1]["datetime"]
+                new_day2_code = data["daily"][1]["icon"]
+                new_day2_high = str(round(data["daily"][1]["temp_high"]))
+                new_day2_low = str(round(data["daily"][1]["temp_low"]))
+                this_datetime = data["daily"][1]["datetime"]
                 # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(day2_datetime)
+                dt_object = datetime.fromtimestamp(this_datetime)
                 # Format the date
-                day2_day = dt_object.strftime("%A")
+                new_day2_day = dt_object.strftime("%A")
 
-                day3_code = data["daily"][2]["icon"]
-                day3_high = str(round(data["daily"][2]["temp_high"]))
-                day3_low = str(round(data["daily"][2]["temp_low"]))
-                day3_datetime = data["daily"][2]["datetime"]
+                new_day3_code = data["daily"][2]["icon"]
+                new_day3_high = str(round(data["daily"][2]["temp_high"]))
+                new_day3_low = str(round(data["daily"][2]["temp_low"]))
+                this_datetime = data["daily"][2]["datetime"]
                 # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(day3_datetime)
+                dt_object = datetime.fromtimestamp(this_datetime)
                 # Format the date
-                day3_day = dt_object.strftime("%A")
+                new_day3_day = dt_object.strftime("%A")
 
-                day4_code = data["daily"][3]["icon"]
-                day4_high = str(round(data["daily"][3]["temp_high"]))
-                day4_low = str(round(data["daily"][3]["temp_low"]))
-                day4_datetime = data["daily"][3]["datetime"]
+                new_day4_code = data["daily"][3]["icon"]
+                new_day4_high = str(round(data["daily"][3]["temp_high"]))
+                new_day4_low = str(round(data["daily"][3]["temp_low"]))
+                this_datetime = data["daily"][3]["datetime"]
                 # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(day4_datetime)
+                dt_object = datetime.fromtimestamp(this_datetime)
                 # Format the date
-                day4_day = dt_object.strftime("%A")
+                new_day4_day = dt_object.strftime("%A")
 
                 return {
-                    'moon_phase_num': moon_phase_num,
-                    'sunrise': sunrise,
-                    'sunset': sunset,
-                    'moonrise': moonrise,
-                    'moonset': moonset,
+                    'moon_phase_num': new_moon_phase_num,
+                    'sunrise': new_sunrise,
+                    'sunset': new_sunset,
+                    'moonrise': new_moonrise,
+                    'moonset': new_moonset,
                     'code': current_icon,
                     'condition': current_condition,
-                    'humidity': humidity,
-                    'pressure': pressure,
-                    'rising': rising,
-                    'indoor': indoor_temp,
-                    'temp': current_temp,
-                    'wind_direction': wind_direction,
-                    'wind_speed': wind_speed,
+                    'humidity': new_humidity,
+                    'pressure': new_pressure,
+                    'rising': new_rising,
+                    'indoor': new_indoor_temp,
+                    'temp': new_current_temp,
+                    'wind_direction': new_wind_direction,
+                    'wind_speed': new_wind_speed,
                     'high': temp_high,
                     'low': temp_low,
-                    'day1_code': day1_code,
-                    'day1_day': day1_day,
-                    'day1_high': day1_high,
-                    'day1_low': day1_low,
-                    'day2_code': day2_code,
-                    'day2_day': day2_day,
-                    'day2_high': day2_high,
-                    'day2_low': day2_low,
-                    'day3_code': day3_code,
-                    'day3_day': day3_day,
-                    'day3_high': day3_high,
-                    'day3_low': day3_low,
-                    'day4_code': day4_code,
-                    'day4_day': day4_day,
-                    'day4_high': day4_high,
-                    'day4_low': day4_low,
-                    'last_date': last_date,
-                    'last_time': last_time
+                    'day1_code': new_day1_code,
+                    'day1_day': new_day1_day,
+                    'day1_high': new_day1_high,
+                    'day1_low': new_day1_low,
+                    'day2_code': new_day2_code,
+                    'day2_day': new_day2_day,
+                    'day2_high': new_day2_high,
+                    'day2_low': new_day2_low,
+                    'day3_code': new_day3_code,
+                    'day3_day': new_day3_day,
+                    'day3_high': new_day3_high,
+                    'day3_low': new_day3_low,
+                    'day4_code': new_day4_code,
+                    'day4_day': new_day4_day,
+                    'day4_high': new_day4_high,
+                    'day4_low': new_day4_low,
+                    'last_date': new_last_date,
+                    'last_time': new_last_time
                     }
 
     except FileNotFoundError:
@@ -319,7 +326,7 @@ def get_weather_data():
         debug_print(f"Running weather_data_cmd: {weather_data_cmd}")
         call(weather_data_cmd,shell=True)
     else:
-        debug_print(f"Calling get_weather_data_local.download_and_write_weather")
+        debug_print("Calling get_weather_data_local.download_and_write_weather")
         get_weather_data_local.download_and_write_weather(hyper_config.cfg_zip_code)
 
 def get_indoor_temp():
@@ -329,6 +336,17 @@ def get_indoor_temp():
 
     indoor_temp_cmd=hyper_config.cfg_indoor_temp_command
     call(indoor_temp_cmd,shell=True)
+
+debug_on=hyper_config.cfg_debug_on
+syslog_on=hyper_config.cfg_syslog_on
+zip_code=hyper_config.cfg_zip_code
+units=hyper_config.cfg_units
+hour_24=hyper_config.cfg_hour_24
+
+if units == "imperial":
+    temp_units="F"
+if units == "metric":
+    temp_units="C"
 
 debug_print("HyperClock v4.0 by level6 of LiE")
 debug_print("--------------------------------")
@@ -419,15 +437,15 @@ last_date=current_data['last_date']
 last_time=current_data['last_time']
 last='(Last update: '+last_date+' '+last_time+')'
 
-current_temp=temp+'F'
-current_indoor_temp='Indoor: '+indoor+'F'
+current_temp=temp+temp_units
+current_indoor_temp='Indoor: '+indoor+temp_units
 current_high=high
 current_low=low
 current_weather=condition
-day1_weather=day1_day+' '+day1_high+'F/'+day1_low+'F'
-day2_weather=day2_day+' '+day2_high+'F/'+day2_low+'F'
-day3_weather=day3_day+' '+day3_high+'F/'+day3_low+'F'
-day4_weather=day4_day+' '+day4_high+'F/'+day4_low+'F'
+day1_weather=day1_day+' '+day1_high+temp_units+'/'+day1_low+temp_units
+day2_weather=day2_day+' '+day2_high+temp_units+'/'+day2_low+temp_units
+day3_weather=day3_day+' '+day3_high+temp_units+'/'+day3_low+temp_units
+day4_weather=day4_day+' '+day4_high+temp_units+'/'+day4_low+temp_units
 
 # Set up the text to display
 time_text=time_font.render(current_time,True,build_rgba(hyper_config.cfg_time_color))
@@ -502,6 +520,10 @@ while True:
             if event.type==QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:                # Press 's' to save screenshot
+                    screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
+                    screen_shot.save_screenshot(my_screen, screenshot_filename)
 
         my_screen.fill((0,0,0))
 
@@ -520,19 +542,19 @@ while True:
         my_screen.blit(date_text,(date_text_pos))
 
         # Every 30 minutes, syslog the outdoor and indoor temp for study
-        if (seconds % (60 * 30) == 0):
+        if seconds % (60 * 30) == 0:
             temp=current_data['temp']
             indoor=current_data['indoor']
             condition=current_data['condition']
             humidity=current_data['humidity']
-            syslog.syslog(syslog.LOG_INFO,f"HyperClock: Condition={condition}, Outdoor={temp}F ({humidity}%), Indoor={indoor}F\n")
+            syslog_print(f"HyperClock: Condition={condition}, Outdoor={temp}F ({humidity}%), Indoor={indoor}F")
 
         # Every 15 minutes, retrieve the new weather data from the network
-        if (seconds % (60 * 15) == 0):
+        if seconds % (60 * 15) == 0:
             get_weather_data()
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
-        if (seconds % (60 * 5) == 0) or first_iteration:
+        if seconds % (60 * 5) == 0 or first_iteration:
             first_iteration = False
             get_indoor_temp()
             current_data=get_current_data()
@@ -573,15 +595,15 @@ while True:
             last_time=current_data['last_time']
             last='(Last update: '+last_date+' '+last_time+')'
 
-            current_temp=temp+'F'
-            current_indoor_temp='Indoor: '+indoor+'F'
+            current_temp=temp+temp_units
+            current_indoor_temp='Indoor: '+indoor+temp_units
             current_high=high
             current_low=low
             current_weather=condition
-            day1_weather=day1_day+' '+day1_high+'F/'+day1_low+'F'
-            day2_weather=day2_day+' '+day2_high+'F/'+day2_low+'F'
-            day3_weather=day3_day+' '+day3_high+'F/'+day3_low+'F'
-            day4_weather=day4_day+' '+day4_high+'F/'+day4_low+'F'
+            day1_weather=day1_day+' '+day1_high+temp_units+'/'+day1_low+temp_units
+            day2_weather=day2_day+' '+day2_high+temp_units+'/'+day2_low+temp_units
+            day3_weather=day3_day+' '+day3_high+temp_units+'/'+day3_low+temp_units
+            day4_weather=day4_day+' '+day4_high+temp_units+'/'+day4_low+temp_units
 
             FILE_NAME='/usr/local/HyperClock/images/'+str(code)+'.png'
             current_img=pygame.image.load(FILE_NAME)
@@ -653,7 +675,7 @@ while True:
         hours=int(datetime.now().strftime("%I"))
         minutes=int(datetime.now().strftime("%M"))
         ampm=datetime.now().strftime("%p")
-        # if(seconds % 10 == 0):
+        # if seconds % 10 == 0:
 
         # Speak the time on the hour
         if minutes % 60 == 0 and seconds % 60 == 0:
@@ -683,5 +705,5 @@ while True:
 
     except KeyboardInterrupt:
         print("Program interrupted by keyboard.  Exiting cleanly.")
-        syslog.syslog(syslog.LOG_INFO,"Program interrupted by keyboard.  Exiting cleanly.")
+        syslog_print("Program interrupted by keyboard.  Exiting cleanly.")
         sys.exit()

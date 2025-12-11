@@ -28,7 +28,7 @@ ZIP_CODE="75240"
 # Uncomment this section to use the OpenWeatherMap API to gather weather data, locally:
 #######################################################################
 
-/usr/local/HyperClock/owm_tools/get_owm_weather ${ZIP_CODE}
+/usr/local/HyperClock/owm_tools/get_owm_weather.py ${ZIP_CODE}
 
 #######################################################################
 
