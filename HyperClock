@@ -73,7 +73,7 @@ def av_init():
     my_screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN|pygame.NOFRAME)
     my_display_info=pygame.display.Info()
     debug_print(f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
-    syslog.syslog(syslog.LOG_INFO,f"Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
+    syslog.syslog(syslog.LOG_INFO,f"HyperClock Started.  Current Resolution: %s x %s\n" % (my_display_info.current_w,my_display_info.current_h))
     min_x=0
     max_x=my_display_info.current_w
     mid_x=int(max_x/2)
@@ -519,7 +519,15 @@ while True:
         my_screen.blit(time_text,(time_text_pos))
         my_screen.blit(date_text,(date_text_pos))
 
-        # Every 15 minutes, retrieve the new weather data
+        # Every 30 minutes, syslog the outdoor and indoor temp for study
+        if (seconds % (60 * 30) == 0):
+            temp=current_data['temp']
+            indoor=current_data['indoor']
+            condition=current_data['condition']
+            humidity=current_data['humidity']
+            syslog.syslog(syslog.LOG_INFO,f"HyperClock: Condition={condition}, Outdoor={temp}F ({humidity}%), Indoor={indoor}F\n")
+
+        # Every 15 minutes, retrieve the new weather data from the network
         if (seconds % (60 * 15) == 0):
             get_weather_data()
 
