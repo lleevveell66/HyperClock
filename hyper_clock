@@ -83,10 +83,10 @@ def av_init():
     syslog_print(f"HyperClock Started.  Current Resolution: {my_width} x {my_height}")
     this_min_x=0
     this_max_x=my_display_info.current_w
-    this_mid_x=int(max_x/2)
+    this_mid_x=int(this_max_x/2)
     this_min_y=0
     this_max_y=my_display_info.current_h
-    this_mid_y=int(max_y/2)
+    this_mid_y=int(this_max_y/2)
 
     return this_screen, this_min_x, this_max_x, this_min_y, this_max_y, this_mid_x, this_mid_y
 
