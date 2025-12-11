@@ -585,9 +585,9 @@ while True:
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
         if seconds % (60 * 5) == 0 or first_iteration:
-            screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
-            save_screenshot(my_screen, screenshot_filename)
-            debug_print(f"Saved screenshot: {screenshot_filename}")
+            #screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
+            #save_screenshot(my_screen, screenshot_filename)
+            #debug_print(f"Saved screenshot: {screenshot_filename}")
 
             first_iteration = False
             get_indoor_temp()
