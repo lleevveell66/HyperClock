@@ -20,7 +20,7 @@ from datetime import datetime
 from xml.dom import minidom
 from xml.dom.minidom import Document
 
-import hyper_config
+from . import hyper_config
 
 dec=decimal.Decimal
 
@@ -90,8 +90,8 @@ def get_weather():
         dom=minidom.parse(urllib.urlopen(url))
     except:
         parse_error=sys.exc_info()[0]
-        print("Error: %s" % parse_error)
-        syslog.syslog(syslog.LOG_ERR,"Error: %s" % parse_error)
+        print(f"Error: {parse_error}")
+        syslog.syslog(syslog.LOG_ERR,f"Error: {parse_error}")
 
     forecasts = []
     for node in dom.getElementsByTagNameNS(WSER, 'forecast'):
@@ -137,8 +137,8 @@ def download_and_write_weather(zip_code):
         weather=get_weather()
     except:
         weather_error=sys.exc_info()[0]
-        print(f"Error: %s" % weather_error)
-        syslog.syslog(syslog.LOG_ERR,f"Error: %s" % weather_error)
+        print(f"Error: {weather_error}")
+        syslog.syslog(syslog.LOG_ERR,f"Error: {weather_error}")
 
     current_condition=weather['current_condition']
     current_temp=weather['current_temp']
