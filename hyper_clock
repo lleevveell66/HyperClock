@@ -69,6 +69,10 @@ def save_screenshot(screen, filename):
     except Exception as error:
         print(f"Error saving screenshot: {error}")
 
+    screenshot = pygame.Surface(screen.get_size())
+    screenshot.blit(screen, (0, 0))
+    pygame.image.save(screenshot, filename)
+
 def build_rgba(color_list):
     """
     This function takes {color_list} in the format of (R,G,B) and returns a pygame.Color
