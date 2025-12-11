@@ -20,12 +20,12 @@ from datetime import datetime
 from subprocess import call
 from pygame.locals import *
 from pygame.constants import QUIT
+from PIL import Image             # Requires Pillow: yum -y install python3-pillow / pip install Pillow
 
 import pygame
 
 from modules import hyper_config
 from modules import get_weather_data_local
-from modules import screen_shot
 
 def debug_print(string_to_print):
     """
@@ -42,6 +42,32 @@ def syslog_print(string_to_print):
 
     if syslog_on:
         syslog.syslog(syslog.LOG_INFO,string_to_print)
+
+def save_screenshot(screen, filename):
+    """
+    Saves the screenshot to the specified file.
+    """
+
+    try:
+        # Convert the Pygame Surface to a PIL Image
+        mode = screen.get_bitsize()  # Get the color depth
+        if mode == 8:
+            my_format = "P"  # Paletted image format
+        elif mode == 16:
+            my_format = "RGB"
+        elif mode == 24:
+            my_format = "RGB"
+        elif mode == 32:
+            my_format = "RGBA"
+        else:
+            my_format = "RGB"
+
+        image = Image.frombytes(my_format, screen.get_size(), screen.get_view(screen.get_rect()))
+        image.save(filename, "PNG")
+        print(f"Screenshot saved to {filename}")
+
+    except Exception as error:
+        print(f"Error saving screenshot: {error}")
 
 def build_rgba(color_list):
     """
@@ -523,7 +549,7 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:                # Press 's' to save screenshot
                     screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
-                    screen_shot.save_screenshot(my_screen, screenshot_filename)
+                    save_screenshot(my_screen, screenshot_filename)
 
         my_screen.fill((0,0,0))
 
@@ -555,6 +581,10 @@ while True:
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
         if seconds % (60 * 5) == 0 or first_iteration:
+            screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
+            save_screenshot(my_screen, screenshot_filename)
+            debug_print(f"Saved screenshot: {screenshot_filename}")
+
             first_iteration = False
             get_indoor_temp()
             current_data=get_current_data()

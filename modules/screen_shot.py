@@ -9,6 +9,8 @@ This module will wait for the 's' to be pressed, then take a snapshot
 of the pygame surface and save it as a PNG into the snapshots/ directory.
 """
 
+import os
+import curses
 from PIL import Image        # Requires Pillow: yum -y install python3-pillow / pip install Pillow
 
 def save_screenshot(screen, filename):
@@ -36,3 +38,14 @@ def save_screenshot(screen, filename):
 
     except Exception as error:
         print(f"Error saving screenshot: {error}")
+
+key = stdscr.getch()
+
+if key == 27:
+    screenshot_filename = os.path.join("snapshots", f"screenshot_{pygame.time.get_ticks()}.png")
+    save_screenshot(my_screen, screenshot_filename)
+else:
+    key_pressed = chr(key)
+    debug_print("Key pressed: {key_pressed}")
+
+stdscr.refresh()
