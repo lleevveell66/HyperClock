@@ -28,7 +28,7 @@ def calculate_moonrise_moonset(latitude, longitude):
     moon.compute(observer)
 
     # Calculate the moonrise and moonset times
-    moonrise = observer.previous_rising(moon, start=now)
-    moonset = observer.next_setting(moon, start=now)
+    moonrise = str(observer.previous_rising(moon, start=now))
+    moonset = str(observer.next_setting(moon, start=now))
 
     return (moonrise, moonset)
