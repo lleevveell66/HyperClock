@@ -25,7 +25,7 @@ def calculate_moonrise_moonset(latitude, longitude):
 
     # Calculate the moon's position at the current time
     moon = ephem.Moon()
-    moon.compute(observer, now)
+    moon.compute(observer)
 
     # Calculate the moonrise and moonset times
     moonrise = observer.previous_rising(moon, start=now)
