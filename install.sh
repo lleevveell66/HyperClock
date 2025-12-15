@@ -37,6 +37,7 @@ echo "  Remember to edit /usr/local/HyperClock/conf/hyper_clock.conf to customiz
 echo ""
 echo ""
 echo "  Remember to edit /usr/local/etc/api_keys.conf to customize your API key for OWM, if you are using that."
+echo "  Remember to edit /usr/local/etc/api_keys.conf to customize your API key for PirateWeather, if you are using that."
 echo ""
 echo "  To run it:  /usr/local/HyperClock/hyper_clock"
 echo ""
