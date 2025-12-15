@@ -4,6 +4,8 @@
 #######################################################################
 
 ZIP_CODE="75240"
+# LAT=$(/usr/bin/cat /usr/local/HyperClock/data/zipgeo.csv | /usr/bin/grep ${ZIP_CODE} | cut -d\, -f1)
+# LON=$(/usr/bin/cat /usr/local/HyperClock/data/zipgeo.csv | /usr/bin/grep ${ZIP_CODE} | cut -d\, -f2)
 
 #######################################################################
 # Uncomment this section to grab the data from a central server:
@@ -27,9 +29,19 @@ ZIP_CODE="75240"
 #######################################################################
 # Uncomment this section to use the OpenWeatherMap API to gather weather data, locally:
 #######################################################################
+# 
+# /usr/local/HyperClock/weather_api_tools/get_owm_weather.py ${ZIP_CODE}
+# 
+#######################################################################
 
-/usr/local/HyperClock/owm_tools/get_owm_weather.py ${ZIP_CODE}
+# or...
 
+#######################################################################
+# Uncomment this section to use the PirateWeather API to gather weather data, locally:
+#######################################################################
+# 
+/usr/local/HyperClock/weather_api_tools/get_pirate_weather.py ${ZIP_CODE}
+# 
 #######################################################################
 
 

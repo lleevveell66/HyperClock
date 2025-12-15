@@ -12,12 +12,18 @@ echo " - Changing file modes of executables"
 /bin/chmod 755 scripts/get_indoor_temp.sh
 /bin/chmod 755 scripts/get_weather.sh
 echo " - Removing any previous directory /usr/local/HyperClock/"
-\rm -r /usr/local/HyperClock/
+/usr/bin/rm -r /usr/local/HyperClock/
 echo " - Making the /usr/local/HyperClock/ directory"
 /bin/mkdir -p /usr/local/HyperClock/
 
 echo " - Copying everything here into /usr/local/HyperClock/"
-/bin/cp -a . /usr/local/HyperClock/
+/usr//bin/cp -a . /usr/local/HyperClock/
+
+echo " - Installing required packages"
+apt -y install python3-pygame
+apt -y install python3-setuptools
+apt -y install python3-skyfield
+pip3 install --break-system-packages configparser
 
 echo "Done!"
 echo ""

@@ -15,6 +15,7 @@ import re
 import syslog
 import json
 import os
+import csv
 
 from datetime import datetime
 from subprocess import call
@@ -26,6 +27,7 @@ import pygame
 
 from modules import hyper_config
 from modules import get_weather_data_local
+from modules import get_moon_data
 
 def debug_print(string_to_print):
     """
@@ -47,27 +49,6 @@ def save_screenshot(screen, filename):
     """
     Saves the screenshot to the specified file.
     """
-
-    try:
-        # Convert the Pygame Surface to a PIL Image
-        mode = screen.get_bitsize()  # Get the color depth
-        if mode == 8:
-            my_format = "P"  # Paletted image format
-        elif mode == 16:
-            my_format = "RGB"
-        elif mode == 24:
-            my_format = "RGB"
-        elif mode == 32:
-            my_format = "RGBA"
-        else:
-            my_format = "RGB"
-
-        image = Image.frombytes(my_format, screen.get_size(), screen.get_view(screen.get_rect()))
-        image.save(filename, "PNG")
-        print(f"Screenshot saved to {filename}")
-
-    except Exception as error:
-        print(f"Error saving screenshot: {error}")
 
     screenshot = pygame.Surface(screen.get_size())
     screenshot.blit(screen, (0, 0))
@@ -119,6 +100,36 @@ def av_init():
     this_mid_y=int(this_max_y/2)
 
     return this_screen, this_min_x, this_max_x, this_min_y, this_max_y, this_mid_x, this_mid_y
+
+def latlon_from_zip(zcode):
+    """
+    This function will return latitude and longitude for the supplied zip code
+    """
+
+    try:
+        with open("/usr/local/HyperClock/data/zipgeo.csv",'r',encoding="utf-8") as csv_file:
+            reader = csv.reader(csv_file)
+            next(reader, None)               # Skip header
+
+            for row in reader:
+                if len(row) >= 3:
+                    if row[0] == zcode:
+                        try:
+                            my_lat=float(row[1])
+                            my_lon=float(row[2])
+                            return my_lat, my_lon
+                        except ValueError:
+                            print(f"Invalid data for zipcode {zcode}")
+                            return None, None
+                else:
+                    print(f"Skipping row with too few columns: {row}")
+        return None, None
+    except FileNotFoundError:
+        print("File not found: /usr/local/HyperConfig/data/zipgeo.csv")
+        return None, None
+    except Exception as error:
+        print(f"An unexpected error occurred: {error}")
+        return None, None
 
 def get_current_data():
     """
@@ -390,6 +401,18 @@ get_indoor_temp()
 # Read the current weather data
 current_data=get_current_data()
 
+# Calulate the current moonrise/moonset
+latitude, longitude = latlon_from_zip(zip_code)
+
+if latitude is None or longitude is None:
+    print(f"Failed to get coordinates for zip {zip_code}")
+    sys.exit(1)
+
+moonrise, moonset = get_moon_data.calculate_moonrise_moonset(latitude, longitude)
+
+if not moonrise and moonset:
+    print("Error: Could not calculate moonrise/moonset.")
+
 # Initialize screen and get min/max/mid x/y values for calculating positions
 my_screen, min_x, max_x, min_y, max_y, mid_x, mid_y = av_init()
 
@@ -579,9 +602,14 @@ while True:
             humidity=current_data['humidity']
             syslog_print(f"HyperClock: Condition={condition}, Outdoor={temp}F ({humidity}%), Indoor={indoor}F")
 
-        # Every 15 minutes, retrieve the new weather data from the network
+        # Every 15 minutes, retrieve the new weather data from the network and recalculate moonrise/set
         if seconds % (60 * 15) == 0:
             get_weather_data()
+
+            moonrise, moonset = get_moon_data.calculate_moonrise_moonset(latitude, longitude)
+
+            if not moonrise and moonset:
+                print("Error: Could not calculate moonrise/moonset.")
 
         # Every 5 minutes, get the new indoor temp, re-read the weather data, and display it all
         if seconds % (60 * 5) == 0 or first_iteration:
@@ -673,6 +701,27 @@ while True:
             moon_img=pygame.image.load(FILE_NAME)
             moon_img=pygame.transform.scale(moon_img,(int(.09*max_x),int(.09*max_x)))
             moon_img_pos=moon_img.get_rect(center=(max_x-int(.11*max_x),mid_y+int(.10*max_y)))
+
+            # Set up the text to display
+            time_text=time_font.render(current_time,True,build_rgba(hyper_config.cfg_time_color))
+            date_text=date_font.render(current_date,True,build_rgba(hyper_config.cfg_date_color))
+            weather_text=weather_font.render(current_weather,True,build_rgba(hyper_config.cfg_weather_color))
+            temp_text=temp_font.render(current_temp,True,build_rgba(hyper_config.cfg_temp_color))
+            indoor_temp_text=indoor_temp_font.render(current_indoor_temp,True,build_rgba(hyper_config.cfg_indoor_temp_color))
+            high_text=high_font.render(current_high,True,build_rgba(hyper_config.cfg_high_color))
+            low_text=low_font.render(current_low,True,build_rgba(hyper_config.cfg_low_color))
+            wind_text=wind_font.render(wind_direction+' '+wind_speed+'mph',True,build_rgba(hyper_config.cfg_wind_color))
+            pressure_text=wind_font.render(pressure+' '+rising,True,build_rgba(hyper_config.cfg_pressure_color))
+            humidity_text=wind_font.render(humidity+'%',True,build_rgba(hyper_config.cfg_humidity_color))
+            day1_text=forecast_font.render(day1_weather,True,build_rgba(hyper_config.cfg_day1_color))
+            day2_text=forecast_font.render(day2_weather,True,build_rgba(hyper_config.cfg_day2_color))
+            day3_text=forecast_font.render(day3_weather,True,build_rgba(hyper_config.cfg_day3_color))
+            day4_text=forecast_font.render(day4_weather,True,build_rgba(hyper_config.cfg_day4_color))
+            sunrise_text=sunriseset_font.render(sunrise,True,build_rgba(hyper_config.cfg_sunrise_color))
+            sunset_text=sunriseset_font.render(sunset,True,build_rgba(hyper_config.cfg_sunset_color))
+            moonrise_text=moonriseset_font.render(moonrise,True,build_rgba(hyper_config.cfg_moonrise_color))
+            moonset_text=moonriseset_font.render(moonset,True,build_rgba(hyper_config.cfg_moonset_color))
+            last_text=last_font.render(last,True,build_rgba(hyper_config.cfg_last_color))
 
         my_screen.blit(time_text,(time_text_pos))
         my_screen.blit(date_text,(date_text_pos))
