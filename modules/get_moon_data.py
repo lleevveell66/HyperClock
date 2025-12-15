@@ -14,7 +14,6 @@ import skyfield                    # apt -y install python3-skyfield
 
 from skyfield.api import load, wgs84
 from skyfield.data import hipparcos
-from skyfield.projections import Stereographic
 
 def calculate_moonrise_moonset(latitude, longitude):
     """
