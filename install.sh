@@ -24,7 +24,8 @@ echo " "
 echo " *****************************************************"
 echo " *****************************************************"
 echo " *****************************************************"
-apt -y install python3-pygame python3-setuptools python3-skyfield
+# apt -y install python3-pygame python3-setuptools python3-skyfield
+apt -y install python3-pygame python3-setuptools python3-ephem
 pip3 install --break-system-packages configparser
 echo " *****************************************************"
 echo " *****************************************************"
