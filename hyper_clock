@@ -196,18 +196,6 @@ def get_current_data():
                 # Format the time
                 new_sunset = dt_object.strftime("%I:%M %p")
 
-                moonrise_datetime = int(data["current"]["moonrise"])
-                # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(moonrise_datetime)
-                # Format the time
-                new_moonrise = dt_object.strftime("%I:%M %p")
-
-                moonset_datetime = int(data["current"]["moonset"])
-                # Convert timestamp to datetime object
-                dt_object = datetime.fromtimestamp(moonset_datetime)
-                # Format the time
-                new_moonset = dt_object.strftime("%I:%M %p")
-
                 new_pressure = str(round(data["current"]["pressure"]))
                 new_humidity = str(round(data["current"]["humidity"]))
 
@@ -310,8 +298,6 @@ def get_current_data():
                     'moon_phase_num': new_moon_phase_num,
                     'sunrise': new_sunrise,
                     'sunset': new_sunset,
-                    'moonrise': new_moonrise,
-                    'moonset': new_moonset,
                     'code': current_icon,
                     'condition': current_condition,
                     'humidity': new_humidity,
@@ -624,8 +610,6 @@ while True:
             moon_phase_num=str(current_data['moon_phase_num'])
             sunrise=current_data['sunrise']
             sunset=current_data['sunset']
-            moonrise=current_data['moonrise']
-            moonset=current_data['moonset']
             code=current_data['code']
             condition=current_data['condition']
             humidity=current_data['humidity']

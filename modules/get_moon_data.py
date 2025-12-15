@@ -52,6 +52,18 @@ def calculate_moonrise_moonset(latitude, longitude):
         elif altitudes[i].degrees > 0 and altitudes[i+1].degrees < 0:
             horizon_crossing_times.append(t + (altitudes[i+1].t - altitudes[i].t) * (0 - altitudes[i].degrees) / (altitudes[i+1].degrees - altitudes[i].degrees))
 
+    # moonrise_datetime = int(data["current"]["moonrise"])                
+    # # Convert timestamp to datetime object                
+    # dt_object = datetime.fromtimestamp(moonrise_datetime)                
+    # # Format the time                
+    # new_moonrise = dt_object.strftime("%I:%M %p")
+    # 
+    # moonset_datetime = int(data["current"]["moonset"])                          
+    # # Convert timestamp to datetime object                         
+    # dt_object = datetime.fromtimestamp(moonset_datetime)                
+    # # Format the time                       
+    # new_moonset = dt_object.strftime("%I:%M %p")                
+
     if len(horizon_crossing_times) >= 2:
         moonrise_time = horizon_crossing_times[0].utc_datetime()
         moonset_time = horizon_crossing_times[1].utc_datetime()
