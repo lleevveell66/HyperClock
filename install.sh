@@ -20,10 +20,16 @@ echo " - Copying everything here into /usr/local/HyperClock/"
 /usr//bin/cp -a . /usr/local/HyperClock/
 
 echo " - Installing required packages"
-apt -y install python3-pygame
-apt -y install python3-setuptools
-apt -y install python3-skyfield
+echo " "
+echo " *****************************************************"
+echo " *****************************************************"
+echo " *****************************************************"
+apt -y install python3-pygame python3-setuptools python3-skyfield
 pip3 install --break-system-packages configparser
+echo " *****************************************************"
+echo " *****************************************************"
+echo " *****************************************************"
+echo " "
 
 echo "Done!"
 echo ""
