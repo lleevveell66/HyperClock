@@ -391,6 +391,7 @@ if units == "metric":
 
 debug_print("HyperClock v4.0 by level6 of LiE")
 debug_print("--------------------------------")
+debug_print(" *** Type ^C to quit ***")
 
 # Retreive the weather data
 get_weather_data()
