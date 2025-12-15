@@ -12,7 +12,8 @@ import ephem
 
 def calculate_moonrise_moonset(latitude, longitude):
     """
-    Calculates moonrise and mooset basd on local date and lat/lon
+    Calculates moonrise and mooset basd on local date and lat/lon and
+    returns them in HH:MM AM/PM format.
     """
 
     # Create an observer at the specified latitude and longitude
@@ -28,7 +29,7 @@ def calculate_moonrise_moonset(latitude, longitude):
     moon.compute(observer)
 
     # Calculate the moonrise and moonset times
-    moonrise = str(observer.previous_rising(moon, start=now))
-    moonset = str(observer.next_setting(moon, start=now))
+    moonrise = observer.previous_rising(moon, start=now)
+    moonset = observer.next_setting(moon, start=now)
 
-    return (moonrise, moonset)
+    return (moonrise.strftime("%I:%M %p"), moonset.strftime("%I:%M %p"))
