@@ -37,19 +37,21 @@ This is HyperClock, the customizable clock and weather display of the futuuuurre
 HyperClock is a Python script running on a Raspberry Pi board showing a simple clock with 
 weather and astral information displayed on any HDMI-capable display you want.  It has also 
 worked on 3.5" and 7" LCD displays via I2C.  It has been tested to work on RPi B+, 2B, 3B,
-Zero W, and Zero WH in Raspbian Wheezy, Jessie, and Stretch.  I am sure it could work on 
+Zero W, and Zero WH in Raspbian Pi OS 13.x (Trixie).  I am sure it could work on 
 any Linux system with Python, Pygame, and graphic capability, though.  The reason I built it 
 on RPis with huge HDMI TV displays is because I am as blind as a bat, these days.  I have one 
 in almost every room of my house, now.
 
-Weather data is retrieved every 15 minutes over the network from the Yahoo Weather API. The 
-time is spoken in a robotic voice, on the hour.  There is support for external temperature s
-ensor probes.  Colors and fonts are easily configurable.
+Weather data is retrieved every 15 minutes over the network from your choice of weather API. 
+Scripts are supplied for the use of both Open Weather Map and Pirate Weather.  But, all that 
+matters is that weather is dropped off in the data directory in the proper JSON format.  The 
+time is spoken in a robotic voice, on the hour.  There is support for external temperature 
+sensor probes.  Colors and fonts are easily configurable.
 
 ## Requirements:
-- Raspberry Pi B+, 2B, 3B, ZeroW, ZeroWH
-- Raspbian (Wheezy, Jessie, or Stretch)
-- Python
+- Raspberry Pi B+, 2B, 3B, Zero W, Zero 2 W
+- Raspbian Pi OS (Trixie)
+- Python 3
 - Pygame
 - Graphics capability (I have this running on 19" and 32" HDMI TVs and 
 on 3.5 and 7" TFT displays via I2C with an external speaker)
@@ -59,7 +61,7 @@ on 3.5 and 7" TFT displays via I2C with an external speaker)
 </h1>
 
 ## Installation:
-- Download and install your favorite SD Card imager.  I use Win32DiskImager .
+- Download and install your favorite SD Card imager.  I now use Rasperry Pi Imager .
 - Download and write the latest Raspbian image to the microSD card (don't get any 
 "Lite" version, or pygame will be very difficult to install)
 - Insert microSD card and boot the RPi
