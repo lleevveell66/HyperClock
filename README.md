@@ -61,13 +61,8 @@ on 3.5 and 7" TFT displays via I2C with an external speaker)
 </h1>
 
 ## Installation:
-- Download and install your favorite SD Card imager.  I now use Rasperry Pi Imager .
-- Download and write the latest Raspbian image to the microSD card (don't get any 
-"Lite" version, or pygame will be very difficult to install)
-- Insert microSD card and boot the RPi
-- CNTL-ALT-F6 and login as pi/raspberry
-  - I do this all from CLI, but you can also do it from X11 GUI.
-  - I also do everything as root.  Feel free to sudo everything.
+ - I do this all from CLI, but you can also do it from X11 GUI.
+ - I also do everything as root.  Feel free to sudo everything.
 
 ```
 # Switch User to root:
@@ -76,58 +71,10 @@ sudo su -
 # Set it to boot into normal textual login, no more X:
 systemctl set-default multi-user.target
 
-raspi-config
-# change password
-# change hostname
-# change locale, timezone, wifi country
-# enable SSH and 1-wire (if using DS18B20-based temperature probe)
-# expand disk
-# set up networking 
-# reboot
-
-# The manual method of enabling 1-wire is:
-# Connect your w1 temp probe
-# echo "dtoverlay=w1-gpio" >> /boot/firmware/config.txt
-# shutdown -rf now
-
-
-# SSH back in as pi user, and switch user to root
-# If you find this annoying, you can allow root SSH login with the following:
-# # Allow root user SSH logins (OPTIONAL):
-# perl -p -i -e 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-# service sshd restart
-# passwd root
-
 # Install some required packages and update everything:
 apt-get install git python3-pip
 apt-get -y upgrade
 apt-get update
-
-# Disable IPv6 (OPTIONAL):
-# Disable IPv6:
-cat >> /etc/sysctl.conf <<EOL
-# Disable IPv6
-net.ipv6.conf.all.disable_ipv6=1
-net.ipv6.conf.default.disable_ipv6=1
-net.ipv4.tcp_timestamps = 0
-EOL
-sysctl -p
-sed -i '/^::1/d' /etc/hosts
-
-# Get NTP working:
-#service ntp stop
-#ntpdate 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
-#service ntp start
-#update-rc.d ntp enable
-#date
-#ntpq -p
-
-# Install pygame for python3:
-apt -y install python3-pygame
-apt -y install python3-setuptools
-
-# Install the python3 configparser library:
-pip3 install --break-system-packages configparser
 
 # Clean-up unused packages
 apt-get autoremove -y
@@ -139,24 +86,24 @@ cd HyperClock
 ./install.sh
 
 # Customize (decribed below):
-vi /usr/local/HyperClock/HyperClock.conf
-# pay special attention to: topology, woeid
+vi /usr/local/HyperClock/conf/hyper_clock.conf
+# pay special attention to: topology, zipcode
 
 # Test it out:
 /usr/local/HyperClock/HyperClock  # Hit CTRL+C to stop
 
 # Make it run HyperClock on boot:
-vi /etc/rc.local
-.
-.
-# Uncomment and edit these for your chosen indoor temperature solution (described below): 
-#printf "Getting the initial indoor temp reading ...\n"
-#/usr/local/HyperClock/extras/IndoorTemp > /usr/local/HyperClock/CurrentIndoorTemp
+cat<<'EOF'>>/etc/rc.local
+#!/bin/sh
 
 printf "HyperClock: Starting HyperClock ...\n"
-sudo /usr/local/HyperClock/HyperClock &
-.
-.
+logger -t HyperClock "Starting HyperClock ...\n"
+sudo /usr/local/HyperClock/hyper_clock &
+
+exit 0
+EOF
+
+chmod -v +x /etc/rc.local
 
 # Reboot to test it out:
 shutdown -r now
@@ -211,6 +158,8 @@ day3color = 255,128,255
 day4color = 255,128,255
 sunrisecolor = 128,255,255
 sunsetcolor = 128,255,255
+moonrisecolor = 128,255,255
+moonsetcolor = 128,255,255
 lastcolor = 50,89,58
 ```
 
