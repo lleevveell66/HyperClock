@@ -4,7 +4,7 @@
   <img src="snapshots/HyperClock.gif" alt="HyperClock Logo" width="75%" align="middle">
 </h1>
 
-![HyperClock 2.0 Screenshot](snapshots/HyperClock-2.0-ScreenShot_071016a.jpg?raw=true "Screen Shot")
+![HyperClock 2.0 Screenshot](snapshots/HyperClock_Display_121525c_smaller.png?raw=true "Screen Shot")
 
 # HyperClock
 
